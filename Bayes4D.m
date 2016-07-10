@@ -21,7 +21,7 @@ function varargout = Bayes4D(varargin)
 
 % Edit the above text to modify the response to help Bayes4D
 
-% Last Modified by GUIDE v2.5 30-Jun-2016 16:31:21
+% Last Modified by GUIDE v2.5 09-Jul-2016 20:07:25
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -54,6 +54,8 @@ function Bayes4D_OpeningFcn(hObject, eventdata, handles, varargin)
 %Ancien aplio
 %DecodeDicomInfo('C:\Documents and Settings\Administrateur\Mes documents\Downloads\AplioXV\DICOM XV\DICOM XV\20160509\S0000004\US000001');
 %DecodeDicomInfo('DICOM XV\20160509\S0000004\US000001');
+
+%Adaptation automatique de l'interface à la résolution de l'écran
 
 %handles.donnees2 = GetRAWframes_B;
 %Choose default command line output for Bayes4D
@@ -116,7 +118,7 @@ end
 xlabel('Y (en pixels)')%A adapter selon Y, X...
 ylabel('Intensité (en niveaux)')
 
-axes(handles.imageTest);
+axes(handles.image);
 %afficherImage_Callback(hObject, eventdata, guidata(hObject));
 
 if xor(XDebut~=XFin,YDebut~=YFin)
@@ -307,12 +309,12 @@ end
 
 
 % --- Executes during object creation, after setting all properties.
-function imageTest_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to imageTest (see GCBO)
+function image_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to image (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
-% Hint: place code in OpeningFcn to populate imageTest
+% Hint: place code in OpeningFcn to populate image
 
 
 % --- Executes on button press in afficherImage.
@@ -326,8 +328,9 @@ function afficherImage_Callback(hObject, eventdata, handles)
 %image3 = ConvertRAWframe_B(donnees3,0);
 %handles.image3 = uint8(image3);
 
-axes(handles.imageTest);
-handles = imshow4(handles.volumes,hObject,handles);
+axes(handles.image);
+imshow4(handles.volumes,hObject,handles);
+%handles = imshow4(handles.volumes,hObject,handles);
 %[x y z t] = size(handles.volumes);
 %imshow(handles.image3);
 set(hObject,'KeyPressFcn',handles.figure1.KeyPressFcn);
@@ -637,7 +640,13 @@ set(handles.chemin_dossier,'String',chemin_dossier);
 
 d = dir(chemin_dossier);
 disp(d(3).name);
-patient_info_id = fopen([chemin_dossier,'\',d(3).name]);
+if ispc
+    patient_info_id = fopen([chemin_dossier,'\',d(3).name]);
+elseif ismac
+    patient_info_id = fopen([chemin_dossier,'/',d(3).name]);
+else
+    disp('Tu utilises Linux, il va falloir des petites modifications dans ma fonction chargement pour que ça marche');
+end
 patient_info = textscan(patient_info_id,'%s',11);
 patient_info = patient_info{1,1};
 range = str2num(patient_info{5});
@@ -657,7 +666,11 @@ for ifichier = 1:nb_fichiers-3
     %disp(['1706 exports matlab Virginie\Données exportées\1648550067\RawData_Vol', num2str(i), '.bin']);
     disp([chemin_dossier,d(ifichier+3).name]);
     %identifiants_fichiers{i}=fopen(['1706 exports matlab Virginie\Données exportées\1648550067\RawData_Vol', num2str(i),'.bin']);
-    identifiants_fichiers{ifichier}=fopen([chemin_dossier,'\',d(ifichier+3).name]);
+    if ispc
+        identifiants_fichiers{ifichier}=fopen([chemin_dossier,'\',d(ifichier+3).name]);
+    elseif ismac
+        identifiants_fichiers{ifichier}=fopen([chemin_dossier,'/',d(ifichier+3).name]);
+    end
     fichiers{ifichier}=fread(identifiants_fichiers{ifichier});
     fichiers{ifichier} =reshape(fichiers{ifichier},range,azimuth,elevation);
 end
@@ -769,3 +782,26 @@ function edit19_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --------------------------------------------------------------------
+function Ligne_Callback(hObject, eventdata, handles)
+% hObject    handle to Ligne (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+imline;
+
+
+% --------------------------------------------------------------------
+function Rectangle_Callback(hObject, eventdata, handles)
+% hObject    handle to Rectangle (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+imrect;
+
+
+% --------------------------------------------------------------------
+function SelectionROI_Callback(hObject, eventdata, handles)
+% hObject    handle to SelectionROI (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)

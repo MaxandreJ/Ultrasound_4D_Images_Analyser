@@ -225,7 +225,8 @@ end;
 if N<6
     imzobr = im(:,:,slice,time);
     %Ajout ci-dessous
-    handles.image3 = imzobr;
+    set(handles.image,'UserData',imzobr);
+    %handles.image3 = imzobr;
     if size(imzobr,2)<200 && inter==1
         imzobr = imresize(imzobr,[size(imzobr,1),200]);
     end;
