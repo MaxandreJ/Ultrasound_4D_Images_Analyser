@@ -29,6 +29,7 @@ function [handles] = imshow4(varargin)
 % method - method from imfuse function -
 % 'falsecolor'/'blend'/'diff'/'montage' (default = 'falsecolor')
 global slice time im mode_out inter colormaps isfused contexte_image
+
 im = varargin{1};
 N = nargin;
 slice = 1;
@@ -41,71 +42,34 @@ inter = 0;
 %h = figure('Position',get(0,'ScreenSize'),'WindowStyle','docked','Interruptible','off');
 colormaps = colormap('gray');
 isfused = 0;
+
 %Ajout ci-dessous
 imzobr = im(:,:,slice,time);
-if N==2
-    contexte_image = varargin{2};
-    %slice = varargin{2};
-elseif N==3
-    contexte_image = varargin{2};
-    handles = varargin{3};
-    %slice = varargin{2};
-    %ref_time = varargin{3};
-elseif N==4
-    %contexte_image = varargin{2};
-    slice = varargin{2};
-    ref_time = varargin{3};
-    range = varargin{4};
-elseif N==5
-    %contexte_image = varargin{2};
-    slice = varargin{3};
-    ref_time = varargin{4};
-    range = varargin{5};
-    colormaps = varargin{6};
-elseif N==6
-    slice = varargin{2};
-    ref_time = varargin{3};
-    range = varargin{4};
-    time = varargin{6};
-    isfused = 1;
-elseif N==7
-    slice = varargin{2};
-    ref_time = varargin{3};
-    range = varargin{4};
-    time = varargin{6};
-    method = varargin{7};
-    isfused = 1;
-end;
-if strcmp(range,'norm')
-    maximum = max(im(:));
-    minimum = min(im(:));
-    im = (im - minimum)./(maximum - minimum);
-    range = 0;
-end;
-if colormaps==0
-    colormaps = colormap('gray');
-end;
-colormaps = colormap(colormaps);
+
+contexte_image = varargin{2};
+handles = varargin{3};
+
+%set(handles.image,'UserData',imzobr);
+%set(handles.image.Children,'CData',imzobr);
+%set(handles.image.Children,'CDataMapping','direct');
+delete(get(handles.image, 'Children'));
+
+hIm = image(flipud(imzobr));
+
+copyobj(hIm,handles.image);
+
+uicontextmenu = get(handles.image,'UIContextMenu');
+set(handles.image.Children,'UIContextMenu',uicontextmenu);
+
+%Ajout
+axes(handles.image);
+
 %figure(h)
 %set(h,'Name',['Z=' num2str(slice) '/' num2str(size(im,3)) ', t=' num2str(time) '/' num2str(size(im,4))])
-if N<6
-    if strcmp(range,'all')
-        imshow(im(:,:,slice,ref_time),[]);
-    elseif range==0
-        imshow(im(:,:,slice,ref_time));
-    else
-        imshow(im(:,:,slice,ref_time),range);
-    end;
-else
-    imf = imfuse(im(:,:,slice,ref_time),im(:,:,slice,time),method);
-    if strcmp(range,'all')
-        imshow(imf,[]);
-    elseif range==0
-        imshow(imf);
-    else
-        imshow(imf,range);
-    end;
-end;
+
+
+
+
 xlabel('Axe des X')
 ylabel('Axe des Y')
 title('Transversal view: \leftarrow\rightarrow = Z-axis, \uparrow\downarrow = t-axis, 0-5 = view')
@@ -222,36 +186,32 @@ if rng(end)~=size(im,3) || rng_t(end)~=size(im,4)
     end
 end;
 %figure(h)
-if N<6
-    imzobr = im(:,:,slice,time);
-    %Ajout ci-dessous
-    set(handles.image,'UserData',imzobr);
-    %handles.image3 = imzobr;
-    if size(imzobr,2)<200 && inter==1
-        imzobr = imresize(imzobr,[size(imzobr,1),200]);
-    end;
-    if strcmp(range,'all')
-        imshow(imzobr,[]);
-    elseif range==0
-        imshow(imzobr);
-    else
-        imshow(imzobr,range);
-    end;
-    %Ajout ci-dessous
-    guidata(h,handles);
-else
-    imf = imfuse(im(:,:,slice,ref_time),im(:,:,slice,time),method);
-    if size(imf,2)<100 && inter==1
-        imf = imresize(imf,[size(imf,1),100]);
-    end;
-    if strcmp(range,'all')
-        imshow(imf,[]);
-    elseif range==0
-        imshow(imf);
-    else
-        imshow(imf,range);
-    end;
+
+imzobr = im(:,:,slice,time);
+
+%axes(handles.image);
+
+%imshow(imzobr);
+
+% Delete previous image(s)
+
+%set(handles.image, 'xlim', [1 size(imzobr, 2)]);
+%set(handles.image, 'ylim', [1 size(imzobr, 1)]);
+
+%Ajout ci-dessous
+set(handles.image,'UserData',imzobr);
+set(handles.image.Children,'CData',imzobr);
+set(handles.image.Children,'CDataMapping','direct');
+uicontextmenu = get(handles.image,'UIContextMenu');
+set(handles.image.Children,'UIContextMenu',uicontextmenu);
+
+if size(imzobr,2)<200 && inter==1
+    imzobr = imresize(imzobr,[size(imzobr,1),200]);
 end;
+
+%Ajout ci-dessous
+guidata(h,handles);
+
 switch mode_out
     case 0
         xlabel('Axe des X')

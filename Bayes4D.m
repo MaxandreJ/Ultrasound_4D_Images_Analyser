@@ -333,7 +333,13 @@ imshow4(handles.volumes,hObject,handles);
 %handles = imshow4(handles.volumes,hObject,handles);
 %[x y z t] = size(handles.volumes);
 %imshow(handles.image3);
-set(hObject,'KeyPressFcn',handles.figure1.KeyPressFcn);
+set(handles.figure1,'KeyPressFcn',handles.figure1.KeyPressFcn);
+
+
+uicontextmenu = get(handles.image,'UIContextMenu');
+set(handles.image.Children,'UIContextMenu',uicontextmenu);
+
+%set(handles.image,'UIContextMenu',uicontextmenu);
 
 blanc = [1 1 1];
 
@@ -346,7 +352,7 @@ set(handles.coupeSelonY,'enable','on','BackgroundColor',blanc);
 set(handles.sommeX,'enable','on','BackgroundColor',blanc);
 set(handles.sommeY,'enable','on','BackgroundColor',blanc);
 
-guidata(hObject,handles);
+guidata(handles.figure1,handles);
 
 
 
@@ -798,6 +804,7 @@ function Rectangle_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 imrect;
+
 
 
 % --------------------------------------------------------------------
