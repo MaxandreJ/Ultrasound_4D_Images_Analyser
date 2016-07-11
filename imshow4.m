@@ -52,6 +52,8 @@ handles = varargin{3};
 %set(handles.image,'UserData',imzobr);
 %set(handles.image.Children,'CData',imzobr);
 %set(handles.image.Children,'CDataMapping','direct');
+
+%{
 delete(get(handles.image, 'Children'));
 
 hIm = image(flipud(imzobr));
@@ -60,9 +62,16 @@ copyobj(hIm,handles.image);
 
 uicontextmenu = get(handles.image,'UIContextMenu');
 set(handles.image.Children,'UIContextMenu',uicontextmenu);
+%}
 
 %Ajout
 axes(handles.image);
+axis on
+imshow(imzobr);
+set(handles.image.Children,'CData',imzobr);
+set(handles.image.Children,'CDataMapping','direct');
+uicontextmenu = get(handles.image,'UIContextMenu');
+set(handles.image.Children,'UIContextMenu',uicontextmenu);
 
 %figure(h)
 %set(h,'Name',['Z=' num2str(slice) '/' num2str(size(im,3)) ', t=' num2str(time) '/' num2str(size(im,4))])
@@ -199,7 +208,7 @@ imzobr = im(:,:,slice,time);
 %set(handles.image, 'ylim', [1 size(imzobr, 1)]);
 
 %Ajout ci-dessous
-set(handles.image,'UserData',imzobr);
+%set(handles.image,'UserData',imzobr);
 set(handles.image.Children,'CData',imzobr);
 set(handles.image.Children,'CDataMapping','direct');
 uicontextmenu = get(handles.image,'UIContextMenu');
