@@ -66,7 +66,6 @@ set(handles.image.Children,'UIContextMenu',uicontextmenu);
 
 %Ajout
 axes(handles.image);
-axis on
 imshow(imzobr);
 set(handles.image.Children,'CData',imzobr);
 set(handles.image.Children,'CDataMapping','direct');
@@ -79,9 +78,10 @@ set(handles.image.Children,'UIContextMenu',uicontextmenu);
 
 
 
-xlabel('Axe des X')
-ylabel('Axe des Y')
-title('Transversal view: \leftarrow\rightarrow = Z-axis, \uparrow\downarrow = t-axis, 0-5 = view')
+xlabel('X')
+ylabel('Y')
+%title({'Vue transversale', ['Z=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))]});
+title('Coupe transversale: \leftarrow\rightarrow = Z-axis, \uparrow\downarrow = t-axis, 0-5 = view')
 %set(h,'Colormap',colormaps);
 if size(im,3)>1 || size(im,4)>1
     %set(h,'KeyPressFcn',{@kresli,h,range,N,ref_time,method})
@@ -198,9 +198,12 @@ end;
 
 imzobr = im(:,:,slice,time);
 
-%axes(handles.image);
+axes(handles.image);
 
-%imshow(imzobr);
+imshow(imzobr);
+set(handles.image.Children,'CDataMapping','direct');
+uicontextmenu = get(handles.image,'UIContextMenu');
+set(handles.image.Children,'UIContextMenu',uicontextmenu);
 
 % Delete previous image(s)
 
@@ -209,10 +212,22 @@ imzobr = im(:,:,slice,time);
 
 %Ajout ci-dessous
 %set(handles.image,'UserData',imzobr);
+%{
 set(handles.image.Children,'CData',imzobr);
 set(handles.image.Children,'CDataMapping','direct');
-uicontextmenu = get(handles.image,'UIContextMenu');
-set(handles.image.Children,'UIContextMenu',uicontextmenu);
+%}
+
+
+
+%Tentative de déconvolution
+%{
+axes(handles.graphique);
+image = get(handles.image.Children,'CData');
+PSF = ones(3);
+[J1, P1] = deconvblind(image,PSF);
+imshow(J1);title('Deblurring with PSF');
+set(handles.graphique.Children,'CDataMapping','direct');
+%}
 
 if size(imzobr,2)<200 && inter==1
     imzobr = imresize(imzobr,[size(imzobr,1),200]);
@@ -223,37 +238,41 @@ guidata(h,handles);
 
 switch mode_out
     case 0
-        xlabel('Axe des X')
-        ylabel('Axe des Y')
+        xlabel('X')
+        ylabel('Y')
         %title('Transversal view: \leftarrow\rightarrow = Z-axis; \uparrow\downarrow = t-axis, 0-5 = view')
-        title({'Vue transversale', ['Z=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))]});
+        title({'Coupe frontale', ['Z=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))]});
         %set(h,'Name',['Z=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))],'Colormap',colormaps)
     case 1
-        xlabel('X-axis')
-        ylabel('Z-axis')
+        xlabel('X')
+        ylabel('Z')
         %title('Frontal view: \leftarrow\rightarrow = Y-axis; \uparrow\downarrow = t-axis, 0-5 = view')
-        title(['Y=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))]);
+        title({'Coupe transverse',['Y=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))]});
         %set(h,'Name',['Y=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))],'Colormap',colormaps)
     case 2
-        xlabel('Y-axis')
-        ylabel('Z-axis')
+        xlabel('Y')
+        ylabel('Z')
+        title({'Coupe sagittale', ['X=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))]});
         %title('Sagital view: \leftarrow\rightarrow = X-axis; \uparrow\downarrow = t-axis, 0-5 = view')
-        set(h,'Name',['X=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))],'Colormap',colormaps)
+        %set(h,'Name',['X=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))],'Colormap',colormaps)
     case 3
-        xlabel('t-axis')
-        ylabel('X-axis')
-        title('X-time view: \leftarrow\rightarrow = Z-axis; \uparrow\downarrow = Y-axis, 0-5 = view')
-        set(h,'Name',['Z=' num2str(slice) '/' num2str(rng(2)) ', Y=' num2str(time) '/' num2str(rng_t(2))],'Colormap',colormaps)
+        xlabel('Temps')
+        ylabel('X')
+        title({'Coupe de X selon le temps', ['Z=' num2str(slice) '/' num2str(rng(2)) ', Y=' num2str(time) '/' num2str(rng_t(2))]});
+        %title('X-time view: \leftarrow\rightarrow = Z-axis; \uparrow\downarrow = Y-axis, 0-5 = view')
+        %set(h,'Name',['Z=' num2str(slice) '/' num2str(rng(2)) ', Y=' num2str(time) '/' num2str(rng_t(2))],'Colormap',colormaps)
     case 4
-        xlabel('t-axis')
-        ylabel('Y-axis')
-        title('Y-time view: \leftarrow\rightarrow = Z-axis; \uparrow\downarrow = X-axis, 0-5 = view')
-        set(h,'Name',['Z=' num2str(slice) '/' num2str(rng(2)) ', X=' num2str(time) '/' num2str(rng_t(2))],'Colormap',colormaps)
+        xlabel('Temps')
+        ylabel('Y')
+        title({'Coupe de Y selon le temps', ['Z=' num2str(slice) '/' num2str(rng(2)) ', X=' num2str(time) '/' num2str(rng_t(2))]});
+        %title('Y-time view: \leftarrow\rightarrow = Z-axis; \uparrow\downarrow = X-axis, 0-5 = view')
+        %set(h,'Name',['Z=' num2str(slice) '/' num2str(rng(2)) ', X=' num2str(time) '/' num2str(rng_t(2))],'Colormap',colormaps)
     case 5
-        xlabel('t-axis')
-        ylabel('Z-axis')
-        title('Z-time view: \leftarrow\rightarrow = Y-axis; \uparrow\downarrow = X-axis, 0-5 = view')
-        set(h,'Name',['Y=' num2str(slice) '/' num2str(rng(2)) ', X=' num2str(time) '/' num2str(rng_t(2))],'Colormap',colormaps)
+        xlabel('Temps')
+        ylabel('Z')
+        title({'Vue de Z selon le temps', ['Y=' num2str(slice) '/' num2str(rng(2)) ', X=' num2str(time) '/' num2str(rng_t(2))]});
+        %title('Z-time view: \leftarrow\rightarrow = Y-axis; \uparrow\downarrow = X-axis, 0-5 = view')
+        %set(h,'Name',['Y=' num2str(slice) '/' num2str(rng(2)) ', X=' num2str(time) '/' num2str(rng_t(2))],'Colormap',colormaps)
 end;
 end
 

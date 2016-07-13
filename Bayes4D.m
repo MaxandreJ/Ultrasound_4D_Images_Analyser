@@ -21,7 +21,7 @@ function varargout = Bayes4D(varargin)
 
 % Edit the above text to modify the response to help Bayes4D
 
-% Last Modified by GUIDE v2.5 09-Jul-2016 20:07:25
+% Last Modified by GUIDE v2.5 13-Jul-2016 18:22:18
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -99,7 +99,9 @@ sommeY = get(handles.sommeY,'Value');
 coupeSelonX = get(handles.coupeSelonX,'Value');
 coupeSelonY = get(handles.coupeSelonY,'Value');
 
-handles.graph = handles.image3(YDebut:YFin,XDebut:XFin);
+image = get(handles.image.Children(2),'CData');
+
+handles.graph = image(int16(YDebut):int16(YFin),int16(XDebut):int16(XFin));
 
 if (sommeX==1 && sommeY==0)
     handles.graph = sum(handles.graph,2);
@@ -110,9 +112,9 @@ handles.graph = squeeze(handles.graph);
 
 axes(handles.graphique);
 if (coupeSelonX==1 && coupeSelonY==0)
-    plot(XDebut:XFin,handles.graph','displayname','Courbe originale');
+    plot(int16(XDebut):int16(XFin),handles.graph','displayname','Courbe originale');
 elseif (coupeSelonY==1 && coupeSelonX==0)
-    plot(YDebut:YFin,handles.graph,'displayname','Courbe originale');
+    plot(int16(YDebut):int16(YFin),handles.graph,'displayname','Courbe originale');
 end
 
 xlabel('Y (en pixels)')%A adapter selon Y, X...
@@ -686,7 +688,10 @@ handles.volumes = volumes;
 
 handles.nb_fichiers = nb_fichiers-3;
 
+
+
 guidata(hObject, handles);
+afficherImage_Callback(hObject, eventdata, guidata(hObject));
 
 % --- Executes on selection change in choix_du_pic.
 function choix_du_pic_Callback(hObject, eventdata, handles)
@@ -803,12 +808,89 @@ function Rectangle_Callback(hObject, eventdata, handles)
 % hObject    handle to Rectangle (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-imrect;
+rectangle = imrect;
+%position_rectangle = wait(rectangle);
+position_rectangle = getPosition(rectangle);
+x_min=position_rectangle(1);
+y_min=position_rectangle(2);
+largeur=position_rectangle(3);
+hauteur=position_rectangle(4);
+x_max = x_min + largeur;
+y_max = y_min + hauteur;
+set(handles.XDebut,'Value',x_min,'String',num2str(x_min));
+set(handles.YDebut,'Value',y_min,'String',num2str(y_min));
+set(handles.XFin,'Value',x_max,'String',num2str(x_max));
+set(handles.YFin,'Value',y_max,'String',num2str(y_max));
+guidata(hObject,handles);
+
+
 
 
 
 % --------------------------------------------------------------------
-function SelectionROI_Callback(hObject, eventdata, handles)
-% hObject    handle to SelectionROI (see GCBO)
+function ContexteImage_Callback(hObject, eventdata, handles)
+% hObject    handle to ContexteImage (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function VueSagitale_Callback(hObject, eventdata, handles)
+% hObject    handle to VueSagitale (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function ChangementVue_Callback(hObject, eventdata, handles)
+% hObject    handle to ChangementVue (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function ChoixDeLaVue_Callback(hObject, eventdata, handles)
+% hObject    handle to ChoixDeLaVue (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function ChoixDuROI_Callback(hObject, eventdata, handles)
+% hObject    handle to ChoixDuROI (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function VueTransversale_Callback(hObject, eventdata, handles)
+% hObject    handle to VueTransversale (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+imline;
+
+
+% --------------------------------------------------------------------
+function SelectionVue_Callback(hObject, eventdata, handles)
+% hObject    handle to SelectionVue (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function Aide_Callback(hObject, eventdata, handles)
+% hObject    handle to Aide (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+msgbox({'Le passage entre les types de coupes est permise par les touches du clavier suivantes :', ...
+'0 : coupe frontale (Y en fonction de X) ;', ...
+'1 : coupe transversale (Z en fonction de X) ;', ...
+'2 : coupe sagittale (Z en fonction de Y);', ...
+'3 : coupe de X en fonction du temps ;', ...
+'4 : coupe de Y en fonction du temps ;', ...
+'5 : coupe de Z en fonction du temps.', ...
+'',...
+'Pour une même coupe, on peut glisser entre les plans par les flèches multidirectionnelles du clavier :',...
+'flèches gauche et droite pour glisser selon le premier axe mentionné dans le titre de l''image ;',...
+'flèches bas et haut pour glisser selon le deuxième axe mentionné dans le titre de l''image.'})
+
