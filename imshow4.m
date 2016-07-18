@@ -75,13 +75,13 @@ set(handles.image.Children,'UIContextMenu',uicontextmenu);
 %figure(h)
 %set(h,'Name',['Z=' num2str(slice) '/' num2str(size(im,3)) ', t=' num2str(time) '/' num2str(size(im,4))])
 
-
-
+%Par défaut
+handles.vue_choisie = 0;
 
 xlabel('X')
 ylabel('Y')
 %title({'Vue transversale', ['Z=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))]});
-title('Coupe transversale: \leftarrow\rightarrow = Z-axis, \uparrow\downarrow = t-axis, 0-5 = view')
+title('Coupe frontale : \leftarrow\rightarrow = Z-axis, \uparrow\downarrow = t-axis, 0-5 = view')
 %set(h,'Colormap',colormaps);
 if size(im,3)>1 || size(im,4)>1
     %set(h,'KeyPressFcn',{@kresli,h,range,N,ref_time,method})
@@ -198,6 +198,7 @@ end;
 
 imzobr = im(:,:,slice,time);
 
+
 axes(handles.image);
 
 imshow(imzobr);
@@ -233,6 +234,8 @@ if size(imzobr,2)<200 && inter==1
     imzobr = imresize(imzobr,[size(imzobr,1),200]);
 end;
 
+handles.vue_choisie = mode_out;
+
 %Ajout ci-dessous
 guidata(h,handles);
 
@@ -243,6 +246,7 @@ switch mode_out
         %title('Transversal view: \leftarrow\rightarrow = Z-axis; \uparrow\downarrow = t-axis, 0-5 = view')
         title({'Coupe frontale', ['Z=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))]});
         %set(h,'Name',['Z=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))],'Colormap',colormaps)
+        axes(handles.graphique);
     case 1
         xlabel('X')
         ylabel('Z')

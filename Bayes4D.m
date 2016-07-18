@@ -55,7 +55,7 @@ function Bayes4D_OpeningFcn(hObject, eventdata, handles, varargin)
 %DecodeDicomInfo('C:\Documents and Settings\Administrateur\Mes documents\Downloads\AplioXV\DICOM XV\DICOM XV\20160509\S0000004\US000001');
 %DecodeDicomInfo('DICOM XV\20160509\S0000004\US000001');
 
-%Adaptation automatique de l'interface à la résolution de l'écran
+
 
 %handles.donnees2 = GetRAWframes_B;
 %Choose default command line output for Bayes4D
@@ -87,6 +87,22 @@ function afficherGraphique_Callback(hObject, eventdata, handles)
 
 cla(handles.graphique); %Efface le graphique précédent
 
+if isfield(handles,'rectangle')
+    delete(handles.rectangle); %Efface la région d'intérêt tracée précédente
+end
+
+
+%test_rect = exist('handles.rectangle_dessine');
+%keyboard;
+if isfield(handles,'ligne')
+    delete(handles.ligne);
+elseif isfield(handles,'rectangle_dessine')
+    delete(handles.rectangle_dessine);
+end
+
+axes(handles.graphique);
+
+
 %On accède aux valeurs de coordonnées par des accesseurs
 XDebut = get(handles.XDebut,'Value');
 YDebut = get(handles.YDebut,'Value');
@@ -96,39 +112,102 @@ YFin = get(handles.YFin,'Value');
 sommeX = get(handles.sommeX,'Value');
 sommeY = get(handles.sommeY,'Value');
 
-coupeSelonX = get(handles.coupeSelonX,'Value');
-coupeSelonY = get(handles.coupeSelonY,'Value');
+coupeSelon1 = get(handles.coupeSelonX,'Value');
+coupeSelon2 = get(handles.coupeSelonY,'Value');
 
-image = get(handles.image.Children(2),'CData');
+choix_coupe_axe1 = coupeSelon1==1 && coupeSelon2==0;
+choix_coupe_axe2 = coupeSelon1==0 && coupeSelon2==1;
 
-handles.graph = image(int16(YDebut):int16(YFin),int16(XDebut):int16(XFin));
+%Initialement la coupe est frontale
+%{
+if choix_coupe1
+    xlabel('X (en pixels)');
+elseif choix_coupe2
+    xlabel('Y (en pixels)');
+end
+%}
+cla(handles.image.Children);
+
+%image = get(handles.image.Children(2),'CData');
+image = getimage(handles.image);
+
+%Les Y sont en abscisse et les X en ordonnées parce que Matlab voie les Y
+%comme des noms de colonne de matrice
+%ce qui n'est pas l'intuition cartésienne
+donnees_ROI = image(int16(YDebut):int16(YFin),int16(XDebut):int16(XFin));
 
 if (sommeX==1 && sommeY==0)
-    handles.graph = sum(handles.graph,2);
+    donnees_ROI = sum(donnees_ROI,2);
 elseif (sommeX==0 && sommeY==1)
-    handles.graph = sum(handles.graph,1);
+    donnees_ROI = sum(donnees_ROI,1);
 end
-handles.graph = squeeze(handles.graph);
+donnees_ROI = squeeze(donnees_ROI);
 
-axes(handles.graphique);
-if (coupeSelonX==1 && coupeSelonY==0)
-    plot(int16(XDebut):int16(XFin),handles.graph','displayname','Courbe originale');
-elseif (coupeSelonY==1 && coupeSelonX==0)
-    plot(int16(YDebut):int16(YFin),handles.graph,'displayname','Courbe originale');
+%Même problème coordonnées cartésiennes/matrice ici
+if choix_coupe_axe1
+    donnees_ROI = donnees_ROI';
+    plot(int16(XDebut):int16(XFin),donnees_ROI,'displayname','Courbe originale');
+elseif choix_coupe_axe2
+    plot(int16(YDebut):int16(YFin),donnees_ROI,'displayname','Courbe originale');
 end
 
-xlabel('Y (en pixels)')%A adapter selon Y, X...
-ylabel('Intensité (en niveaux)')
+ylabel('Intensité (en niveaux)'); %L'axe des ordonnées représente toujours les niveaux
 
+%Détermination du nom de l'axe des abscisses du graphique
+coupe_frontale = 0;
+coupe_transverse = 1;
+coupe_sagittale = 2;
+coupe_X_temps = 3;
+coupe_Y_temps = 4;
+coupe_Z_temps = 5;
+
+switch handles.vue_choisie
+    case coupe_frontale
+        if choix_coupe_axe1
+            xlabel('X (en pixels)');
+        elseif choix_coupe_axe2
+            xlabel('Y (en pixels)');
+        end
+    case coupe_transverse
+        if choix_coupe_axe1
+            xlabel('X (en pixels)');
+        elseif choix_coupe_axe2
+            xlabel('Z (en pixels)');
+        end
+    case coupe_sagittale
+        if choix_coupe_axe1
+            xlabel('Y (en pixels)');
+        elseif choix_coupe_axe2
+            xlabel('Z (en pixels)');
+        end
+    case coupe_X_temps
+        if choix_coupe_axe1
+            xlabel('Temps (en numéro de volume)');
+        elseif choix_coupe_axe2
+            xlabel('X (en pixels)');
+        end
+    case coupe_Y_temps
+        if choix_coupe_axe1
+            xlabel('Temps (en numéro de volume)');
+        elseif choix_coupe_axe2
+            xlabel('Y (en pixels)');
+        end
+    case coupe_Z_temps
+        if choix_coupe_axe1
+            xlabel('Temps (en numéro de volume)');
+        elseif choix_coupe_axe2
+            xlabel('X (en pixels)');
+        end
+end
 axes(handles.image);
 %afficherImage_Callback(hObject, eventdata, guidata(hObject));
 
 if xor(XDebut~=XFin,YDebut~=YFin)
-    line([XDebut,XFin],[YDebut,YFin],'Color',[1 0 0]);
+    handles.ligne = line([XDebut,XFin],[YDebut,YFin],'Color',[1 0 0]);
 elseif (XDebut~=XFin && YDebut~=YFin)
     largeur = XFin-XDebut;
     hauteur = YFin-YDebut;
-    rectangle('Position',[XDebut YDebut largeur hauteur],'EdgeColor','r');
+    handles.rectangle_dessine = rectangle('Position',[XDebut YDebut largeur hauteur],'EdgeColor','r');
 end
 
 blanc = [1 1 1];
@@ -137,6 +216,9 @@ set(handles.choix_du_pic,'enable','on','BackgroundColor',blanc);
 set(handles.choix_de_deux_pics,'enable','on','BackgroundColor',blanc);
 set(handles.lmh_affichage,'BackgroundColor',blanc);
 set(handles.dpap_affichage,'BackgroundColor',blanc);
+handles.donnees_ROI = donnees_ROI;
+handles.choix_coupe_axe1 = choix_coupe_axe1;
+handles.choix_coupe_axe2 = choix_coupe_axe2;
 
 guidata(hObject, handles);
 
@@ -416,21 +498,23 @@ function heterogeneite_Callback(hObject, eventdata, handles)
 coupeSelonX = get(handles.coupeSelonX,'Value');
 coupeSelonY = get(handles.coupeSelonY,'Value');
 
-
+donnees_ROI=handles.donnees_ROI;
+%{
 if (coupeSelonX==0 && coupeSelonY==1)
-    heterogeneite = handles.graph;
+    heterogeneite = handles.donneesROI';
 elseif (coupeSelonX==1 && coupeSelonY==0)
-    heterogeneite = transpose(handles.graph);
+    heterogeneite = handles.donneesROI;
 end
+%}
 
 %Enlever les lignes qui ne contiennent que des 0 (signaux nuls pour chacune
 %des tranches
-heterogeneite(all(heterogeneite==0,2),:)=[];
+donnees_ROI(all(donnees_ROI==0,2),:)=[];
 
 seuil_de_risque = 0.05;
 
-[nLig nCol]=size(heterogeneite);
-[es,esCi,khi2,p]=cramerV(heterogeneite,nLig,nCol,0.95);
+[nLig nCol]=size(donnees_ROI);
+[es,esCi,khi2,p]=cramerV(donnees_ROI,nLig,nCol,0.95);
 r=min(nLig,nCol);
 w=es*sqrt(r-1);
 wCi=esCi*sqrt(r-1);
@@ -516,36 +600,39 @@ XFin = get(handles.XFin,'Value');
 YFin = get(handles.YFin,'Value');
 
 %Affichage des pics
-graph_pic = double(handles.graph);
+donnees_ROI = double(handles.donnees_ROI);
 %graph_pic_lisse = mslowess([1:length(graph_pic)]',graph_pic,'Span',10);
 windowSize = 5;
 filtre_lissage = (1/windowSize)*ones(1,windowSize);
 coefficient_filtre = 1;
-graph_pic_lisse = filter(filtre_lissage,coefficient_filtre,graph_pic);
+donnees_ROI_lissees = filter(filtre_lissage,coefficient_filtre,donnees_ROI);
 
+Xs = double(XDebut):double(XFin);
+Ys = double(YDebut):double(YFin);
 
+keyboard;
 axes(handles.graphique);
 hold on
-if (coupeSelonX==1 && coupeSelonY==0)
+if handles.choix_coupe_axe1
     %plot(handles.XDebut:handles.XFin,graph_pic_lisse,'g','displayname','Courbe débruitée');
-    [y_maxs,x_maxs,lmhs,proms] = findpeaks(graph_pic_lisse,double(XDebut):double(XFin));
-    findpeaks(graph_pic_lisse,double(XDebut):double(XFin),'Annotate','extents');
+    [y_maxs,x_maxs,lmhs,proms] = findpeaks(donnees_ROI_lissees,double(XDebut):double(XFin));
+    findpeaks(donnees_ROI_lissees,double(XDebut):double(XFin),'Annotate','extents');
     %[Peaklist, PFWHH, PExt] = mspeaks(double(handles.XDebut:handles.XFin),graph_pic,'Style','fwhhline','ShowPlot', false);
-elseif (coupeSelonX==0 && coupeSelonY==1)
+elseif handles.choix_coupe_axe2
     %plot(handles.YDebut:handles.YFin,graph_pic_lisse,'g','displayname','Courbe débruitée');
-    [y_maxs,x_maxs,lmhs,proms] = findpeaks(graph_pic_lisse,double(YDebut):double(YFin));
-    findpeaks(graph_pic_lisse,double(YDebut):double(YFin),'Annotate','extents');
+    [y_maxs,x_maxs,lmhs,proms] = findpeaks(donnees_ROI_lissees,double(YDebut):double(YFin));
+    findpeaks(donnees_ROI_lissees,double(YDebut):double(YFin),'Annotate','extents');
     %[Peaklist, PFWHH, PExt] = mspeaks(double(handles.YDebut:handles.YFin),graph_pic_lisse','Style','fwhhline','HeightFilter',0.7*max(graph_pic_lisse'),'ShowPlot', false);
 end
 legend(gca,'off');
-
-axes(handles.graphique);
+hold off
+%axes(handles.graphique);
 %legend('show','Location','northwest');
 %findpeaks(graph_pic_lisse,'Annotate','extents');
 %plot(handles.XDebut+locs(1),pks(1),'xr','linewidth',2,'displayname','Maximums');
-axes(handles.graphique);
+%axes(handles.graphique);
 %plot(PFWHH{1},[Peaklist(2)/2 Peaklist(2)/2] ,'r','linewidth',2,'displayname','DETECTION_PICS');
-hold off
+
 
 %set(handles.dpap_affichage,'String',x_maxs(2)-x_maxs(1));
 %{
@@ -563,7 +650,7 @@ handles.x_maxs = x_maxs;
 crochet_ouvrant = repmat('[', nombre_de_pics , 1);
 virgule = repmat(', ',nombre_de_pics,1);
 crochet_fermant = repmat(']',nombre_de_pics,1);
-liste_de_pics = [crochet_ouvrant num2str(x_maxs') virgule ...
+liste_de_pics = [crochet_ouvrant num2str(x_maxs) virgule ...
     num2str(y_maxs) crochet_fermant];
 set(handles.choix_du_pic,'String',liste_de_pics);
 pic_choisi = get(handles.choix_du_pic,'Value');
@@ -685,6 +772,7 @@ end
 assignin('base', 'fichiers', fichiers);
 volumes = cat(4,fichiers{:});
 handles.volumes = volumes;
+
 
 handles.nb_fichiers = nb_fichiers-3;
 
@@ -821,6 +909,7 @@ set(handles.XDebut,'Value',x_min,'String',num2str(x_min));
 set(handles.YDebut,'Value',y_min,'String',num2str(y_min));
 set(handles.XFin,'Value',x_max,'String',num2str(x_max));
 set(handles.YFin,'Value',y_max,'String',num2str(y_max));
+handles.rectangle = rectangle;
 guidata(hObject,handles);
 
 
