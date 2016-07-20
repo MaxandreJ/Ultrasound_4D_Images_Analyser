@@ -46,8 +46,16 @@ isfused = 0;
 %Ajout ci-dessous
 imzobr = im(:,:,slice,time);
 
-contexte_image = varargin{2};
-handles = varargin{3};
+N = nargin;
+if N==3
+    contexte_image = varargin{2};
+    handles = varargin{3};
+elseif N==5
+    contexte_image = varargin{2};
+    handles = varargin{3};
+    slice = varargin{4};
+    time = varargin{5};
+end
 
 %set(handles.image,'UserData',imzobr);
 %set(handles.image.Children,'CData',imzobr);
@@ -243,40 +251,63 @@ switch mode_out
     case 0
         xlabel('X')
         ylabel('Y')
-        %title('Transversal view: \leftarrow\rightarrow = Z-axis; \uparrow\downarrow = t-axis, 0-5 = view')
         title({'Coupe frontale', ['Z=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))]});
-        %set(h,'Name',['Z=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))],'Colormap',colormaps)
-        axes(handles.graphique);
+        set(handles.axe1_graphique,'String','X');
+        set(handles.axe2_graphique,'String','Y');
+        set(handles.texte_coupe_axe1,'String','Coupe selon X');
+        set(handles.texte_coupe_axe2,'String','Coupe selon Y');
+        set(handles.texte_axe3_image,'String','Z');
+        set(handles.texte_axe4_image,'String','Temps');
     case 1
         xlabel('X')
         ylabel('Z')
-        %title('Frontal view: \leftarrow\rightarrow = Y-axis; \uparrow\downarrow = t-axis, 0-5 = view')
         title({'Coupe transverse',['Y=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))]});
-        %set(h,'Name',['Y=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))],'Colormap',colormaps)
+        set(handles.axe1_graphique,'String','X');
+        set(handles.axe2_graphique,'String','Z');
+        set(handles.texte_coupe_axe1,'String','Coupe selon X');
+        set(handles.texte_coupe_axe2,'String','Coupe selon Z');
+        set(handles.texte_axe3_image,'String','Y');
+        set(handles.texte_axe4_image,'String','Temps');
     case 2
         xlabel('Y')
         ylabel('Z')
         title({'Coupe sagittale', ['X=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))]});
-        %title('Sagital view: \leftarrow\rightarrow = X-axis; \uparrow\downarrow = t-axis, 0-5 = view')
-        %set(h,'Name',['X=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))],'Colormap',colormaps)
+        set(handles.axe1_graphique,'String','Y');
+        set(handles.axe2_graphique,'String','Z');
+        set(handles.texte_coupe_axe1,'String','Coupe selon Y');
+        set(handles.texte_coupe_axe2,'String','Coupe selon Z');
+        set(handles.texte_axe3_image,'String','X');
+        set(handles.texte_axe4_image,'String','Temps');
     case 3
         xlabel('Temps')
         ylabel('X')
         title({'Coupe de X selon le temps', ['Z=' num2str(slice) '/' num2str(rng(2)) ', Y=' num2str(time) '/' num2str(rng_t(2))]});
-        %title('X-time view: \leftarrow\rightarrow = Z-axis; \uparrow\downarrow = Y-axis, 0-5 = view')
-        %set(h,'Name',['Z=' num2str(slice) '/' num2str(rng(2)) ', Y=' num2str(time) '/' num2str(rng_t(2))],'Colormap',colormaps)
+        set(handles.axe1_graphique,'String','Temps');
+        set(handles.axe2_graphique,'String','X');
+        set(handles.texte_coupe_axe1,'String','Coupe selon T');
+        set(handles.texte_coupe_axe2,'String','Coupe selon X');
+        set(handles.texte_axe3_image,'String','Z');
+        set(handles.texte_axe4_image,'String','Y');
     case 4
         xlabel('Temps')
         ylabel('Y')
         title({'Coupe de Y selon le temps', ['Z=' num2str(slice) '/' num2str(rng(2)) ', X=' num2str(time) '/' num2str(rng_t(2))]});
-        %title('Y-time view: \leftarrow\rightarrow = Z-axis; \uparrow\downarrow = X-axis, 0-5 = view')
-        %set(h,'Name',['Z=' num2str(slice) '/' num2str(rng(2)) ', X=' num2str(time) '/' num2str(rng_t(2))],'Colormap',colormaps)
+        set(handles.axe1_graphique,'String','Temps');
+        set(handles.axe2_graphique,'String','Y');
+        set(handles.texte_coupe_axe1,'String','Coupe selon T');
+        set(handles.texte_coupe_axe2,'String','Coupe selon Y');
+        set(handles.texte_axe3_image,'String','Z');
+        set(handles.texte_axe4_image,'String','X');
     case 5
         xlabel('Temps')
         ylabel('Z')
         title({'Vue de Z selon le temps', ['Y=' num2str(slice) '/' num2str(rng(2)) ', X=' num2str(time) '/' num2str(rng_t(2))]});
-        %title('Z-time view: \leftarrow\rightarrow = Y-axis; \uparrow\downarrow = X-axis, 0-5 = view')
-        %set(h,'Name',['Y=' num2str(slice) '/' num2str(rng(2)) ', X=' num2str(time) '/' num2str(rng_t(2))],'Colormap',colormaps)
+        set(handles.axe1_graphique,'String','Temps');
+        set(handles.axe2_graphique,'String','Z');
+        set(handles.texte_coupe_axe1,'String','Coupe selon T');
+        set(handles.texte_coupe_axe2,'String','Coupe selon Z');
+        set(handles.texte_axe3_image,'String','Y');
+        set(handles.texte_axe4_image,'String','X');
 end;
 end
 

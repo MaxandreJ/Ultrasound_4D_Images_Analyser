@@ -21,7 +21,7 @@ function varargout = Bayes4D(varargin)
 
 % Edit the above text to modify the response to help Bayes4D
 
-% Last Modified by GUIDE v2.5 13-Jul-2016 18:22:18
+% Last Modified by GUIDE v2.5 20-Jul-2016 16:29:02
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -131,23 +131,37 @@ cla(handles.image.Children);
 %image = get(handles.image.Children(2),'CData');
 image = getimage(handles.image);
 
+%Conversion des indices de matrice (lignes/colonnes) en coordonnées
+%cartésiennes par transposition de la matrice
+image = image';
+
 %Les Y sont en abscisse et les X en ordonnées parce que Matlab voie les Y
 %comme des noms de colonne de matrice
 %ce qui n'est pas l'intuition cartésienne
-donnees_ROI = image(int16(YDebut):int16(YFin),int16(XDebut):int16(XFin));
+%donnees_ROI = image(int16(YDebut):int16(YFin),int16(XDebut):int16(XFin));
+donnees_ROI = image(int16(XDebut):int16(XFin),int16(YDebut):int16(YFin));
 
 if (sommeX==1 && sommeY==0)
-    donnees_ROI = sum(donnees_ROI,2);
-elseif (sommeX==0 && sommeY==1)
+    %donnees_ROI = sum(donnees_ROI,2);
     donnees_ROI = sum(donnees_ROI,1);
+    %Pour avoir toujours des données en ligne
+    donnees_ROI = donnees_ROI';
+elseif (sommeX==0 && sommeY==1)
+    %donnees_ROI = sum(donnees_ROI,1);
+    donnees_ROI = sum(donnees_ROI,2);
+    donnees_ROI = donnees_ROI';
 end
+%Enlever les dimensions inutiles laissées par la somme
 donnees_ROI = squeeze(donnees_ROI);
 
 %Même problème coordonnées cartésiennes/matrice ici
 if choix_coupe_axe1
-    donnees_ROI = donnees_ROI';
+    %donnees_ROI = donnees_ROI';
+    %plot(int16(XDebut):int16(XFin),donnees_ROI,'displayname','Courbe originale');
     plot(int16(XDebut):int16(XFin),donnees_ROI,'displayname','Courbe originale');
 elseif choix_coupe_axe2
+    %plot(int16(YDebut):int16(YFin),donnees_ROI,'displayname','Courbe originale');
+    donnees_ROI = donnees_ROI';
     plot(int16(YDebut):int16(YFin),donnees_ROI,'displayname','Courbe originale');
 end
 
@@ -412,6 +426,7 @@ function afficherImage_Callback(hObject, eventdata, handles)
 %image3 = ConvertRAWframe_B(donnees3,0);
 %handles.image3 = uint8(image3);
 
+
 axes(handles.image);
 imshow4(handles.volumes,hObject,handles);
 %handles = imshow4(handles.volumes,hObject,handles);
@@ -495,63 +510,28 @@ function heterogeneite_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 %On accède aux choix de coupes par des accesseurs
-coupeSelonX = get(handles.coupeSelonX,'Value');
-coupeSelonY = get(handles.coupeSelonY,'Value');
+%coupeSelonX = get(handles.coupeSelonX,'Value');
+%coupeSelonY = get(handles.coupeSelonY,'Value');
 
-donnees_ROI=handles.donnees_ROI;
-%{
-if (coupeSelonX==0 && coupeSelonY==1)
-    heterogeneite = handles.donneesROI';
-elseif (coupeSelonX==1 && coupeSelonY==0)
-    heterogeneite = handles.donneesROI;
-end
-%}
-
-%Enlever les lignes qui ne contiennent que des 0 (signaux nuls pour chacune
-%des tranches
-donnees_ROI(all(donnees_ROI==0,2),:)=[];
-
-seuil_de_risque = 0.05;
-
-[nLig nCol]=size(donnees_ROI);
-[es,esCi,khi2,p]=cramerV(donnees_ROI,nLig,nCol,0.95);
-r=min(nLig,nCol);
-w=es*sqrt(r-1);
-wCi=esCi*sqrt(r-1);
-
-set(handles.khi2,'String',khi2);
-set(handles.p,'String',p);
-set(handles.w,'String',w);
-set(handles.wb,'String',wCi(1));
-set(handles.wh,'String',wCi(2));
-
-if p<=seuil_de_risque
-    if w<0.1
-        resultatHetero=['Le résultat est significatif au seuil de risque ',num2str(seuil_de_risque),' i.e. les coupes '...
-       'utilisées permettent d''induire que la tumeur est hétérogène. L''hétérogénéité est cependant quasi nulle (w<0,1).'];
-        set(handles.resultatCouleur,'BackgroundColor','red');
-    elseif w<0.3
-        resultatHetero=['Le résultat est significatif au seuil de risque ',num2str(seuil_de_risque),' i.e. les coupes '...
-       'utilisées permettent d''induire que la tumeur est hétérogène. L''hétérogénéité est faible (0,1<=w<0,3).'];
-        set(handles.resultatCouleur,'BackgroundColor','yellow');
-   elseif w<0.5
-        resultatHetero=['Le résultat est significatif au seuil de risque ',num2str(seuil_de_risque),' i.e. les coupes '...
-       'utilisées permettent d''induire que la tumeur est hétérogène. L''hétérogénéité est moyenne (0,3<=w<0,5).'];
-        set(handles.resultatCouleur,'BackgroundColor','blue');
-    elseif w>=0.5
-        resultatHetero=['Le résultat est significatif au seuil de risque ',num2str(seuil_de_risque),' i.e. les coupes '...
-       'utilisées permettent d''induire que la tumeur est hétérogène. L''hétérogénéité est forte (0,5<=w).'];
-        set(handles.resultatCouleur,'BackgroundColor','green');
+courbes = get(handles.graphique,'Children');
+[nombre_de_courbes ~]=size(courbes);
+somme_des_distances=0;
+for i=1:nombre_de_courbes
+    for j=i+1:nombre_de_courbes
+        Y=abs(courbes(i).YData-courbes(j).YData);
+        somme_des_distances=sum(Y)+somme_des_distances;
     end
-else
-   resultatHetero = ['Le résultat n''est pas significatif au seuil de risque ',num2str(seuil_de_risque),' i.e. les coupes '...
-       'utilisées ne permettent pas d''induire que la tumeur est hétérogène.'];
-   set(handles.resultatCouleur,'BackgroundColor','black');
 end
+somme_des_distances_normalises_nombre_de_courbes=somme_des_distances/nombre_de_courbes;
 
-set(handles.resultatHetero,'String',resultatHetero);
+set(handles.affichage_somme_des_distances,'String',num2str(somme_des_distances_normalises_nombre_de_courbes));
+%Pour utilisation de l'entropie l'image doit avoir 256 niveaux
+donnees_ROI_8bits=uint8(handles.donnees_ROI);
+entropie_region_interet=entropy(donnees_ROI_8bits);
+set(handles.affichage_entropie,'String',num2str(entropie_region_interet));
+guidata(handles.figure1,handles);
 
-guidata(hObject, handles);
+
 
 
 % --- Executes during object creation, after setting all properties.
@@ -610,7 +590,6 @@ donnees_ROI_lissees = filter(filtre_lissage,coefficient_filtre,donnees_ROI);
 Xs = double(XDebut):double(XFin);
 Ys = double(YDebut):double(YFin);
 
-keyboard;
 axes(handles.graphique);
 hold on
 if handles.choix_coupe_axe1
@@ -643,7 +622,11 @@ handles.proms = proms;
 handles=guidata(hObject);
 %}
 
-handles.x_maxs = x_maxs;
+%handles.x_maxs = x_maxs;
+
+%Passage de x_maxs et y_maxs en vecteurs colonne pour affichage
+x_maxs=x_maxs';
+y_maxs=y_maxs';
 
 %Affichage de la liste de pics dans la première liste déroulante
 [nombre_de_pics ~] = size(y_maxs);
@@ -667,6 +650,7 @@ x_plus_grand_des_deux_pics = x_maxs(combinaison_pics_choisis(2));
 x_plus_petit_des_deux_pics = x_maxs(combinaison_pics_choisis(1));
 set(handles.dpap_affichage,'String',num2str(x_plus_grand_des_deux_pics-x_plus_petit_des_deux_pics));
 
+handles.x_maxs=x_maxs;
 guidata(hObject, handles);
 
 %disp('Peaklist');
@@ -905,6 +889,13 @@ largeur=position_rectangle(3);
 hauteur=position_rectangle(4);
 x_max = x_min + largeur;
 y_max = y_min + hauteur;
+
+%On arrondit les valeurs des coordonnées sélectionnées
+x_min=int16(round(x_min));
+y_min=int16(round(y_min));
+x_max=int16(round(x_max));
+y_max=int16(round(y_max));
+
 set(handles.XDebut,'Value',x_min,'String',num2str(x_min));
 set(handles.YDebut,'Value',y_min,'String',num2str(y_min));
 set(handles.XFin,'Value',x_max,'String',num2str(x_max));
@@ -983,3 +974,57 @@ msgbox({'Le passage entre les types de coupes est permise par les touches du cla
 'flèches gauche et droite pour glisser selon le premier axe mentionné dans le titre de l''image ;',...
 'flèches bas et haut pour glisser selon le deuxième axe mentionné dans le titre de l''image.'})
 
+
+
+
+function affichage_somme_des_distances_Callback(hObject, eventdata, handles)
+% hObject    handle to affichage_somme_des_distances (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of affichage_somme_des_distances as text
+%        str2double(get(hObject,'String')) returns contents of affichage_somme_des_distances as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function affichage_somme_des_distances_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to affichage_somme_des_distances (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --------------------------------------------------------------------
+function uitoggletool6_ClickedCallback(hObject, eventdata, handles)
+% hObject    handle to uitoggletool6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+h = rotate3d(handles.image);
+
+
+
+function affichage_entropie_Callback(hObject, eventdata, handles)
+% hObject    handle to affichage_entropie (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of affichage_entropie as text
+%        str2double(get(hObject,'String')) returns contents of affichage_entropie as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function affichage_entropie_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to affichage_entropie (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
