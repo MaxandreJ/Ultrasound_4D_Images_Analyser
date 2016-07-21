@@ -21,7 +21,7 @@ function varargout = Bayes4D(varargin)
 
 % Edit the above text to modify the response to help Bayes4D
 
-% Last Modified by GUIDE v2.5 20-Jul-2016 16:29:02
+% Last Modified by GUIDE v2.5 21-Jul-2016 16:23:34
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -31,6 +31,7 @@ gui_State = struct('gui_Name',       mfilename, ...
                    'gui_OutputFcn',  @Bayes4D_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
+
 if nargin && ischar(varargin{1})
     gui_State.gui_Callback = str2func(varargin{1});
 end
@@ -54,8 +55,6 @@ function Bayes4D_OpeningFcn(hObject, eventdata, handles, varargin)
 %Ancien aplio
 %DecodeDicomInfo('C:\Documents and Settings\Administrateur\Mes documents\Downloads\AplioXV\DICOM XV\DICOM XV\20160509\S0000004\US000001');
 %DecodeDicomInfo('DICOM XV\20160509\S0000004\US000001');
-
-
 
 %handles.donnees2 = GetRAWframes_B;
 %Choose default command line output for Bayes4D
@@ -426,9 +425,12 @@ function afficherImage_Callback(hObject, eventdata, handles)
 %image3 = ConvertRAWframe_B(donnees3,0);
 %handles.image3 = uint8(image3);
 
+coordonnee_axe3 = int16(str2double(get(handles.valeur_axe3_image,'String')));
+coordonnee_axe4 = int16(str2double(get(handles.valeur_axe4_image,'String')));
+
 
 axes(handles.image);
-imshow4(handles.volumes,hObject,handles);
+imshow4(handles.volumes,hObject,handles,coordonnee_axe3,coordonnee_axe4);
 %handles = imshow4(handles.volumes,hObject,handles);
 %[x y z t] = size(handles.volumes);
 %imshow(handles.image3);
@@ -438,7 +440,7 @@ set(handles.figure1,'KeyPressFcn',handles.figure1.KeyPressFcn);
 uicontextmenu = get(handles.image,'UIContextMenu');
 set(handles.image.Children,'UIContextMenu',uicontextmenu);
 
-%set(handles.image,'UIContextMenu',uicontextmenu);
+
 
 blanc = [1 1 1];
 
@@ -456,21 +458,21 @@ guidata(handles.figure1,handles);
 
 
 
-function imageChoisie_Callback(hObject, eventdata, handles)
-% hObject    handle to imageChoisie (see GCBO)
+function valeur_axe3_image_Callback(hObject, eventdata, handles)
+% hObject    handle to valeur_axe3_image (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
 handles.imageC = int16(str2double(get(hObject,'String')));
 guidata(hObject,handles);
 
-% Hints: get(hObject,'String') returns contents of imageChoisie as text
-%        str2double(get(hObject,'String')) returns contents of imageChoisie as a double
+% Hints: get(hObject,'String') returns contents of valeur_axe3_image as text
+%        str2double(get(hObject,'String')) returns contents of valeur_axe3_image as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function imageChoisie_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to imageChoisie (see GCBO)
+function valeur_axe3_image_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to valeur_axe3_image (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -582,7 +584,7 @@ YFin = get(handles.YFin,'Value');
 %Affichage des pics
 donnees_ROI = double(handles.donnees_ROI);
 %graph_pic_lisse = mslowess([1:length(graph_pic)]',graph_pic,'Span',10);
-windowSize = 5;
+windowSize = 1;
 filtre_lissage = (1/windowSize)*ones(1,windowSize);
 coefficient_filtre = 1;
 donnees_ROI_lissees = filter(filtre_lissage,coefficient_filtre,donnees_ROI);
@@ -760,7 +762,8 @@ handles.volumes = volumes;
 
 handles.nb_fichiers = nb_fichiers-3;
 
-
+set(handles.valeur_axe3_image,'enable','on','BackgroundColor','white','String','1');
+set(handles.valeur_axe4_image,'enable','on','BackgroundColor','white','String','1');
 
 guidata(hObject, handles);
 afficherImage_Callback(hObject, eventdata, guidata(hObject));
@@ -845,18 +848,18 @@ end
 
 
 
-function edit19_Callback(hObject, eventdata, handles)
-% hObject    handle to edit19 (see GCBO)
+function valeur_axe4_image_Callback(hObject, eventdata, handles)
+% hObject    handle to valeur_axe4_image (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit19 as text
-%        str2double(get(hObject,'String')) returns contents of edit19 as a double
+% Hints: get(hObject,'String') returns contents of valeur_axe4_image as text
+%        str2double(get(hObject,'String')) returns contents of valeur_axe4_image as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit19_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit19 (see GCBO)
+function valeur_axe4_image_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to valeur_axe4_image (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -1028,3 +1031,10 @@ function affichage_entropie_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --------------------------------------------------------------------
+function uipushtool3_ClickedCallback(hObject, eventdata, handles)
+% hObject    handle to uipushtool3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)

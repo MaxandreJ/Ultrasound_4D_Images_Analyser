@@ -29,7 +29,6 @@ function [handles] = imshow4(varargin)
 % method - method from imfuse function -
 % 'falsecolor'/'blend'/'diff'/'montage' (default = 'falsecolor')
 global slice time im mode_out inter colormaps isfused contexte_image
-
 im = varargin{1};
 N = nargin;
 slice = 1;
@@ -43,8 +42,12 @@ inter = 0;
 colormaps = colormap('gray');
 isfused = 0;
 
-%Ajout ci-dessous
-imzobr = im(:,:,slice,time);
+rng=size(im,3);
+rng=[1 rng];
+rng_t=size(im,4);
+rng_t=[1 rng_t];
+
+
 
 N = nargin;
 if N==3
@@ -56,6 +59,13 @@ elseif N==5
     slice = varargin{4};
     time = varargin{5};
 end
+
+set(handles.total_axe3_image,'String',['sur ', num2str(rng(2))]);
+set(handles.total_axe4_image,'String',['sur ', num2str(rng_t(2))]);
+
+%Ajout ci-dessous
+imzobr = im(:,:,slice,time);
+
 
 %set(handles.image,'UserData',imzobr);
 %set(handles.image.Children,'CData',imzobr);
@@ -75,7 +85,7 @@ set(handles.image.Children,'UIContextMenu',uicontextmenu);
 %Ajout
 axes(handles.image);
 imshow(imzobr);
-set(handles.image.Children,'CData',imzobr);
+%set(handles.image.Children,'CData',imzobr);
 set(handles.image.Children,'CDataMapping','direct');
 uicontextmenu = get(handles.image,'UIContextMenu');
 set(handles.image.Children,'UIContextMenu',uicontextmenu);
@@ -88,8 +98,8 @@ handles.vue_choisie = 0;
 
 xlabel('X')
 ylabel('Y')
-%title({'Vue transversale', ['Z=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))]});
-title('Coupe frontale : \leftarrow\rightarrow = Z-axis, \uparrow\downarrow = t-axis, 0-5 = view')
+title({'Coupe frontale', ['Z=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))]});
+%title('Coupe frontale : \leftarrow\rightarrow = Z-axis, \uparrow\downarrow = t-axis, 0-5 = view')
 %set(h,'Colormap',colormaps);
 if size(im,3)>1 || size(im,4)>1
     %set(h,'KeyPressFcn',{@kresli,h,range,N,ref_time,method})
