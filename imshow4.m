@@ -113,6 +113,9 @@ rng=size(im,3);
 rng=[1 rng];
 rng_t=size(im,4);
 rng_t=[1 rng_t];
+
+%On ajoute la possibilité à l'utilisateur de choisir son plan de coupe et
+%naviguer entre les images au moyen des flèches multidirectionnelles
 if slice>=min(rng) && slice<=max(rng) && time>=min(rng_t) && time<=max(rng_t)
     switch eventdata.Key
         case  'rightarrow'

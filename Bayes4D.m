@@ -21,7 +21,7 @@ function varargout = Bayes4D(varargin)
 
 % Edit the above text to modify the response to help Bayes4D
 
-% Last Modified by GUIDE v2.5 21-Jul-2016 16:23:34
+% Last Modified by GUIDE v2.5 22-Jul-2016 16:44:32
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -91,8 +91,6 @@ if isfield(handles,'rectangle')
 end
 
 
-%test_rect = exist('handles.rectangle_dessine');
-%keyboard;
 if isfield(handles,'ligne')
     delete(handles.ligne);
 elseif isfield(handles,'rectangle_dessine')
@@ -103,10 +101,17 @@ axes(handles.graphique);
 
 
 %On accède aux valeurs de coordonnées par des accesseurs
-XDebut = get(handles.XDebut,'Value');
-YDebut = get(handles.YDebut,'Value');
-XFin = get(handles.XFin,'Value');
-YFin = get(handles.YFin,'Value');
+valeur_axe1Debut_graphique = get(handles.valeur_axe1Debut_graphique,'Value');
+valeur_axe2Debut_graphique = get(handles.valeur_axe2Debut_graphique,'Value');
+valeur_axe1Fin_graphique = get(handles.valeur_axe1Fin_graphique,'Value');
+valeur_axe2Fin_graphique = get(handles.valeur_axe2Fin_graphique,'Value');
+
+%On enregistre ces données dans le champ 'UserData' des boites
+%correspondantes aux coordonnées des axes
+set(handles.valeur_axe1Debut_graphique,'UserData',valeur_axe1Debut_graphique);
+set(handles.valeur_axe2Debut_graphique,'UserData',valeur_axe2Debut_graphique);
+set(handles.valeur_axe1Fin_graphique,'UserData',valeur_axe1Fin_graphique);
+set(handles.valeur_axe2Fin_graphique,'UserData',valeur_axe2Fin_graphique);
 
 sommeX = get(handles.sommeX,'Value');
 sommeY = get(handles.sommeY,'Value');
@@ -137,34 +142,36 @@ image = image';
 %Les Y sont en abscisse et les X en ordonnées parce que Matlab voie les Y
 %comme des noms de colonne de matrice
 %ce qui n'est pas l'intuition cartésienne
-%donnees_ROI = image(int16(YDebut):int16(YFin),int16(XDebut):int16(XFin));
-donnees_ROI = image(int16(XDebut):int16(XFin),int16(YDebut):int16(YFin));
+%donnees_ROI = image(int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique),int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique));
+donnees_ROI = image(int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique),int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique));
 
 if (sommeX==1 && sommeY==0)
-    %donnees_ROI = sum(donnees_ROI,2);
     donnees_ROI = sum(donnees_ROI,1);
-    %Pour avoir toujours des données en ligne
-    donnees_ROI = donnees_ROI';
+    
+    %donnees_ROI = donnees_ROI';
 elseif (sommeX==0 && sommeY==1)
-    %donnees_ROI = sum(donnees_ROI,1);
     donnees_ROI = sum(donnees_ROI,2);
+    %Pour avoir toujours des données en ligne
     donnees_ROI = donnees_ROI';
 end
 %Enlever les dimensions inutiles laissées par la somme
 donnees_ROI = squeeze(donnees_ROI);
 
+test = (int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique))
+
 %Même problème coordonnées cartésiennes/matrice ici
 if choix_coupe_axe1
     %donnees_ROI = donnees_ROI';
-    %plot(int16(XDebut):int16(XFin),donnees_ROI,'displayname','Courbe originale');
-    plot(int16(XDebut):int16(XFin),donnees_ROI,'displayname','Courbe originale');
+    %plot(int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique),donnees_ROI,'displayname','Courbe originale');
+    plot(int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique),donnees_ROI,'displayname','Courbe originale');
 elseif choix_coupe_axe2
-    %plot(int16(YDebut):int16(YFin),donnees_ROI,'displayname','Courbe originale');
+    %plot(int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique),donnees_ROI,'displayname','Courbe originale');
     donnees_ROI = donnees_ROI';
-    plot(int16(YDebut):int16(YFin),donnees_ROI,'displayname','Courbe originale');
+    plot(int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique),donnees_ROI,'displayname','Courbe originale');
 end
 
 ylabel('Intensité (en niveaux)'); %L'axe des ordonnées représente toujours les niveaux
+title('Courbe(s) d''intensité');
 
 %Détermination du nom de l'axe des abscisses du graphique
 coupe_frontale = 0;
@@ -213,22 +220,25 @@ switch handles.vue_choisie
         end
 end
 axes(handles.image);
-%afficherImage_Callback(hObject, eventdata, guidata(hObject));
 
-if xor(XDebut~=XFin,YDebut~=YFin)
-    handles.ligne = line([XDebut,XFin],[YDebut,YFin],'Color',[1 0 0]);
-elseif (XDebut~=XFin && YDebut~=YFin)
-    largeur = XFin-XDebut;
-    hauteur = YFin-YDebut;
-    handles.rectangle_dessine = rectangle('Position',[XDebut YDebut largeur hauteur],'EdgeColor','r');
+valeurs_axe1_DebutFin_distinctes = valeur_axe1Debut_graphique~=valeur_axe1Fin_graphique;
+valeurs_axe2_DebutFin_distinctes = valeur_axe2Debut_graphique~=valeur_axe2Fin_graphique;
+
+
+if xor(valeurs_axe1_DebutFin_distinctes,valeurs_axe2_DebutFin_distinctes)
+    handles.ligne = line([valeur_axe1Debut_graphique,valeur_axe1Fin_graphique],[valeur_axe2Debut_graphique,valeur_axe2Fin_graphique],'Color',[1 0 0]);
+elseif (valeurs_axe1_DebutFin_distinctes && valeurs_axe2_DebutFin_distinctes)
+    largeur = valeur_axe1Fin_graphique-valeur_axe1Debut_graphique;
+    hauteur = valeur_axe2Fin_graphique-valeur_axe2Debut_graphique;
+    handles.rectangle_dessine = rectangle('Position',[valeur_axe1Debut_graphique valeur_axe2Debut_graphique largeur hauteur],'EdgeColor','r');
 end
 
-blanc = [1 1 1];
+set(handles.choix_du_pic,'enable','on','BackgroundColor','white');
+set(handles.choix_de_deux_pics,'enable','on','BackgroundColor','white');
+set(handles.lmh_affichage,'BackgroundColor','white');
+set(handles.dpap_affichage,'BackgroundColor','white');
+set(handles.valeur_taille_fenetre_lissage,'enable','on','BackgroundColor','white');
 
-set(handles.choix_du_pic,'enable','on','BackgroundColor',blanc);
-set(handles.choix_de_deux_pics,'enable','on','BackgroundColor',blanc);
-set(handles.lmh_affichage,'BackgroundColor',blanc);
-set(handles.dpap_affichage,'BackgroundColor',blanc);
 handles.donnees_ROI = donnees_ROI;
 handles.choix_coupe_axe1 = choix_coupe_axe1;
 handles.choix_coupe_axe2 = choix_coupe_axe2;
@@ -250,21 +260,21 @@ function graphique_CreateFcn(hObject, eventdata, handles)
 
 
 
-function XDebut_Callback(hObject, eventdata, handles)
-% hObject    handle to XDebut (see GCBO)
+function valeur_axe1Debut_graphique_Callback(hObject, eventdata, handles)
+% hObject    handle to valeur_axe1Debut_graphique (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 set(hObject,'Value',int16(str2double(get(hObject,'String'))));
 guidata(hObject,handles);
     
 
-% Hints: get(hObject,'String') returns contents of XDebut as text
-%        str2double(get(hObject,'String')) returns contents of XDebut as a double
+% Hints: get(hObject,'String') returns contents of valeur_axe1Debut_graphique as text
+%        str2double(get(hObject,'String')) returns contents of valeur_axe1Debut_graphique as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function XDebut_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to XDebut (see GCBO)
+function valeur_axe1Debut_graphique_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to valeur_axe1Debut_graphique (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -277,21 +287,21 @@ end
 
 
 
-function YDebut_Callback(hObject, eventdata, handles)
-% hObject    handle to YDebut (see GCBO)
+function valeur_axe2Debut_graphique_Callback(hObject, eventdata, handles)
+% hObject    handle to valeur_axe2Debut_graphique (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 set(hObject,'Value',int16(str2double(get(hObject,'String'))));
 guidata(hObject,handles);
 
 
-% Hints: get(hObject,'String') returns contents of YDebut as text
-%        str2double(get(hObject,'String')) returns contents of YDebut as a double
+% Hints: get(hObject,'String') returns contents of valeur_axe2Debut_graphique as text
+%        str2double(get(hObject,'String')) returns contents of valeur_axe2Debut_graphique as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function YDebut_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to YDebut (see GCBO)
+function valeur_axe2Debut_graphique_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to valeur_axe2Debut_graphique (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -329,20 +339,20 @@ end
 
 
 
-function XFin_Callback(hObject, eventdata, handles)
-% hObject    handle to XFin (see GCBO)
+function valeur_axe1Fin_graphique_Callback(hObject, eventdata, handles)
+% hObject    handle to valeur_axe1Fin_graphique (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 set(hObject,'Value',int16(str2double(get(hObject,'String'))));
 guidata(hObject,handles);
 
-% Hints: get(hObject,'String') returns contents of XFin as text
-%        str2double(get(hObject,'String')) returns contents of XFin as a double
+% Hints: get(hObject,'String') returns contents of valeur_axe1Fin_graphique as text
+%        str2double(get(hObject,'String')) returns contents of valeur_axe1Fin_graphique as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function XFin_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to XFin (see GCBO)
+function valeur_axe1Fin_graphique_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to valeur_axe1Fin_graphique (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -355,20 +365,20 @@ end
 
 
 
-function YFin_Callback(hObject, eventdata, handles)
-% hObject    handle to YFin (see GCBO)
+function valeur_axe2Fin_graphique_Callback(hObject, eventdata, handles)
+% hObject    handle to valeur_axe2Fin_graphique (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 set(hObject,'Value',int16(str2double(get(hObject,'String'))));
 guidata(hObject,handles);
 
-% Hints: get(hObject,'String') returns contents of YFin as text
-%        str2double(get(hObject,'String')) returns contents of YFin as a double
+% Hints: get(hObject,'String') returns contents of valeur_axe2Fin_graphique as text
+%        str2double(get(hObject,'String')) returns contents of valeur_axe2Fin_graphique as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function YFin_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to YFin (see GCBO)
+function valeur_axe2Fin_graphique_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to valeur_axe2Fin_graphique (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -416,43 +426,42 @@ function image_CreateFcn(hObject, eventdata, handles)
 
 % --- Executes on button press in afficherImage.
 function afficherImage_Callback(hObject, eventdata, handles)
+%Affiche l'image dans handles.image 
+%correspondant à la coordonnée dans l'axe 3 et l'axe 4
+%choisie dans les champs correspondants.
 % hObject    handle to afficherImage (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-%donnees3 = GetRAWframe_B(handles.imageC);
-
-%image3 = ConvertRAWframe_B(donnees3,0);
-%handles.image3 = uint8(image3);
-
+%Récupère les coordonnées de l'axe 3 et l'axe 4 choisis par l'utilisateur
+%et les convertit en entier signés codés sur 16 bits
 coordonnee_axe3 = int16(str2double(get(handles.valeur_axe3_image,'String')));
 coordonnee_axe4 = int16(str2double(get(handles.valeur_axe4_image,'String')));
 
+%On affiche l'image dans handles.image
+axes(handles.image); %choix de l'endroit où on affiche l'image
+imshow4(handles.volumes,hObject,handles,coordonnee_axe3,coordonnee_axe4); %Appel de la fonction d'affichage d'image 4D
 
-axes(handles.image);
-imshow4(handles.volumes,hObject,handles,coordonnee_axe3,coordonnee_axe4);
-%handles = imshow4(handles.volumes,hObject,handles);
-%[x y z t] = size(handles.volumes);
-%imshow(handles.image3);
-set(handles.figure1,'KeyPressFcn',handles.figure1.KeyPressFcn);
+%On ajoute la possibilité de faire un clic droit sur l'image pour afficher
+%un menu contextuel qui permet de sélectionner une région d'intérêt
+uicontextmenu = get(handles.image,'UIContextMenu'); %le menu contextuel est créé sur l'axe grâce à GUIDE...
+set(handles.image.Children,'UIContextMenu',uicontextmenu); %mais doit être récupéré puis reparamétré pour fonctionner sur l'image qui s'affiche sur l'axe.
 
+%Une fois l'image sélectionnée, on peut permettre à l'utilisateur de
+%choisir une région d'intérêt, ce qu'on lui indique visuellement en passant
+%du gris au blanc les éléments graphiques correspondants. On utilise pour
+%cela des mutateurs d'objets enregistrés dans handles.
+set(handles.valeur_axe1Debut_graphique,'enable','on','BackgroundColor','white');
+set(handles.valeur_axe2Debut_graphique,'enable','on','BackgroundColor','white');
+set(handles.valeur_axe1Fin_graphique,'enable','on','BackgroundColor','white');
+set(handles.valeur_axe2Fin_graphique,'enable','on','BackgroundColor','white');
+set(handles.coupeSelonX,'enable','on','BackgroundColor','white');
+set(handles.coupeSelonY,'enable','on','BackgroundColor','white');
+set(handles.sommeX,'enable','on','BackgroundColor','white');
+set(handles.sommeY,'enable','on','BackgroundColor','white');
 
-uicontextmenu = get(handles.image,'UIContextMenu');
-set(handles.image.Children,'UIContextMenu',uicontextmenu);
-
-
-
-blanc = [1 1 1];
-
-set(handles.XDebut,'enable','on','BackgroundColor',blanc);
-set(handles.YDebut,'enable','on','BackgroundColor',blanc);
-set(handles.XFin,'enable','on','BackgroundColor',blanc);
-set(handles.YFin,'enable','on','BackgroundColor',blanc);
-set(handles.coupeSelonX,'enable','on','BackgroundColor',blanc);
-set(handles.coupeSelonY,'enable','on','BackgroundColor',blanc);
-set(handles.sommeX,'enable','on','BackgroundColor',blanc);
-set(handles.sommeY,'enable','on','BackgroundColor',blanc);
-
+%On sauvegarde les modifications que l'on a fait dans handles dans la
+%figure handles.figure1
 guidata(handles.figure1,handles);
 
 
@@ -462,12 +471,9 @@ function valeur_axe3_image_Callback(hObject, eventdata, handles)
 % hObject    handle to valeur_axe3_image (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-handles.imageC = int16(str2double(get(hObject,'String')));
-guidata(hObject,handles);
-
 % Hints: get(hObject,'String') returns contents of valeur_axe3_image as text
 %        str2double(get(hObject,'String')) returns contents of valeur_axe3_image as a double
+guidata(hObject,handles);
 
 
 % --- Executes during object creation, after setting all properties.
@@ -527,6 +533,7 @@ end
 somme_des_distances_normalises_nombre_de_courbes=somme_des_distances/nombre_de_courbes;
 
 set(handles.affichage_somme_des_distances,'String',num2str(somme_des_distances_normalises_nombre_de_courbes));
+
 %Pour utilisation de l'entropie l'image doit avoir 256 niveaux
 donnees_ROI_8bits=uint8(handles.donnees_ROI);
 entropie_region_interet=entropy(donnees_ROI_8bits);
@@ -571,96 +578,96 @@ function detection_pics_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-%On accède aux choix de coupes
-coupeSelonX = get(handles.coupeSelonX,'Value');
-coupeSelonY = get(handles.coupeSelonY,'Value');
-
-%On accède aux valeurs des coordonnées
-XDebut = get(handles.XDebut,'Value');
-YDebut = get(handles.YDebut,'Value');
-XFin = get(handles.XFin,'Value');
-YFin = get(handles.YFin,'Value');
-
-%Affichage des pics
-donnees_ROI = double(handles.donnees_ROI);
-%graph_pic_lisse = mslowess([1:length(graph_pic)]',graph_pic,'Span',10);
-windowSize = 1;
-filtre_lissage = (1/windowSize)*ones(1,windowSize);
-coefficient_filtre = 1;
-donnees_ROI_lissees = filter(filtre_lissage,coefficient_filtre,donnees_ROI);
-
-Xs = double(XDebut):double(XFin);
-Ys = double(YDebut):double(YFin);
-
-axes(handles.graphique);
-hold on
-if handles.choix_coupe_axe1
-    %plot(handles.XDebut:handles.XFin,graph_pic_lisse,'g','displayname','Courbe débruitée');
-    [y_maxs,x_maxs,lmhs,proms] = findpeaks(donnees_ROI_lissees,double(XDebut):double(XFin));
-    findpeaks(donnees_ROI_lissees,double(XDebut):double(XFin),'Annotate','extents');
-    %[Peaklist, PFWHH, PExt] = mspeaks(double(handles.XDebut:handles.XFin),graph_pic,'Style','fwhhline','ShowPlot', false);
-elseif handles.choix_coupe_axe2
-    %plot(handles.YDebut:handles.YFin,graph_pic_lisse,'g','displayname','Courbe débruitée');
-    [y_maxs,x_maxs,lmhs,proms] = findpeaks(donnees_ROI_lissees,double(YDebut):double(YFin));
-    findpeaks(donnees_ROI_lissees,double(YDebut):double(YFin),'Annotate','extents');
-    %[Peaklist, PFWHH, PExt] = mspeaks(double(handles.YDebut:handles.YFin),graph_pic_lisse','Style','fwhhline','HeightFilter',0.7*max(graph_pic_lisse'),'ShowPlot', false);
+%On enlève l'éventuel résultat d'une exécution précédente
+[nombre_de_lignes_affichees_graphique ~] = size(handles.graphique.Children);
+if nombre_de_lignes_affichees_graphique>1
+    delete(handles.graphique.Children(1:4));
 end
-legend(gca,'off');
-hold off
-%axes(handles.graphique);
-%legend('show','Location','northwest');
-%findpeaks(graph_pic_lisse,'Annotate','extents');
-%plot(handles.XDebut+locs(1),pks(1),'xr','linewidth',2,'displayname','Maximums');
-%axes(handles.graphique);
-%plot(PFWHH{1},[Peaklist(2)/2 Peaklist(2)/2] ,'r','linewidth',2,'displayname','DETECTION_PICS');
 
-
-%set(handles.dpap_affichage,'String',x_maxs(2)-x_maxs(1));
-%{
-handles.y_maxs = y_maxs;
-handles.x_maxs = x_maxs;
-handles.lmhs = lmhs;
-handles.proms = proms;
-handles=guidata(hObject);
-%}
-
-%handles.x_maxs = x_maxs;
-
-%Passage de x_maxs et y_maxs en vecteurs colonne pour affichage
-x_maxs=x_maxs';
-y_maxs=y_maxs';
-
-%Affichage de la liste de pics dans la première liste déroulante
-[nombre_de_pics ~] = size(y_maxs);
-crochet_ouvrant = repmat('[', nombre_de_pics , 1);
-virgule = repmat(', ',nombre_de_pics,1);
-crochet_fermant = repmat(']',nombre_de_pics,1);
-liste_de_pics = [crochet_ouvrant num2str(x_maxs) virgule ...
-    num2str(y_maxs) crochet_fermant];
-set(handles.choix_du_pic,'String',liste_de_pics);
-pic_choisi = get(handles.choix_du_pic,'Value');
-set(handles.lmh_affichage,'String',lmhs(pic_choisi));
-handles.lmhs=lmhs;
-
-%Affichage des combinaisons de deux pics dans la deuxième liste déroulante
-combinaisons_de_deux_pics = combnk(1:nombre_de_pics,2);
-set(handles.choix_de_deux_pics,'String',num2str(combinaisons_de_deux_pics));
-handles.combinaisons_de_deux_pics = combinaisons_de_deux_pics;
-numero_combinaison_de_deux_pics_choisie = get(handles.choix_de_deux_pics,'Value');
-combinaison_pics_choisis = combinaisons_de_deux_pics(numero_combinaison_de_deux_pics_choisie,:);
-x_plus_grand_des_deux_pics = x_maxs(combinaison_pics_choisis(2));
-x_plus_petit_des_deux_pics = x_maxs(combinaison_pics_choisis(1));
-set(handles.dpap_affichage,'String',num2str(x_plus_grand_des_deux_pics-x_plus_petit_des_deux_pics));
-
-handles.x_maxs=x_maxs;
 guidata(hObject, handles);
 
-%disp('Peaklist');
-%disp(Peaklist);
-%disp('PFWHH');
-%celldisp(PFWHH);
-%disp('PExt');
-%disp(PExt);
+try
+    taille_fenetre_lissage = str2double(get(handles.valeur_taille_fenetre_lissage,'String'));
+    if mod(taille_fenetre_lissage,2) == 0
+        erreurImpaire.message = 'Fenêtre de taille paire.';
+        erreurImpaire.identifier = 'detection_pics_Callback:taille_fenetre_paire';
+        error(erreurImpaire);
+    end
+
+    %On accède aux valeurs des coordonnées
+    valeur_axe1Debut_graphique = get(handles.valeur_axe1Debut_graphique,'UserData');
+    valeur_axe2Debut_graphique = get(handles.valeur_axe2Debut_graphique,'UserData');
+    valeur_axe1Fin_graphique = get(handles.valeur_axe1Fin_graphique,'UserData');
+    valeur_axe2Fin_graphique = get(handles.valeur_axe2Fin_graphique,'UserData');
+
+    %%Lissage de la courbe
+    %On accède la taille de fenêtre de lissage choisie (si ==1 pas de lissage)
+
+    taille_fenetre_lissage = str2double(get(handles.valeur_taille_fenetre_lissage,'String'));
+
+    donnees_ROI = double(handles.donnees_ROI);
+
+    if taille_fenetre_lissage~=1
+        filtre_lissage = (1/taille_fenetre_lissage)*ones(1,taille_fenetre_lissage);
+        coefficient_filtre = 1;
+        donnees_ROI_lissees = filter(filtre_lissage,coefficient_filtre,donnees_ROI);
+    else
+        donnees_ROI_lissees = donnees_ROI;
+    end
+
+    axes(handles.graphique);
+    hold on
+    if handles.choix_coupe_axe1
+        [y_maxs,x_maxs,lmhs,~] = findpeaks(donnees_ROI_lissees,double(valeur_axe1Debut_graphique):double(valeur_axe1Fin_graphique));
+        findpeaks(donnees_ROI_lissees,double(valeur_axe1Debut_graphique):double(valeur_axe1Fin_graphique),'Annotate','extents');
+        y_maxs=y_maxs';
+    elseif handles.choix_coupe_axe2
+        [y_maxs,x_maxs,lmhs,~] = findpeaks(donnees_ROI_lissees,double(valeur_axe2Debut_graphique):double(valeur_axe2Fin_graphique));
+        findpeaks(donnees_ROI_lissees,double(valeur_axe2Debut_graphique):double(valeur_axe2Fin_graphique),'Annotate','extents');
+    end
+    legend(gca,'off');
+    hold off
+
+
+    %Passage de x_maxs en vecteur colonne pour affichage
+    x_maxs=x_maxs';
+
+
+
+    %Affichage de la liste de pics dans la première liste déroulante
+    [nombre_de_pics ~] = size(y_maxs);
+    crochet_ouvrant = repmat('[', nombre_de_pics , 1);
+    virgule = repmat(', ',nombre_de_pics,1);
+    crochet_fermant = repmat(']',nombre_de_pics,1);
+    liste_de_pics = [crochet_ouvrant num2str(x_maxs) virgule ...
+        num2str(y_maxs) crochet_fermant];
+    set(handles.choix_du_pic,'String',liste_de_pics);
+    pic_choisi = get(handles.choix_du_pic,'Value');
+    set(handles.lmh_affichage,'String',lmhs(pic_choisi));
+    handles.lmhs=lmhs;
+
+    %Affichage des combinaisons de deux pics dans la deuxième liste déroulante
+    combinaisons_de_deux_pics = combnk(1:nombre_de_pics,2);
+    set(handles.choix_de_deux_pics,'String',num2str(combinaisons_de_deux_pics));
+    handles.combinaisons_de_deux_pics = combinaisons_de_deux_pics;
+    numero_combinaison_de_deux_pics_choisie = get(handles.choix_de_deux_pics,'Value');
+    combinaison_pics_choisis = combinaisons_de_deux_pics(numero_combinaison_de_deux_pics_choisie,:);
+    x_plus_grand_des_deux_pics = x_maxs(combinaison_pics_choisis(2));
+    x_plus_petit_des_deux_pics = x_maxs(combinaison_pics_choisis(1));
+    set(handles.dpap_affichage,'String',num2str(x_plus_grand_des_deux_pics-x_plus_petit_des_deux_pics));
+
+    handles.x_maxs=x_maxs;
+    guidata(hObject, handles);
+catch ME
+    if (strcmp(ME.identifier,'detection_pics_Callback:taille_fenetre_paire'))
+        warndlg('Merci d''entrer une taille de fenêtre de lissage impaire.');
+        causeException = MException(erreurImpaire.identifier,erreurImpaire.message);
+        ME = addCause(ME,causeException);
+        throw(causeException);
+    end
+    rethrow(ME)
+end
+    
 
 
 
@@ -883,8 +890,10 @@ function Rectangle_Callback(hObject, eventdata, handles)
 % hObject    handle to Rectangle (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
 rectangle = imrect;
-%position_rectangle = wait(rectangle);
+
 position_rectangle = getPosition(rectangle);
 x_min=position_rectangle(1);
 y_min=position_rectangle(2);
@@ -899,10 +908,10 @@ y_min=int16(round(y_min));
 x_max=int16(round(x_max));
 y_max=int16(round(y_max));
 
-set(handles.XDebut,'Value',x_min,'String',num2str(x_min));
-set(handles.YDebut,'Value',y_min,'String',num2str(y_min));
-set(handles.XFin,'Value',x_max,'String',num2str(x_max));
-set(handles.YFin,'Value',y_max,'String',num2str(y_max));
+set(handles.valeur_axe1Debut_graphique,'Value',x_min,'String',num2str(x_min));
+set(handles.valeur_axe2Debut_graphique,'Value',y_min,'String',num2str(y_min));
+set(handles.valeur_axe1Fin_graphique,'Value',x_max,'String',num2str(x_max));
+set(handles.valeur_axe2Fin_graphique,'Value',y_max,'String',num2str(y_max));
 handles.rectangle = rectangle;
 guidata(hObject,handles);
 
@@ -1038,3 +1047,50 @@ function uipushtool3_ClickedCallback(hObject, eventdata, handles)
 % hObject    handle to uipushtool3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on selection change in popupmenu4.
+function popupmenu4_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu4 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu4
+
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu4_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function valeur_taille_fenetre_lissage_Callback(hObject, eventdata, handles)
+% hObject    handle to valeur_taille_fenetre_lissage (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of valeur_taille_fenetre_lissage as text
+%        str2double(get(hObject,'String')) returns contents of valeur_taille_fenetre_lissage as a double
+
+
+
+% --- Executes during object creation, after setting all properties.
+function valeur_taille_fenetre_lissage_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to valeur_taille_fenetre_lissage (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
