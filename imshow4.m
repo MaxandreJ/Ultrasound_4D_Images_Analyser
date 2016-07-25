@@ -28,7 +28,7 @@ function [handles] = imshow4(varargin)
 % time - number of time sample (default = 1)
 % method - method from imfuse function -
 % 'falsecolor'/'blend'/'diff'/'montage' (default = 'falsecolor')
-global slice time im mode_out inter colormaps isfused contexte_image
+global slice time im mode_out inter colormaps isfused contexte_image taille_axe
 im = varargin{1};
 N = nargin;
 slice = 1;
@@ -42,10 +42,9 @@ inter = 0;
 colormaps = colormap('gray');
 isfused = 0;
 
-rng=size(im,3);
-rng=[1 rng];
-rng_t=size(im,4);
-rng_t=[1 rng_t];
+%Interversion des dimensions 1 et 2 pour passer de la taille de matrice à
+%un repère cartésien
+taille_axe=[size(im,2),size(im,1),size(im,3),size(im,4)];
 
 
 
@@ -60,8 +59,12 @@ elseif N==5
     time = varargin{5};
 end
 
-set(handles.total_axe3_image,'String',['sur ', num2str(rng(2))]);
-set(handles.total_axe4_image,'String',['sur ', num2str(rng_t(2))]);
+set(handles.maximum_axe1_1,'String',['/',num2str(taille_axe(1))]);
+set(handles.maximum_axe1_2,'String',['/',num2str(taille_axe(1))]);
+set(handles.maximum_axe2_1,'String',['/',num2str(taille_axe(2))]);
+set(handles.maximum_axe2_2,'String',['/',num2str(taille_axe(2))]);
+set(handles.total_axe3_image,'String',['sur ', num2str(taille_axe(3))]);
+set(handles.total_axe4_image,'String',['sur ', num2str(taille_axe(4))]);
 
 %Ajout ci-dessous
 imzobr = im(:,:,slice,time);
@@ -93,22 +96,20 @@ set(handles.image.Children,'UIContextMenu',uicontextmenu);
 %figure(h)
 %set(h,'Name',['Z=' num2str(slice) '/' num2str(size(im,3)) ', t=' num2str(time) '/' num2str(size(im,4))])
 
-%Par défaut
-handles.vue_choisie = 0;
-
 xlabel('X')
 ylabel('Y')
-title({'Coupe frontale', ['Z=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))]});
+title({'Coupe frontale', ['Z=' num2str(slice) '/' num2str(taille_axe(3)) ', t=' num2str(time) '/' num2str(taille_axe(4))]});
 %title('Coupe frontale : \leftarrow\rightarrow = Z-axis, \uparrow\downarrow = t-axis, 0-5 = view')
 %set(h,'Colormap',colormaps);
 if size(im,3)>1 || size(im,4)>1
     %set(h,'KeyPressFcn',{@kresli,h,range,N,ref_time,method})
     set(handles.figure1,'KeyPressFcn',{@kresli,handles.figure1,range,N,ref_time,method,handles})
 end;
+guidata(handles.figure1,handles);
 end
 
 function kresli(~,eventdata,h,range,N,ref_time,method,handles)
-global slice time im mode_out inter colormaps isfused
+global slice time im mode_out inter colormaps isfused taille_axe
 rng=size(im,3);
 rng=[1 rng];
 rng_t=size(im,4);
@@ -262,82 +263,80 @@ guidata(h,handles);
 
 switch mode_out
     case 0
-        xlabel('X')
-        ylabel('Y')
+        axe1='X';
+        axe2='Y';
         title({'Coupe frontale', ['Z=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))]});
-        set(handles.axe1_graphique,'String','X');
-        set(handles.axe2_graphique,'String','Y');
-        set(handles.texte_coupe_axe1,'String','Coupe selon X');
-        set(handles.texte_coupe_axe2,'String','Coupe selon Y');
         set(handles.texte_axe3_image,'String','Z');
         set(handles.texte_axe4_image,'String','Temps');
+        ordre_axes = [1,2,3,4]; % frontal
     case 1
-        xlabel('X')
-        ylabel('Z')
+        axe1='X';
+        axe2='Z';
         title({'Coupe transverse',['Y=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))]});
-        set(handles.axe1_graphique,'String','X');
-        set(handles.axe2_graphique,'String','Z');
-        set(handles.texte_coupe_axe1,'String','Coupe selon X');
-        set(handles.texte_coupe_axe2,'String','Coupe selon Z');
         set(handles.texte_axe3_image,'String','Y');
         set(handles.texte_axe4_image,'String','Temps');
+        ordre_axes = [1,3,2,4]; % transversal
     case 2
-        xlabel('Y')
-        ylabel('Z')
+        axe1='Y';
+        axe2='Z';
         title({'Coupe sagittale', ['X=' num2str(slice) '/' num2str(rng(2)) ', t=' num2str(time) '/' num2str(rng_t(2))]});
-        set(handles.axe1_graphique,'String','Y');
-        set(handles.axe2_graphique,'String','Z');
-        set(handles.texte_coupe_axe1,'String','Coupe selon Y');
-        set(handles.texte_coupe_axe2,'String','Coupe selon Z');
         set(handles.texte_axe3_image,'String','X');
         set(handles.texte_axe4_image,'String','Temps');
+        ordre_axes = [2,3,1,4]; % sagittal
     case 3
-        xlabel('Temps')
-        ylabel('X')
+        axe1='Temps';
+        axe2='X';
         title({'Coupe de X selon le temps', ['Z=' num2str(slice) '/' num2str(rng(2)) ', Y=' num2str(time) '/' num2str(rng_t(2))]});
-        set(handles.axe1_graphique,'String','Temps');
-        set(handles.axe2_graphique,'String','X');
-        set(handles.texte_coupe_axe1,'String','Coupe selon T');
-        set(handles.texte_coupe_axe2,'String','Coupe selon X');
         set(handles.texte_axe3_image,'String','Z');
         set(handles.texte_axe4_image,'String','Y');
+        ordre_axes = [4,1,3,2]; % x-temps
     case 4
-        xlabel('Temps')
-        ylabel('Y')
+        axe1='Temps';
+        axe2='Y';
         title({'Coupe de Y selon le temps', ['Z=' num2str(slice) '/' num2str(rng(2)) ', X=' num2str(time) '/' num2str(rng_t(2))]});
-        set(handles.axe1_graphique,'String','Temps');
-        set(handles.axe2_graphique,'String','Y');
-        set(handles.texte_coupe_axe1,'String','Coupe selon T');
-        set(handles.texte_coupe_axe2,'String','Coupe selon Y');
         set(handles.texte_axe3_image,'String','Z');
         set(handles.texte_axe4_image,'String','X');
+        ordre_axes = [4,2,3,1]; % y-temps
     case 5
-        xlabel('Temps')
-        ylabel('Z')
+        axe1='Temps';
+        axe2='Z';
         title({'Vue de Z selon le temps', ['Y=' num2str(slice) '/' num2str(rng(2)) ', X=' num2str(time) '/' num2str(rng_t(2))]});
-        set(handles.axe1_graphique,'String','Temps');
-        set(handles.axe2_graphique,'String','Z');
-        set(handles.texte_coupe_axe1,'String','Coupe selon T');
-        set(handles.texte_coupe_axe2,'String','Coupe selon Z');
         set(handles.texte_axe3_image,'String','Y');
         set(handles.texte_axe4_image,'String','X');
+        ordre_axes = [4,3,2,1]; % z-temps
 end;
+        xlabel(axe1);
+        ylabel(axe2);
+        set(handles.valeur_axe3_image,'String',slice);
+        set(handles.valeur_axe4_image,'String',time);
+        set(handles.axe1_graphique,'String',axe1);
+        set(handles.axe2_graphique,'String',axe2);
+        set(handles.graphique_selon_axe1,'String',axe1);
+        set(handles.graphique_selon_axe2,'String',axe2);
+        set(handles.somme_axe1,'String',axe1);
+        set(handles.somme_axe2,'String',axe2);
+        set(handles.maximum_axe1_1,'String',['/',num2str(taille_axe(ordre_axes(1)))]);
+        set(handles.maximum_axe1_2,'String',['/',num2str(taille_axe(ordre_axes(1)))]);
+        set(handles.maximum_axe2_1,'String',['/',num2str(taille_axe(ordre_axes(2)))]);
+        set(handles.maximum_axe2_2,'String',['/',num2str(taille_axe(ordre_axes(2)))]);
+        set(handles.total_axe3_image,'String',['sur ', num2str(taille_axe(ordre_axes(3)))]);
+        set(handles.total_axe4_image,'String',['sur ', num2str(taille_axe(ordre_axes(4)))]);
 end
 
 function [im_out] = permutation(im_in,mode_in)
     switch mode_in
         case 0
-            mode_in = [1,2,3,4]; % transversal
+            mode_in = [1,2,3,4]; % frontal
         case 1
-            mode_in = [3,2,1,4]; % frontal
+            mode_in = [3,2,1,4]; % transversal
         case 2
-            mode_in = [3,1,2,4]; % sagital
+            mode_in = [3,1,2,4]; % sagittal
         case 3
-            mode_in = [2,4,3,1]; % x-time
+            mode_in = [2,4,3,1]; % x-temps
         case 4
-            mode_in = [1,4,3,2]; % y-time
+            mode_in = [1,4,3,2]; % y-temps
         case 5
-            mode_in = [3,4,1,2]; % z-time
+            mode_in = [3,4,1,2]; % z-temps
     end;
     im_out = permute(im_in,mode_in);
 end
@@ -345,17 +344,17 @@ end
 function [im_out] = ipermutation(im_in,mode_in)
     switch mode_in
         case 0
-            mode_in = [1,2,3,4]; % transversal
+            mode_in = [1,2,3,4]; % frontal
         case 1
-            mode_in = [3,2,1,4]; % frontal
+            mode_in = [3,2,1,4]; % transversal
         case 2
-            mode_in = [3,1,2,4]; % sagital
+            mode_in = [3,1,2,4]; % sagittal
         case 3
-            mode_in = [2,4,3,1]; % x-time
+            mode_in = [2,4,3,1];  % x-temps
         case 4
-            mode_in = [1,4,3,2]; % y-time
+            mode_in = [1,4,3,2]; % y-temps
         case 5
-            mode_in = [3,4,1,2]; % z-time
+            mode_in = [3,4,1,2]; % z-temps
     end;
     im_out = ipermute(im_in,mode_in);
 end

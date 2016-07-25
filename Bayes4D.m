@@ -21,7 +21,7 @@ function varargout = Bayes4D(varargin)
 
 % Edit the above text to modify the response to help Bayes4D
 
-% Last Modified by GUIDE v2.5 22-Jul-2016 16:44:32
+% Last Modified by GUIDE v2.5 25-Jul-2016 16:03:25
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -77,173 +77,91 @@ function varargout = Bayes4D_OutputFcn(hObject, eventdata, handles)
 % Get default command line output from handles structure
 varargout{1} = handles.output;
 
-% --- Executes on button press in afficherGraphique.
-function afficherGraphique_Callback(hObject, eventdata, handles)
-% hObject    handle to afficherGraphique (see GCBO)
+% --- Executes on button press in selection_region_interet.
+function selection_region_interet_Callback(hObject, eventdata, handles)
+% hObject    handle to selection_region_interet (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+try
+    cla(handles.graphique,'reset'); %Efface le graphique précédent
 
-cla(handles.graphique); %Efface le graphique précédent
-
-if isfield(handles,'rectangle')
-    delete(handles.rectangle); %Efface la région d'intérêt tracée précédente
-end
-
-
-if isfield(handles,'ligne')
-    delete(handles.ligne);
-elseif isfield(handles,'rectangle_dessine')
-    delete(handles.rectangle_dessine);
-end
-
-axes(handles.graphique);
+    if isfield(handles,'rectangle')
+        delete(handles.rectangle); %Efface la région d'intérêt tracée précédente
+    end
 
 
-%On accède aux valeurs de coordonnées par des accesseurs
-valeur_axe1Debut_graphique = get(handles.valeur_axe1Debut_graphique,'Value');
-valeur_axe2Debut_graphique = get(handles.valeur_axe2Debut_graphique,'Value');
-valeur_axe1Fin_graphique = get(handles.valeur_axe1Fin_graphique,'Value');
-valeur_axe2Fin_graphique = get(handles.valeur_axe2Fin_graphique,'Value');
-
-%On enregistre ces données dans le champ 'UserData' des boites
-%correspondantes aux coordonnées des axes
-set(handles.valeur_axe1Debut_graphique,'UserData',valeur_axe1Debut_graphique);
-set(handles.valeur_axe2Debut_graphique,'UserData',valeur_axe2Debut_graphique);
-set(handles.valeur_axe1Fin_graphique,'UserData',valeur_axe1Fin_graphique);
-set(handles.valeur_axe2Fin_graphique,'UserData',valeur_axe2Fin_graphique);
-
-sommeX = get(handles.sommeX,'Value');
-sommeY = get(handles.sommeY,'Value');
-
-coupeSelon1 = get(handles.coupeSelonX,'Value');
-coupeSelon2 = get(handles.coupeSelonY,'Value');
-
-choix_coupe_axe1 = coupeSelon1==1 && coupeSelon2==0;
-choix_coupe_axe2 = coupeSelon1==0 && coupeSelon2==1;
-
-%Initialement la coupe est frontale
-%{
-if choix_coupe1
-    xlabel('X (en pixels)');
-elseif choix_coupe2
-    xlabel('Y (en pixels)');
-end
-%}
-cla(handles.image.Children);
-
-%image = get(handles.image.Children(2),'CData');
-image = getimage(handles.image);
-
-%Conversion des indices de matrice (lignes/colonnes) en coordonnées
-%cartésiennes par transposition de la matrice
-image = image';
-
-%Les Y sont en abscisse et les X en ordonnées parce que Matlab voie les Y
-%comme des noms de colonne de matrice
-%ce qui n'est pas l'intuition cartésienne
-%donnees_ROI = image(int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique),int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique));
-donnees_ROI = image(int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique),int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique));
-
-if (sommeX==1 && sommeY==0)
-    donnees_ROI = sum(donnees_ROI,1);
+    if isfield(handles,'ligne')
+        delete(handles.ligne);
+    elseif isfield(handles,'rectangle_dessine')
+        delete(handles.rectangle_dessine);
+    end
     
-    %donnees_ROI = donnees_ROI';
-elseif (sommeX==0 && sommeY==1)
-    donnees_ROI = sum(donnees_ROI,2);
-    %Pour avoir toujours des données en ligne
-    donnees_ROI = donnees_ROI';
+    cla(handles.image.Children);
+
+    image = getimage(handles.image);
+
+    %Conversion des indices de matrice (lignes/colonnes) en coordonnées
+    %cartésiennes par transposition de la matrice
+    image = image';
+
+    axes(handles.graphique);
+
+
+    %On accède aux valeurs de coordonnées par des accesseurs
+    valeur_axe1Debut_graphique = get(handles.valeur_axe1Debut_graphique,'Value');
+    valeur_axe2Debut_graphique = get(handles.valeur_axe2Debut_graphique,'Value');
+    valeur_axe1Fin_graphique = get(handles.valeur_axe1Fin_graphique,'Value');
+    valeur_axe2Fin_graphique = get(handles.valeur_axe2Fin_graphique,'Value');
+    
+    taille_image_axe1 = size(image,1);
+    taille_image_axe2 = size(image,2);
+
+    %On enregistre ces données dans le champ 'UserData' des boites
+    %correspondantes aux coordonnées des axes
+    set(handles.valeur_axe1Debut_graphique,'UserData',valeur_axe1Debut_graphique);
+    set(handles.valeur_axe2Debut_graphique,'UserData',valeur_axe2Debut_graphique);
+    set(handles.valeur_axe1Fin_graphique,'UserData',valeur_axe1Fin_graphique);
+    set(handles.valeur_axe2Fin_graphique,'UserData',valeur_axe2Fin_graphique);
+
+
+
+
+
+    %Les Y sont en abscisse et les X en ordonnées parce que Matlab voie les Y
+    %comme des noms de colonne de matrice
+    %ce qui n'est pas l'intuition cartésienne
+    %donnees_ROI = image(int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique),int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique));
+    donnees_ROI = image(int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique),int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique));
+
+
+    axes(handles.image);
+
+    valeurs_axe1_DebutFin_distinctes = valeur_axe1Debut_graphique~=valeur_axe1Fin_graphique;
+    valeurs_axe2_DebutFin_distinctes = valeur_axe2Debut_graphique~=valeur_axe2Fin_graphique;
+
+    if xor(valeurs_axe1_DebutFin_distinctes,valeurs_axe2_DebutFin_distinctes)
+        handles.ligne = line([valeur_axe1Debut_graphique,valeur_axe1Fin_graphique],[valeur_axe2Debut_graphique,valeur_axe2Fin_graphique],'Color',[1 0 0]);
+    elseif (valeurs_axe1_DebutFin_distinctes && valeurs_axe2_DebutFin_distinctes)
+        largeur = valeur_axe1Fin_graphique-valeur_axe1Debut_graphique;
+        hauteur = valeur_axe2Fin_graphique-valeur_axe2Debut_graphique;
+        handles.rectangle_dessine = rectangle('Position',[valeur_axe1Debut_graphique valeur_axe2Debut_graphique largeur hauteur],'EdgeColor','r');
+    end
+
+    handles.donnees_ROI = donnees_ROI;
+    handles.valeurs_axe1_DebutFin_distinctes = valeurs_axe1_DebutFin_distinctes;
+    handles.valeurs_axe2_DebutFin_distinctes = valeurs_axe2_DebutFin_distinctes;
+
+    guidata(hObject, handles);
+catch erreurs
+    if (strcmp(erreurs.identifier,'MATLAB:badsubscript'))
+        warndlg('Merci d''entrer une région d''intérêt incluse dans l''image.');
+        messsage_erreur = 'La région d''intérêt dépasse de l''image.';
+        cause_erreur = MException('MATLAB:badsubscript',messsage_erreur);
+        erreurs = addCause(erreurs,cause_erreur);
+    end
+    rethrow(erreurs);
 end
-%Enlever les dimensions inutiles laissées par la somme
-donnees_ROI = squeeze(donnees_ROI);
-
-test = (int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique))
-
-%Même problème coordonnées cartésiennes/matrice ici
-if choix_coupe_axe1
-    %donnees_ROI = donnees_ROI';
-    %plot(int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique),donnees_ROI,'displayname','Courbe originale');
-    plot(int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique),donnees_ROI,'displayname','Courbe originale');
-elseif choix_coupe_axe2
-    %plot(int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique),donnees_ROI,'displayname','Courbe originale');
-    donnees_ROI = donnees_ROI';
-    plot(int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique),donnees_ROI,'displayname','Courbe originale');
-end
-
-ylabel('Intensité (en niveaux)'); %L'axe des ordonnées représente toujours les niveaux
-title('Courbe(s) d''intensité');
-
-%Détermination du nom de l'axe des abscisses du graphique
-coupe_frontale = 0;
-coupe_transverse = 1;
-coupe_sagittale = 2;
-coupe_X_temps = 3;
-coupe_Y_temps = 4;
-coupe_Z_temps = 5;
-
-switch handles.vue_choisie
-    case coupe_frontale
-        if choix_coupe_axe1
-            xlabel('X (en pixels)');
-        elseif choix_coupe_axe2
-            xlabel('Y (en pixels)');
-        end
-    case coupe_transverse
-        if choix_coupe_axe1
-            xlabel('X (en pixels)');
-        elseif choix_coupe_axe2
-            xlabel('Z (en pixels)');
-        end
-    case coupe_sagittale
-        if choix_coupe_axe1
-            xlabel('Y (en pixels)');
-        elseif choix_coupe_axe2
-            xlabel('Z (en pixels)');
-        end
-    case coupe_X_temps
-        if choix_coupe_axe1
-            xlabel('Temps (en numéro de volume)');
-        elseif choix_coupe_axe2
-            xlabel('X (en pixels)');
-        end
-    case coupe_Y_temps
-        if choix_coupe_axe1
-            xlabel('Temps (en numéro de volume)');
-        elseif choix_coupe_axe2
-            xlabel('Y (en pixels)');
-        end
-    case coupe_Z_temps
-        if choix_coupe_axe1
-            xlabel('Temps (en numéro de volume)');
-        elseif choix_coupe_axe2
-            xlabel('X (en pixels)');
-        end
-end
-axes(handles.image);
-
-valeurs_axe1_DebutFin_distinctes = valeur_axe1Debut_graphique~=valeur_axe1Fin_graphique;
-valeurs_axe2_DebutFin_distinctes = valeur_axe2Debut_graphique~=valeur_axe2Fin_graphique;
-
-
-if xor(valeurs_axe1_DebutFin_distinctes,valeurs_axe2_DebutFin_distinctes)
-    handles.ligne = line([valeur_axe1Debut_graphique,valeur_axe1Fin_graphique],[valeur_axe2Debut_graphique,valeur_axe2Fin_graphique],'Color',[1 0 0]);
-elseif (valeurs_axe1_DebutFin_distinctes && valeurs_axe2_DebutFin_distinctes)
-    largeur = valeur_axe1Fin_graphique-valeur_axe1Debut_graphique;
-    hauteur = valeur_axe2Fin_graphique-valeur_axe2Debut_graphique;
-    handles.rectangle_dessine = rectangle('Position',[valeur_axe1Debut_graphique valeur_axe2Debut_graphique largeur hauteur],'EdgeColor','r');
-end
-
-set(handles.choix_du_pic,'enable','on','BackgroundColor','white');
-set(handles.choix_de_deux_pics,'enable','on','BackgroundColor','white');
-set(handles.lmh_affichage,'BackgroundColor','white');
-set(handles.dpap_affichage,'BackgroundColor','white');
-set(handles.valeur_taille_fenetre_lissage,'enable','on','BackgroundColor','white');
-
-handles.donnees_ROI = donnees_ROI;
-handles.choix_coupe_axe1 = choix_coupe_axe1;
-handles.choix_coupe_axe2 = choix_coupe_axe2;
-
-guidata(hObject, handles);
 
 
 
@@ -455,10 +373,10 @@ set(handles.valeur_axe1Debut_graphique,'enable','on','BackgroundColor','white');
 set(handles.valeur_axe2Debut_graphique,'enable','on','BackgroundColor','white');
 set(handles.valeur_axe1Fin_graphique,'enable','on','BackgroundColor','white');
 set(handles.valeur_axe2Fin_graphique,'enable','on','BackgroundColor','white');
-set(handles.coupeSelonX,'enable','on','BackgroundColor','white');
-set(handles.coupeSelonY,'enable','on','BackgroundColor','white');
-set(handles.sommeX,'enable','on','BackgroundColor','white');
-set(handles.sommeY,'enable','on','BackgroundColor','white');
+%set(handles.coupeSelonX,'enable','on','BackgroundColor','white');
+%set(handles.coupeSelonY,'enable','on','BackgroundColor','white');
+%set(handles.sommeX,'enable','on','BackgroundColor','white');
+%set(handles.sommeY,'enable','on','BackgroundColor','white');
 
 %On sauvegarde les modifications que l'on a fait dans handles dans la
 %figure handles.figure1
@@ -521,6 +439,14 @@ function heterogeneite_Callback(hObject, eventdata, handles)
 %coupeSelonX = get(handles.coupeSelonX,'Value');
 %coupeSelonY = get(handles.coupeSelonY,'Value');
 
+somme_axe1_choisie = logical(get(handles.somme_axe1,'value'));
+somme_axe2_choisie = logical(get(handles.somme_axe2,'value'));
+
+if somme_axe1_choisie || somme_axe2_choisie
+    set(handles.pas_de_somme,'value',1);
+    afficherGraphique_Callback(hObject, eventdata, handles);
+end
+
 courbes = get(handles.graphique,'Children');
 [nombre_de_courbes ~]=size(courbes);
 somme_des_distances=0;
@@ -530,7 +456,7 @@ for i=1:nombre_de_courbes
         somme_des_distances=sum(Y)+somme_des_distances;
     end
 end
-somme_des_distances_normalises_nombre_de_courbes=somme_des_distances/nombre_de_courbes;
+somme_des_distances_normalises_nombre_de_courbes=somme_des_distances/(2^nombre_de_courbes);
 
 set(handles.affichage_somme_des_distances,'String',num2str(somme_des_distances_normalises_nombre_de_courbes));
 
@@ -617,11 +543,11 @@ try
 
     axes(handles.graphique);
     hold on
-    if handles.choix_coupe_axe1
+    if handles.graphique_selon_axe1
         [y_maxs,x_maxs,lmhs,~] = findpeaks(donnees_ROI_lissees,double(valeur_axe1Debut_graphique):double(valeur_axe1Fin_graphique));
         findpeaks(donnees_ROI_lissees,double(valeur_axe1Debut_graphique):double(valeur_axe1Fin_graphique),'Annotate','extents');
         y_maxs=y_maxs';
-    elseif handles.choix_coupe_axe2
+    elseif handles.graphique_selon_axe2
         [y_maxs,x_maxs,lmhs,~] = findpeaks(donnees_ROI_lissees,double(valeur_axe2Debut_graphique):double(valeur_axe2Fin_graphique));
         findpeaks(donnees_ROI_lissees,double(valeur_axe2Debut_graphique):double(valeur_axe2Fin_graphique),'Annotate','extents');
     end
@@ -771,9 +697,10 @@ handles.nb_fichiers = nb_fichiers-3;
 
 set(handles.valeur_axe3_image,'enable','on','BackgroundColor','white','String','1');
 set(handles.valeur_axe4_image,'enable','on','BackgroundColor','white','String','1');
+handles.vue_choisie = 0;
 
 guidata(hObject, handles);
-afficherImage_Callback(hObject, eventdata, guidata(hObject));
+afficherImage_Callback(hObject, eventdata, handles);
 
 % --- Executes on selection change in choix_du_pic.
 function choix_du_pic_Callback(hObject, eventdata, handles)
@@ -1094,3 +1021,190 @@ function valeur_taille_fenetre_lissage_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in graphique_selon_axe1.
+function graphique_selon_axe1_Callback(hObject, eventdata, handles)
+% hObject    handle to graphique_selon_axe1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+somme_axe1_choisie = logical(get(handles.somme_axe1,'value'));
+if somme_axe1_choisie
+    set(handles.somme_axe1,'value',0);
+    set(handles.somme_axe2,'value',1);
+end
+guidata(handles.figure1,handles);
+
+% Hint: get(hObject,'Value') returns toggle state of graphique_selon_axe1
+
+
+% --- Executes on button press in graphique_selon_axe2.
+function graphique_selon_axe2_Callback(hObject, eventdata, handles)
+% hObject    handle to graphique_selon_axe2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+somme_axe2_choisie = logical(get(handles.somme_axe2,'value'));
+if somme_axe2_choisie
+    set(handles.somme_axe2,'value',0);
+    set(handles.somme_axe1,'value',1);
+end
+guidata(handles.figure1,handles);
+
+% Hint: get(hObject,'Value') returns toggle state of graphique_selon_axe2
+
+
+% --- Executes on button press in somme_axe1.
+function somme_axe1_Callback(hObject, eventdata, handles)
+% hObject    handle to somme_axe1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+graphique_selon_axe1_choisi = logical(get(handles.graphique_selon_axe1,'value'));
+if graphique_selon_axe1_choisi
+    set(handles.graphique_selon_axe1,'value',0);
+    set(handles.graphique_selon_axe2,'value',1);
+end
+guidata(handles.figure1,handles);
+
+% Hint: get(hObject,'Value') returns toggle state of somme_axe1
+
+
+% --- Executes on button press in somme_axe2.
+function somme_axe2_Callback(hObject, eventdata, handles)
+% hObject    handle to somme_axe2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+graphique_selon_axe2_choisi = logical(get(handles.graphique_selon_axe2,'value'));
+if graphique_selon_axe2_choisi
+    set(handles.graphique_selon_axe2,'value',0);
+    set(handles.graphique_selon_axe1,'value',1);
+end
+guidata(handles.figure1,handles);
+
+% Hint: get(hObject,'Value') returns toggle state of somme_axe2
+
+
+% --- Executes on button press in afficher_graphique.
+function afficher_graphique_Callback(hObject, eventdata, handles)
+% hObject    handle to afficher_graphique (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+
+donnees_ROI=handles.donnees_ROI;
+
+valeur_axe1Debut_graphique = get(handles.valeur_axe1Debut_graphique,'UserData');
+valeur_axe2Debut_graphique = get(handles.valeur_axe2Debut_graphique,'UserData');
+valeur_axe1Fin_graphique = get(handles.valeur_axe1Fin_graphique,'UserData');
+valeur_axe2Fin_graphique = get(handles.valeur_axe2Fin_graphique,'UserData');
+
+somme_axe1 = get(handles.somme_axe1,'Value');
+somme_axe2 = get(handles.somme_axe2,'Value');
+
+if somme_axe1
+    donnees_ROI = sum(donnees_ROI,1);
+elseif somme_axe2
+    donnees_ROI = sum(donnees_ROI,2);
+    %Pour avoir toujours des données en ligne
+    donnees_ROI = donnees_ROI';
+end
+%Enlever les dimensions inutiles laissées par la somme
+donnees_ROI = squeeze(donnees_ROI);
+
+graphique_selon_axe1 = get(handles.graphique_selon_axe1,'Value');
+graphique_selon_axe2 = get(handles.graphique_selon_axe2,'Value');
+
+
+axes(handles.graphique);
+%Problème coordonnées cartésiennes/matrice ici
+if graphique_selon_axe1
+    plot(int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique),donnees_ROI,'displayname','Courbe originale','HitTest', 'off');
+elseif graphique_selon_axe2
+    donnees_ROI = donnees_ROI';
+    plot(int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique),donnees_ROI,'displayname','Courbe originale','HitTest', 'off');
+end
+
+ylabel('Intensité (en niveaux)'); %L'axe des ordonnées représente toujours les niveaux
+
+ligne = xor(handles.valeurs_axe1_DebutFin_distinctes,handles.valeurs_axe2_DebutFin_distinctes);
+une_seule_courbe = ligne || somme_axe1 || somme_axe2;
+
+if une_seule_courbe
+    title('Courbe d''intensité');
+else
+    title('Courbes d''intensité');
+end
+
+%Détermination du nom de l'axe des abscisses du graphique
+coupe_frontale = 0;
+coupe_transverse = 1;
+coupe_sagittale = 2;
+coupe_X_temps = 3;
+coupe_Y_temps = 4;
+coupe_Z_temps = 5;
+
+switch handles.vue_choisie
+    case coupe_frontale
+        if graphique_selon_axe1
+            xlabel('X (en pixels)');
+        elseif graphique_selon_axe2
+            xlabel('Y (en pixels)');
+        end
+    case coupe_transverse
+        if graphique_selon_axe1
+            xlabel('X (en pixels)');
+        elseif graphique_selon_axe2
+            xlabel('Z (en pixels)');
+        end
+    case coupe_sagittale
+        if graphique_selon_axe1
+            xlabel('Y (en pixels)');
+        elseif graphique_selon_axe2
+            xlabel('Z (en pixels)');
+        end
+    case coupe_X_temps
+        if graphique_selon_axe1
+            xlabel('Temps (en numéro de volume)');
+        elseif graphique_selon_axe2
+            xlabel('X (en pixels)');
+        end
+    case coupe_Y_temps
+        if graphique_selon_axe1
+            xlabel('Temps (en numéro de volume)');
+        elseif graphique_selon_axe2
+            xlabel('Y (en pixels)');
+        end
+    case coupe_Z_temps
+        if graphique_selon_axe1
+            xlabel('Temps (en numéro de volume)');
+        elseif graphique_selon_axe2
+            xlabel('X (en pixels)');
+        end
+end
+
+set(handles.choix_du_pic,'enable','on','BackgroundColor','white');
+set(handles.choix_de_deux_pics,'enable','on','BackgroundColor','white');
+set(handles.lmh_affichage,'BackgroundColor','white');
+set(handles.dpap_affichage,'BackgroundColor','white');
+set(handles.valeur_taille_fenetre_lissage,'enable','on','BackgroundColor','white');
+guidata(handles.figure1,handles);
+
+
+
+
+% --------------------------------------------------------------------
+function sauvegarde_graphique_Callback(hObject, eventdata, handles)
+% hObject    handle to sauvegarde_graphique (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+[nom_du_fichier,chemin] = uiputfile({'*.png';'*.jpeg';'*.bmp';'*.tiff';'*.pdf';'*.eps'});
+dossier_principal=pwd;
+cd(chemin);
+export_fig(handles.graphique, nom_du_fichier);
+cd(dossier_principal)
+
+% --------------------------------------------------------------------
+function ContexteGraphique_Callback(hObject, eventdata, handles)
+% hObject    handle to ContexteGraphique (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)

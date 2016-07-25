@@ -1,0 +1,13 @@
+[Geometry Data]
+Range = 312
+Azimuth = 34
+Elevation = 74
+RoiAxialSpanMm = 15.000000
+AxialRoiStartMm = 5.000000
+MechRadiusMm = 85.000000
+ApexAngleAzimuthHalf = 17.959591
+ApexAngleElevationHalf = 29.304001
+AzimuthSteeringAngle = 1.696456
+Probe ID = 8995
+Probe Type = Linear 
+PixelSpacing = 0.000000
