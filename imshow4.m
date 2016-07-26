@@ -268,44 +268,44 @@ switch mode_out
     case 0
         axe1='X';
         axe2='Y';
-        title({'Coupe frontale', ['Z=' num2str(valeur_axe3) '/' num2str(rng(2)) ', t=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
-        set(handles.texte_axe3_image,'String','Z');
-        set(handles.texte_axe4_image,'String','Temps');
+        axe3='Z';
+        axe4='Temps';
+        title({'Coupe frontale', [axe3 '=' num2str(valeur_axe3) '/' num2str(rng(2)) ', ' axe4 '=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
         ordre_axes = [1,2,3,4]; % frontal
     case 1
         axe1='X';
         axe2='Z';
-        title({'Coupe transverse',['Y=' num2str(valeur_axe3) '/' num2str(rng(2)) ', t=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
-        set(handles.texte_axe3_image,'String','Y');
-        set(handles.texte_axe4_image,'String','Temps');
+        axe3='Y';
+        axe4='Temps';
+        title({'Coupe transverse',[axe3 '=' num2str(valeur_axe3) '/' num2str(rng(2)) ', ' axe4 '=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
         ordre_axes = [1,3,2,4]; % transversal
     case 2
         axe1='Y';
         axe2='Z';
-        title({'Coupe sagittale', ['X=' num2str(valeur_axe3) '/' num2str(rng(2)) ', t=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
-        set(handles.texte_axe3_image,'String','X');
-        set(handles.texte_axe4_image,'String','Temps');
+        axe3='X';
+        axe4='Temps';
+        title({'Coupe sagittale', [axe3 '=' num2str(valeur_axe3) '/' num2str(rng(2)) ', ' axe4 '=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
         ordre_axes = [2,3,1,4]; % sagittal
     case 3
         axe1='Temps';
         axe2='X';
-        title({'Coupe de X selon le temps', ['Z=' num2str(valeur_axe3) '/' num2str(rng(2)) ', Y=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
-        set(handles.texte_axe3_image,'String','Z');
-        set(handles.texte_axe4_image,'String','Y');
+        axe3='Z';
+        axe4='Y';
+        title({'Coupe de X selon le temps', [axe3 '=' num2str(valeur_axe3) '/' num2str(rng(2)) ', ' axe4 '=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
         ordre_axes = [4,1,3,2]; % x-temps
     case 4
         axe1='Temps';
         axe2='Y';
-        title({'Coupe de Y selon le temps', ['Z=' num2str(valeur_axe3) '/' num2str(rng(2)) ', X=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
-        set(handles.texte_axe3_image,'String','Z');
-        set(handles.texte_axe4_image,'String','X');
+        axe3='Z';
+        axe4='X';
+        title({'Coupe de Y selon le temps', [axe3 '=' num2str(valeur_axe3) '/' num2str(rng(2)) ', ' axe4 '=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
         ordre_axes = [4,2,3,1]; % y-temps
     case 5
         axe1='Temps';
         axe2='Z';
-        title({'Vue de Z selon le temps', ['Y=' num2str(valeur_axe3) '/' num2str(rng(2)) ', X=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
-        set(handles.texte_axe3_image,'String','Y');
-        set(handles.texte_axe4_image,'String','X');
+        axe3='Y';
+        axe4='X';
+        title({'Vue de Z selon le temps', [axe3 '=' num2str(valeur_axe3) '/' num2str(rng(2)) ', ' axe4 '=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
         ordre_axes = [4,3,2,1]; % z-temps
 end;
         xlabel(axe1);
@@ -316,8 +316,13 @@ end;
         set(handles.axe2_graphique,'String',axe2);
         set(handles.graphique_selon_axe1,'String',axe1);
         set(handles.graphique_selon_axe2,'String',axe2);
-        set(handles.somme_axe1,'String',axe1);
-        set(handles.somme_axe2,'String',axe2);
+        set(handles.graphique_selon_axe3,'String',axe3);
+        set(handles.graphique_selon_axe4,'String',axe4);
+        set(handles.moyenne_axe1,'String',axe1);
+        set(handles.moyenne_axe2,'String',axe2);
+        set(handles.moyenne_axe1et2,'String',[axe1, ' et ', axe2]);
+        set(handles.texte_axe3_image,'String',axe3);
+        set(handles.texte_axe4_image,'String',axe4);
         set(handles.maximum_axe1_1,'String',['/',num2str(taille_axes(ordre_axes(1)))]);
         set(handles.maximum_axe1_2,'String',['/',num2str(taille_axes(ordre_axes(1)))]);
         set(handles.maximum_axe2_1,'String',['/',num2str(taille_axes(ordre_axes(2)))]);

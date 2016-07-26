@@ -21,7 +21,7 @@ function varargout = Bayes4D(varargin)
 
 % Edit the above text to modify the response to help Bayes4D
 
-% Last Modified by GUIDE v2.5 26-Jul-2016 17:26:50
+% Last Modified by GUIDE v2.5 26-Jul-2016 18:26:17
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -90,7 +90,6 @@ try
         delete(handles.rectangle); %Efface la région d'intérêt tracée précédente
     end
 
-
     if isfield(handles,'rectangle_trace')
         delete(handles.rectangle_trace);
     end
@@ -98,6 +97,13 @@ try
     if isfield(handles,'polygone_trace')
     delete(handles.polygone_trace);
     end
+    
+    set(handles.moyenne_axe1,'Visible','on');
+    set(handles.moyenne_axe2,'Visible','on');
+    set(handles.pas_de_moyenne,'Visible','on');
+    
+    set(handles.graphique_selon_axe1,'Visible','on');
+    set(handles.graphique_selon_axe2,'Visible','on');
     
     volumes = handles.volumes;
     
@@ -1036,9 +1042,9 @@ function graphique_selon_axe1_Callback(hObject, eventdata, handles)
 % hObject    handle to graphique_selon_axe1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-moyenne_axe1_choisie = logical(get(handles.moyenne_axe1,'value'));
-if moyenne_axe1_choisie
-    set(handles.moyenne_axe1,'value',0);
+moyenne_axe1_ou_axe1et2_choisie = logical(get(handles.moyenne_axe1,'value')) || ...
+   logical(get(handles.moyenne_axe1et2,'value'));
+if moyenne_axe1_ou_axe1et2_choisie
     set(handles.moyenne_axe2,'value',1);
 end
 guidata(handles.figure1,handles);
@@ -1051,9 +1057,9 @@ function graphique_selon_axe2_Callback(hObject, eventdata, handles)
 % hObject    handle to graphique_selon_axe2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-moyenne_axe2_choisie = logical(get(handles.moyenne_axe2,'value'));
-if moyenne_axe2_choisie
-    set(handles.moyenne_axe2,'value',0);
+moyenne_axe2_ou_axe1et2_choisie = logical(get(handles.moyenne_axe2,'value')) || ...
+   logical(get(handles.moyenne_axe1et2,'value'));
+if moyenne_axe2_ou_axe1et2_choisie
     set(handles.moyenne_axe1,'value',1);
 end
 guidata(handles.figure1,handles);
@@ -1068,7 +1074,6 @@ function moyenne_axe1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 graphique_selon_axe1_choisi = logical(get(handles.graphique_selon_axe1,'value'));
 if graphique_selon_axe1_choisi
-    set(handles.graphique_selon_axe1,'value',0);
     set(handles.graphique_selon_axe2,'value',1);
 end
 guidata(handles.figure1,handles);
@@ -1083,7 +1088,6 @@ function moyenne_axe2_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 graphique_selon_axe2_choisi = logical(get(handles.graphique_selon_axe2,'value'));
 if graphique_selon_axe2_choisi
-    set(handles.graphique_selon_axe2,'value',0);
     set(handles.graphique_selon_axe1,'value',1);
 end
 guidata(handles.figure1,handles);
@@ -1288,11 +1292,18 @@ handles.image_ROI = image_ROI;
 position_polygone=getPosition(polygone);
 ordre_des_points=1:size(position_polygone,1);
 polygone_trace=patch('Faces',ordre_des_points,'Vertices',position_polygone,'FaceColor','none','EdgeColor','red');
-%volume1=volumes_ROI(:,:,3,3);
-%imagesc(volume1);
-%volume2=volumes_ROI(:,:,4,5);
 handles.polygone_trace=polygone_trace;
 delete(polygone);
+
+set(handles.moyenne_axe1et2,'Value',1);
+set(handles.moyenne_axe1,'Visible','off');
+set(handles.moyenne_axe2,'Visible','off');
+set(handles.pas_de_moyenne,'Visible','off');
+
+set(handles.graphique_selon_axe4,'Value',1);
+set(handles.graphique_selon_axe1,'Visible','off');
+set(handles.graphique_selon_axe2,'Visible','off');
+
 guidata(handles.figure1,handles);
 
 %volumes_filtres=reshape(volume_filtres,taille_axes
@@ -1303,3 +1314,59 @@ guidata(handles.figure1,handles);
 %imshow(volumes_filtres(:,:,3,3));
 
 
+
+
+% --- Executes on button press in moyenne_axe1et2.
+function moyenne_axe1et2_Callback(hObject, eventdata, handles)
+% hObject    handle to moyenne_axe1et2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+graphique_selon_axe1ou2_choisi = logical(get(handles.graphique_selon_axe1,'value')) || logical(get(handles.graphique_selon_axe2,'value'));
+if graphique_selon_axe1ou2_choisi
+    set(handles.graphique_selon_axe4,'value',1);
+end
+
+% Hint: get(hObject,'Value') returns toggle state of moyenne_axe1et2
+
+
+% --- Executes on button press in graphique_selon_axe3.
+function graphique_selon_axe3_Callback(hObject, eventdata, handles)
+% hObject    handle to graphique_selon_axe3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+moyenne_axe1ou2oupas_choisie = logical(get(handles.moyenne_axe1,'value')) || logical(get(handles.moyenne_axe2,'value')) || ...
+    logical(get(handles.pas_de_moyenne,'value'));
+if moyenne_axe1ou2oupas_choisie
+    set(handles.moyenne_axe1et2,'value',1);
+end
+
+% Hint: get(hObject,'Value') returns toggle state of graphique_selon_axe3
+
+
+% --- Executes on button press in graphique_selon_axe4.
+function graphique_selon_axe4_Callback(hObject, eventdata, handles)
+% hObject    handle to graphique_selon_axe4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+moyenne_axe1ou2oupas_choisie = logical(get(handles.moyenne_axe1,'value')) || logical(get(handles.moyenne_axe2,'value')) || ...
+    logical(get(handles.pas_de_moyenne,'value'));
+if moyenne_axe1ou2oupas_choisie
+    set(handles.moyenne_axe1et2,'value',1);
+end
+
+% Hint: get(hObject,'Value') returns toggle state of graphique_selon_axe4
+
+
+% --- Executes on button press in pas_de_moyenne.
+function pas_de_moyenne_Callback(hObject, eventdata, handles)
+% hObject    handle to pas_de_moyenne (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+graphique_selon_axe3ou4_choisi = logical(get(handles.graphique_selon_axe3,'value')) || ...
+    logical(get(handles.graphique_selon_axe4,'value'));
+if graphique_selon_axe3ou4_choisi
+    set(handles.graphique_selon_axe1,'value',1);
+end
+guidata(handles.figure1,handles);
+
+% Hint: get(hObject,'Value') returns toggle state of pas_de_moyenne
