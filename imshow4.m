@@ -113,6 +113,7 @@ end
 
 function kresli(~,eventdata,h,range,N,ref_valeur_axe4,method,handles)
 global valeur_axe3 valeur_axe4 im mode_out inter colormaps isfused taille_axes
+cla(handles.graphique,'reset'); %Efface le graphique précédent
 rng=size(im,3);
 rng=[1 rng];
 rng_t=size(im,4);
@@ -231,29 +232,6 @@ set(handles.image.Children,'CDataMapping','direct');
 uicontextmenu = get(handles.image,'UIContextMenu');
 set(handles.image.Children,'UIContextMenu',uicontextmenu);
 
-% Delete previous image(s)
-
-%set(handles.image, 'xlim', [1 size(imzobr, 2)]);
-%set(handles.image, 'ylim', [1 size(imzobr, 1)]);
-
-%Ajout ci-dessous
-%set(handles.image,'UserData',imzobr);
-%{
-set(handles.image.Children,'CData',imzobr);
-set(handles.image.Children,'CDataMapping','direct');
-%}
-
-
-
-%Tentative de déconvolution
-%{
-axes(handles.graphique);
-image = get(handles.image.Children,'CData');
-PSF = ones(3);
-[J1, P1] = deconvblind(image,PSF);
-imshow(J1);title('Deblurring with PSF');
-set(handles.graphique.Children,'CDataMapping','direct');
-%}
 
 if size(imzobr,2)<200 && inter==1
     imzobr = imresize(imzobr,[size(imzobr,1),200]);
@@ -339,15 +317,15 @@ function [im_out] = permutation(im_in,mode_in)
         case 0
             mode_in = [1,2,3,4]; % frontal
         case 1
-            mode_in = [3,2,1,4]; % transversal
+            mode_in = [1,3,2,4]; % transversal
         case 2
-            mode_in = [3,1,2,4]; % sagittal
+            mode_in = [2,3,1,4]; % sagittal
         case 3
-            mode_in = [2,4,3,1]; % x-temps
+            mode_in = [4,1,3,2]; % x-temps
         case 4
-            mode_in = [1,4,3,2]; % y-temps
+            mode_in = [4,2,3,1]; % y-temps
         case 5
-            mode_in = [3,4,1,2]; % z-temps
+            mode_in = [4,3,2,1]; % z-temps
     end;
     im_out = permute(im_in,mode_in);
 end
@@ -357,15 +335,15 @@ function [im_out] = ipermutation(im_in,mode_in)
         case 0
             mode_in = [1,2,3,4]; % frontal
         case 1
-            mode_in = [3,2,1,4]; % transversal
+            mode_in = [1,3,2,4]; % transversal
         case 2
-            mode_in = [3,1,2,4]; % sagittal
+            mode_in = [2,3,1,4]; % sagittal
         case 3
-            mode_in = [2,4,3,1];  % x-temps
+            mode_in = [4,1,3,2]; % x-temps
         case 4
-            mode_in = [1,4,3,2]; % y-temps
+            mode_in = [4,2,3,1]; % y-temps
         case 5
-            mode_in = [3,4,1,2]; % z-temps
+            mode_in = [4,3,2,1]; % z-temps
     end;
     im_out = ipermute(im_in,mode_in);
 end

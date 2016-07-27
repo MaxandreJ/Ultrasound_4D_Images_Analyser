@@ -82,85 +82,103 @@ function selection_region_interet_Callback(hObject, eventdata, handles)
 % hObject    handle to selection_region_interet (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+choix_ROI_rectangle=strcmp(handles.choix_forme_ROI,'rectangle');
+choix_ROI_polygone=strcmp(handles.choix_forme_ROI,'polygone');
+
+coordonnee_axe3 = int16(str2double(get(handles.valeur_axe3_image,'String')));
+coordonnee_axe4 = int16(str2double(get(handles.valeur_axe4_image,'String')));
+
 
 try
     cla(handles.graphique,'reset'); %Efface le graphique précédent
-
-    if isfield(handles,'rectangle')
-        delete(handles.rectangle); %Efface la région d'intérêt tracée précédente
-    end
-
-    if isfield(handles,'rectangle_trace')
-        delete(handles.rectangle_trace);
-    end
-    
-    if isfield(handles,'polygone_trace')
-    delete(handles.polygone_trace);
-    end
-    
-    set(handles.moyenne_axe1,'Visible','on');
-    set(handles.moyenne_axe2,'Visible','on');
-    set(handles.pas_de_moyenne,'Visible','on');
-    
-    set(handles.graphique_selon_axe1,'Visible','on');
-    set(handles.graphique_selon_axe2,'Visible','on');
-    
-    volumes = handles.volumes;
-    
     cla(handles.image.Children);
+%     if isfield(handles,'rectangle')
+%         delete(handles.rectangle); %Efface la région d'intérêt tracée précédente
+%     end
+% 
+%     if isfield(handles,'rectangle_trace')
+%         delete(handles.rectangle_trace);
+%     end
+%     
+%     if isfield(handles,'polygone_trace')
+%     delete(handles.polygone_trace);
+%     end
+%   
+   
+    
 
-    image = getimage(handles.image);
+
+    %image = getimage(handles.image);
 
     %Conversion des indices de matrice (lignes/colonnes) en coordonnées
     %cartésiennes par transposition de la matrice
-    image = image';
+    %image = image';
 
-    axes(handles.graphique);
-
-
-    %On accède aux valeurs de coordonnées par des accesseurs
-    valeur_axe1Debut_graphique = get(handles.valeur_axe1Debut_graphique,'Value');
-    valeur_axe2Debut_graphique = get(handles.valeur_axe2Debut_graphique,'Value');
-    valeur_axe1Fin_graphique = get(handles.valeur_axe1Fin_graphique,'Value');
-    valeur_axe2Fin_graphique = get(handles.valeur_axe2Fin_graphique,'Value');
-   
-
-    %On enregistre ces données dans le champ 'UserData' des boites
-    %correspondantes aux coordonnées des axes
-    set(handles.valeur_axe1Debut_graphique,'UserData',valeur_axe1Debut_graphique);
-    set(handles.valeur_axe2Debut_graphique,'UserData',valeur_axe2Debut_graphique);
-    set(handles.valeur_axe1Fin_graphique,'UserData',valeur_axe1Fin_graphique);
-    set(handles.valeur_axe2Fin_graphique,'UserData',valeur_axe2Fin_graphique);
+    if choix_ROI_rectangle
+        
+        %On accède aux valeurs de coordonnées par des accesseurs
+        valeur_axe1Debut_graphique = get(handles.valeur_axe1Debut_graphique,'Value');
+        valeur_axe2Debut_graphique = get(handles.valeur_axe2Debut_graphique,'Value');
+        valeur_axe1Fin_graphique = get(handles.valeur_axe1Fin_graphique,'Value');
+        valeur_axe2Fin_graphique = get(handles.valeur_axe2Fin_graphique,'Value');
 
 
+        %On enregistre ces données dans le champ 'UserData' des boites
+        %correspondantes aux coordonnées des axes
+        set(handles.valeur_axe1Debut_graphique,'UserData',valeur_axe1Debut_graphique);
+        set(handles.valeur_axe2Debut_graphique,'UserData',valeur_axe2Debut_graphique);
+        set(handles.valeur_axe1Fin_graphique,'UserData',valeur_axe1Fin_graphique);
+        set(handles.valeur_axe2Fin_graphique,'UserData',valeur_axe2Fin_graphique);
+        
+        volumes = handles.volumes;
 
-
-
-    %Les Y sont en abscisse et les X en ordonnées parce que Matlab voie les Y
-    %comme des noms de colonne de matrice
-    %ce qui n'est pas l'intuition cartésienne
-    %image_ROI = image(int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique),int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique));
-    image_ROI = image(int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique),int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique));
-    
-    volumes_ROI_rectangle=volumes(int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique),int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique),:,:);
-
-    axes(handles.image);
-
-    valeurs_axe1_DebutFin_distinctes = valeur_axe1Debut_graphique~=valeur_axe1Fin_graphique;
-    valeurs_axe2_DebutFin_distinctes = valeur_axe2Debut_graphique~=valeur_axe2Fin_graphique;
-
-    if xor(valeurs_axe1_DebutFin_distinctes,valeurs_axe2_DebutFin_distinctes)
-        handles.ligne = line([valeur_axe1Debut_graphique,valeur_axe1Fin_graphique],[valeur_axe2Debut_graphique,valeur_axe2Fin_graphique],'Color',[1 0 0]);
-    elseif (valeurs_axe1_DebutFin_distinctes && valeurs_axe2_DebutFin_distinctes)
-        largeur = valeur_axe1Fin_graphique-valeur_axe1Debut_graphique;
-        hauteur = valeur_axe2Fin_graphique-valeur_axe2Debut_graphique;
-        handles.rectangle_trace = rectangle('Position',[valeur_axe1Debut_graphique valeur_axe2Debut_graphique largeur hauteur],'EdgeColor','r');
+        %Les Y sont en abscisse et les X en ordonnées parce que Matlab voie les Y
+        %comme des noms de colonne de matrice
+        %ce qui n'est pas l'intuition cartésienne
+        %image_ROI = image(int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique),int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique));
+        %image_ROI = image(int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique),int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique));
+        volumes_ROI=volumes(int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique),int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique),:,:);
+        handles.volumes_ROI=volumes_ROI;
+    elseif choix_ROI_polygone
+        volumes_ROI=handles.volumes_ROI;
     end
 
+    image_ROI = volumes_ROI(:,:,coordonnee_axe3,coordonnee_axe4);
     handles.image_ROI = image_ROI;
-    handles.valeurs_axe1_DebutFin_distinctes = valeurs_axe1_DebutFin_distinctes;
-    handles.valeurs_axe2_DebutFin_distinctes = valeurs_axe2_DebutFin_distinctes;
-    handles.volumes_ROI_rectangle = volumes_ROI_rectangle;
+    
+    
+
+
+
+    %if xor(valeurs_axe1_DebutFin_distinctes,valeurs_axe2_DebutFin_distinctes)
+    %    handles.ligne = line([valeur_axe1Debut_graphique,valeur_axe1Fin_graphique],[valeur_axe2Debut_graphique,valeur_axe2Fin_graphique],'Color',[1 0 0]);
+    %elseif (valeurs_axe1_DebutFin_distinctes && valeurs_axe2_DebutFin_distinctes)
+    %end
+
+    %handles.volumes_ROI_rectangle = volumes_ROI_rectangle;
+    
+    if choix_ROI_rectangle
+        axes(handles.image);
+        valeurs_axe1_DebutFin_distinctes = valeur_axe1Debut_graphique~=valeur_axe1Fin_graphique;
+        valeurs_axe2_DebutFin_distinctes = valeur_axe2Debut_graphique~=valeur_axe2Fin_graphique;
+        handles.valeurs_axe1_DebutFin_distinctes = valeurs_axe1_DebutFin_distinctes;
+        handles.valeurs_axe2_DebutFin_distinctes = valeurs_axe2_DebutFin_distinctes;
+        
+        set(handles.moyenne_axe1,'Visible','on');
+        set(handles.moyenne_axe2,'Visible','on');
+        set(handles.pas_de_moyenne,'Visible','on');
+        set(handles.graphique_selon_axe1,'Visible','on');
+        set(handles.graphique_selon_axe2,'Visible','on');
+    elseif choix_ROI_polygone
+        set(handles.moyenne_axe1et2,'Value',1);
+        set(handles.moyenne_axe1,'Visible','off');
+        set(handles.moyenne_axe2,'Visible','off');
+        set(handles.pas_de_moyenne,'Visible','off');
+
+        set(handles.graphique_selon_axe4,'Value',1);
+        set(handles.graphique_selon_axe1,'Visible','off');
+        set(handles.graphique_selon_axe2,'Visible','off');
+    end
 
     guidata(hObject, handles);
 catch erreurs
@@ -524,6 +542,11 @@ end
 
 guidata(hObject, handles);
 
+graphique_selon_axe1_choisi = get(handles.graphique_selon_axe1,'value');
+graphique_selon_axe2_choisi = get(handles.graphique_selon_axe2,'value');
+graphique_selon_axe3_choisi = get(handles.graphique_selon_axe3,'value');
+graphique_selon_axe4_choisi = get(handles.graphique_selon_axe4,'value');
+
 try
     taille_fenetre_lissage = str2double(get(handles.valeur_taille_fenetre_lissage,'String'));
     if mod(taille_fenetre_lissage,2) == 0
@@ -555,11 +578,11 @@ try
 
     axes(handles.graphique);
     hold on
-    if handles.graphique_selon_axe1
+    if graphique_selon_axe1_choisi
         [y_maxs,x_maxs,lmhs,~] = findpeaks(image_ROI_lissees,double(valeur_axe1Debut_graphique):double(valeur_axe1Fin_graphique));
         findpeaks(image_ROI_lissees,double(valeur_axe1Debut_graphique):double(valeur_axe1Fin_graphique),'Annotate','extents');
         y_maxs=y_maxs';
-    elseif handles.graphique_selon_axe2
+    elseif graphique_selon_axe2_choisi
         [y_maxs,x_maxs,lmhs,~] = findpeaks(image_ROI_lissees,double(valeur_axe2Debut_graphique):double(valeur_axe2Fin_graphique));
         findpeaks(image_ROI_lissees,double(valeur_axe2Debut_graphique):double(valeur_axe2Fin_graphique),'Annotate','extents');
     end
@@ -831,33 +854,42 @@ function Rectangle_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+if isfield(handles,'rectangle_trace')
+    delete(handles.rectangle_trace);
+end
 
-rectangle = imrect;
+if isfield(handles,'polygone_trace')
+    delete(handles.polygone_trace);
+end
 
-position_rectangle = getPosition(rectangle);
-x_min=position_rectangle(1);
-y_min=position_rectangle(2);
-largeur=position_rectangle(3);
-hauteur=position_rectangle(4);
-x_max = x_min + largeur;
-y_max = y_min + hauteur;
+objet_rectangle = imrect;
+
+position_rectangle = getPosition(objet_rectangle);
+valeur_axe1Debut_graphique=position_rectangle(1);
+valeur_axe2Debut_graphique=position_rectangle(2);
+largeur_axe1=position_rectangle(3);
+hauteur_axe2=position_rectangle(4);
+valeur_axe1Fin_graphique = valeur_axe1Debut_graphique + largeur_axe1;
+valeur_axe2Fin_graphique = valeur_axe2Debut_graphique + hauteur_axe2;
 
 %On arrondit les valeurs des coordonnées sélectionnées
-x_min=int16(round(x_min));
-y_min=int16(round(y_min));
-x_max=int16(round(x_max));
-y_max=int16(round(y_max));
+valeur_axe1Debut_graphique=int16(round(valeur_axe1Debut_graphique));
+valeur_axe2Debut_graphique=int16(round(valeur_axe2Debut_graphique));
+valeur_axe1Fin_graphique=int16(round(valeur_axe1Fin_graphique));
+valeur_axe2Fin_graphique=int16(round(valeur_axe2Fin_graphique));
 
-set(handles.valeur_axe1Debut_graphique,'Value',x_min,'String',num2str(x_min));
-set(handles.valeur_axe2Debut_graphique,'Value',y_min,'String',num2str(y_min));
-set(handles.valeur_axe1Fin_graphique,'Value',x_max,'String',num2str(x_max));
-set(handles.valeur_axe2Fin_graphique,'Value',y_max,'String',num2str(y_max));
-handles.rectangle = rectangle;
+set(handles.valeur_axe1Debut_graphique,'Value',valeur_axe1Debut_graphique,'String',num2str(valeur_axe1Debut_graphique));
+set(handles.valeur_axe2Debut_graphique,'Value',valeur_axe2Debut_graphique,'String',num2str(valeur_axe2Debut_graphique));
+set(handles.valeur_axe1Fin_graphique,'Value',valeur_axe1Fin_graphique,'String',num2str(valeur_axe1Fin_graphique));
+set(handles.valeur_axe2Fin_graphique,'Value',valeur_axe2Fin_graphique,'String',num2str(valeur_axe2Fin_graphique));
+
+handles.rectangle_trace = rectangle('Position',[valeur_axe1Debut_graphique valeur_axe2Debut_graphique largeur_axe1 hauteur_axe2],'EdgeColor','r');
+
+delete(objet_rectangle);
+
+handles.choix_forme_ROI = 'rectangle';
 guidata(hObject,handles);
 selection_region_interet_Callback(hObject, eventdata, handles)
-
-
-
 
 
 % --------------------------------------------------------------------
@@ -1103,8 +1135,8 @@ function afficher_graphique_Callback(hObject, eventdata, handles)
 
 choix_ROI_rectangle=isfield(handles,'rectangle_trace');
 choix_ROI_polygone=isfield(handles,'polygone_trace');
-axes(handles.graphique);
-taille_axes=handles.taille_axes;
+
+
 coordonnee_axe3 = int16(str2double(get(handles.valeur_axe3_image,'String')));
 coordonnee_axe4 = int16(str2double(get(handles.valeur_axe4_image,'String')));
 graphique_selon_axe1 = get(handles.graphique_selon_axe1,'Value');
@@ -1112,120 +1144,152 @@ graphique_selon_axe2 = get(handles.graphique_selon_axe2,'Value');
 graphique_selon_axe3 = get(handles.graphique_selon_axe3,'Value');
 graphique_selon_axe4 = get(handles.graphique_selon_axe4,'Value');
 
-if choix_ROI_rectangle
-    image_ROI=handles.image_ROI;
-    volumes_ROI_rectangle=handles.volumes_ROI_rectangle;
+volumes_ROI=handles.volumes_ROI;
+image_ROI=handles.image_ROI;
+ordre_axes=handles.ordre_axes;
+taille_axes=handles.taille_axes;
+
+legende_abscisse_graphique={'X (en pixels)','Y (en pixels)','Z (en pixels)','Temps (en numéro de volume)'};
+noms_axes=['X','Y','Z','Temps'];
 
 
+valeur_axe1Debut_graphique = get(handles.valeur_axe1Debut_graphique,'UserData');
+valeur_axe2Debut_graphique = get(handles.valeur_axe2Debut_graphique,'UserData');
+valeur_axe1Fin_graphique = get(handles.valeur_axe1Fin_graphique,'UserData');
+valeur_axe2Fin_graphique = get(handles.valeur_axe2Fin_graphique,'UserData');
 
+moyenne_axe1 = get(handles.moyenne_axe1,'Value');
+moyenne_axe2 = get(handles.moyenne_axe2,'Value');
+moyenne_axe1et2 = get(handles.moyenne_axe1et2,'Value');
+pas_de_moyenne = get(handles.pas_de_moyenne,'Value');
 
-    valeur_axe1Debut_graphique = get(handles.valeur_axe1Debut_graphique,'UserData');
-    valeur_axe2Debut_graphique = get(handles.valeur_axe2Debut_graphique,'UserData');
-    valeur_axe1Fin_graphique = get(handles.valeur_axe1Fin_graphique,'UserData');
-    valeur_axe2Fin_graphique = get(handles.valeur_axe2Fin_graphique,'UserData');
-
-    moyenne_axe1 = get(handles.moyenne_axe1,'Value');
-    moyenne_axe2 = get(handles.moyenne_axe2,'Value');
-
-    if moyenne_axe1
-        image_ROI = mean(image_ROI,1);
-    elseif moyenne_axe2
-        image_ROI = mean(image_ROI,2);
-        %Pour avoir toujours des données en ligne
-        image_ROI = image_ROI';
-    end
-    %Enlever les dimensions inutiles laissées par la somme
+axes(handles.graphique);
+if moyenne_axe1
+    image_ROI = mean(image_ROI,ordre_axes(1));
+    %Enlever les dimensions inutiles laissées par la moyenne
     image_ROI = squeeze(image_ROI);
-    
-    volumes_ROI_rectangle_moyennes_2_1eres_dim = mean(mean(volumes_ROI_rectangle,1),2);
-    volumes_ROI_rectangle_moyennes_2_1eres_dim = squeeze(volumes_ROI_rectangle_moyennes_2_1eres_dim);
-
-    
-    %Problème coordonnées cartésiennes/matrice ici
-    if graphique_selon_axe1
-        plot(int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique),image_ROI,'displayname','Courbe originale','HitTest', 'off');
-    elseif graphique_selon_axe2
-        image_ROI = image_ROI';
-        plot(int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique),image_ROI,'displayname','Courbe originale','HitTest', 'off');
-    elseif graphique_selon_axe3
-        volumes_ROI_rectangle_moyennes_2_1eres_dim_2D_Z = volumes_ROI_rectangle_moyennes_2_1eres_dim(:,coordonnee_axe4);
-        plot(1:int16(taille_axes(3)),volumes_ROI_rectangle_moyennes_2_1eres_dim_2D_Z,'displayname','Courbe originale','HitTest', 'off');
-    elseif graphique_selon_axe4
-        volumes_ROI_rectangle_moyennes_2_1eres_dim_2D_T = volumes_ROI_rectangle_moyennes_2_1eres_dim(coordonnee_axe3,:);
-        plot(1:int16(taille_axes(4)),volumes_ROI_rectangle_moyennes_2_1eres_dim_2D_T,'displayname','Courbe originale','HitTest', 'off');    
-    end
-
-    ylabel('Intensité (en niveaux)'); %L'axe des ordonnées représente toujours les niveaux
-
-    ligne = xor(handles.valeurs_axe1_DebutFin_distinctes,handles.valeurs_axe2_DebutFin_distinctes);
-    une_seule_courbe = ligne || moyenne_axe1 || moyenne_axe2;
-
-    if une_seule_courbe
-        title('Courbe d''intensité');
-    else
-        title('Courbes d''intensité');
-    end
-
-    %Détermination du nom de l'axe des abscisses du graphique
-    coupe_frontale = 0;
-    coupe_transverse = 1;
-    coupe_sagittale = 2;
-    coupe_X_temps = 3;
-    coupe_Y_temps = 4;
-    coupe_Z_temps = 5;
-
-    switch handles.vue_choisie
-        case coupe_frontale
-            if graphique_selon_axe1
-                xlabel('X (en pixels)');
-            elseif graphique_selon_axe2
-                xlabel('Y (en pixels)');
-            end
-        case coupe_transverse
-            if graphique_selon_axe1
-                xlabel('X (en pixels)');
-            elseif graphique_selon_axe2
-                xlabel('Z (en pixels)');
-            end
-        case coupe_sagittale
-            if graphique_selon_axe1
-                xlabel('Y (en pixels)');
-            elseif graphique_selon_axe2
-                xlabel('Z (en pixels)');
-            end
-        case coupe_X_temps
-            if graphique_selon_axe1
-                xlabel('Temps (en numéro de volume)');
-            elseif graphique_selon_axe2
-                xlabel('X (en pixels)');
-            end
-        case coupe_Y_temps
-            if graphique_selon_axe1
-                xlabel('Temps (en numéro de volume)');
-            elseif graphique_selon_axe2
-                xlabel('Y (en pixels)');
-            end
-        case coupe_Z_temps
-            if graphique_selon_axe1
-                xlabel('Temps (en numéro de volume)');
-            elseif graphique_selon_axe2
-                xlabel('X (en pixels)');
-            end
-    end
- 
-elseif choix_ROI_polygone
-    volumes_ROI=handles.volumes_ROI;
-    ordre_axes=handles.ordre_axes;
-    volumes_ROI_moyenne_sur_2_1ers_axes=nanmean(nanmean(volumes_ROI,ordre_axes(1)),ordre_axes(2));
-    volumes_ROI_moyenne_sur_2_1ers_axes=squeeze(volumes_ROI_moyenne_sur_2_1ers_axes);
-    if graphique_selon_axe3
-        volumes_ROI_moyenne_sur_2_1ers_axes_selonZ = volumes_ROI_moyenne_sur_2_1ers_axes(:,coordonnee_axe4);
-        plot(1:int16(taille_axes(3)),volumes_ROI_moyenne_sur_2_1ers_axes_selonZ,'displayname','Courbe originale','HitTest', 'off');
-    elseif graphique_selon_axe4
-        volumes_ROI_moyenne_sur_2_1ers_axes_selonT = volumes_ROI_moyenne_sur_2_1ers_axes(coordonnee_axe3,:);
-        plot(1:int16(taille_axes(4)),volumes_ROI_moyenne_sur_2_1ers_axes_selonT,'displayname','Courbe originale','HitTest', 'off');    
-    end
+elseif moyenne_axe2
+    image_ROI = mean(image_ROI,ordre_axes(2));
+    %Pour avoir toujours des données en ligne
+    image_ROI = image_ROI';
+    %Enlever les dimensions inutiles laissées par la moyenne
+    image_ROI = squeeze(image_ROI);
+elseif moyenne_axe1et2
+    volumes_ROI=nanmean(nanmean(volumes_ROI,ordre_axes(1)),ordre_axes(2));
+    %Enlever les dimensions inutiles laissées par les moyennes
+    volumes_ROI=squeeze(volumes_ROI);
 end
+
+
+
+
+%Problème coordonnées cartésiennes/matrice ici
+if graphique_selon_axe1
+    plot(int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique),image_ROI,'displayname','Courbe originale','HitTest', 'off');
+    xlabel(legende_abscisse_graphique(ordre_axes(1)));
+elseif graphique_selon_axe2
+    image_ROI = image_ROI';
+    plot(int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique),image_ROI,'displayname','Courbe originale','HitTest', 'off');
+    xlabel(legende_abscisse_graphique(ordre_axes(2)));
+elseif graphique_selon_axe3
+    volumes_ROI = volumes_ROI(:,coordonnee_axe4);
+    plot(1:int16(taille_axes(ordre_axes(3))),volumes_ROI,'displayname','Courbe originale','HitTest', 'off');
+    xlabel(legende_abscisse_graphique(ordre_axes(3)));
+elseif graphique_selon_axe4
+    volumes_ROI = volumes_ROI(coordonnee_axe3,:);
+    plot(1:int16(taille_axes(ordre_axes(4))),volumes_ROI,'displayname','Courbe originale','HitTest', 'off');
+    xlabel(legende_abscisse_graphique(ordre_axes(4)));
+end
+
+
+
+if strcmp(handles.choix_forme_ROI,'rectangle');
+    ligne = xor(handles.valeurs_axe1_DebutFin_distinctes,handles.valeurs_axe2_DebutFin_distinctes);
+else
+    ligne = false;
+end
+
+une_seule_courbe = ligne || moyenne_axe1 || moyenne_axe2 || moyenne_axe1et2;
+
+if une_seule_courbe
+    title('Courbe d''intensité');
+else
+    title('Courbes d''intensité');
+end
+
+if moyenne_axe1
+    ylabel({'Intensité (en niveaux)',...
+['moyennée sur ',noms_axes(ordre_axes(1)),' dans la région d''intérêt']});
+elseif moyenne_axe2
+    ylabel({'Intensité (en niveaux)',...
+['moyennée sur ',noms_axes(ordre_axes(2)),' dans la région d''intérêt']});
+elseif moyenne_axe1et2
+    ylabel({'Intensité (en niveaux)',...
+['moyennée sur ',noms_axes(ordre_axes(1)),' et ',noms_axes(ordre_axes(2))],...
+' dans la région d''intérêt'});
+elseif pas_de_moyenne
+    ylabel('Intensité (en niveaux)');
+end
+
+
+%Détermination du nom de l'axe des abscisses du graphique
+% coupe_frontale = 0;
+% coupe_transverse = 1;
+% coupe_sagittale = 2;
+% coupe_X_temps = 3;
+% coupe_Y_temps = 4;
+% coupe_Z_temps = 5;
+% 
+% switch handles.vue_choisie
+%     case coupe_frontale
+%         if graphique_selon_axe1
+%             xlabel('X (en pixels)');
+%         elseif graphique_selon_axe2
+%             xlabel('Y (en pixels)');
+%         end
+%     case coupe_transverse
+%         if graphique_selon_axe1
+%             xlabel('X (en pixels)');
+%         elseif graphique_selon_axe2
+%             xlabel('Z (en pixels)');
+%         end
+%     case coupe_sagittale
+%         if graphique_selon_axe1
+%             xlabel('Y (en pixels)');
+%         elseif graphique_selon_axe2
+%             xlabel('Z (en pixels)');
+%         end
+%     case coupe_X_temps
+%         if graphique_selon_axe1
+%             xlabel('Temps (en numéro de volume)');
+%         elseif graphique_selon_axe2
+%             xlabel('X (en pixels)');
+%         end
+%     case coupe_Y_temps
+%         if graphique_selon_axe1
+%             xlabel('Temps (en numéro de volume)');
+%         elseif graphique_selon_axe2
+%             xlabel('Y (en pixels)');
+%         end
+%     case coupe_Z_temps
+%         if graphique_selon_axe1
+%             xlabel('Temps (en numéro de volume)');
+%         elseif graphique_selon_axe2
+%             xlabel('X (en pixels)');
+%         end
+% end
+ 
+% elseif choix_ROI_polygone
+%     volumes_ROI_moyenne_sur_2_1ers_axes=nanmean(nanmean(volumes_ROI,ordre_axes(1)),ordre_axes(2));
+%     volumes_ROI_moyenne_sur_2_1ers_axes=squeeze(volumes_ROI_moyenne_sur_2_1ers_axes);
+%     if graphique_selon_axe3
+%         volumes_ROI_moyenne_sur_2_1ers_axes_selonZ = volumes_ROI_moyenne_sur_2_1ers_axes(:,coordonnee_axe4);
+%         plot(1:int16(taille_axes(3)),volumes_ROI_moyenne_sur_2_1ers_axes_selonZ,'displayname','Courbe originale','HitTest', 'off');
+%     elseif graphique_selon_axe4
+%         volumes_ROI_moyenne_sur_2_1ers_axes_selonT = volumes_ROI_moyenne_sur_2_1ers_axes(coordonnee_axe3,:);
+%         plot(1:int16(taille_axes(4)),volumes_ROI_moyenne_sur_2_1ers_axes_selonT,'displayname','Courbe originale','HitTest', 'off');    
+%     end
+% end
     
     
 
@@ -1263,10 +1327,6 @@ function polygone_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-if isfield(handles,'rectangle')
-    delete(handles.rectangle); %Efface la région d'intérêt tracée précédente
-end
-
 if isfield(handles,'rectangle_trace')
     delete(handles.rectangle_trace);
 end
@@ -1274,9 +1334,6 @@ end
 if isfield(handles,'polygone_trace')
     delete(handles.polygone_trace);
 end
-
-coordonnee_axe3 = int16(str2double(get(handles.valeur_axe3_image,'String')));
-coordonnee_axe4 = int16(str2double(get(handles.valeur_axe4_image,'String')));
 
 taille_axes=handles.taille_axes;
 polygone=impoly;
@@ -1287,24 +1344,18 @@ masque_binaire_4D = repmat(masque_binaire_2D,1,1,taille_axes(3),taille_axes(4));
 volumes_ROI=handles.volumes;
 volumes_ROI(masque_binaire_4D==0) = NaN;
 handles.volumes_ROI = volumes_ROI;
-image_ROI = volumes_ROI(:,:,coordonnee_axe3,coordonnee_axe4);
-handles.image_ROI = image_ROI;
+
+
 position_polygone=getPosition(polygone);
 ordre_des_points=1:size(position_polygone,1);
 polygone_trace=patch('Faces',ordre_des_points,'Vertices',position_polygone,'FaceColor','none','EdgeColor','red');
 handles.polygone_trace=polygone_trace;
 delete(polygone);
 
-set(handles.moyenne_axe1et2,'Value',1);
-set(handles.moyenne_axe1,'Visible','off');
-set(handles.moyenne_axe2,'Visible','off');
-set(handles.pas_de_moyenne,'Visible','off');
-
-set(handles.graphique_selon_axe4,'Value',1);
-set(handles.graphique_selon_axe1,'Visible','off');
-set(handles.graphique_selon_axe2,'Visible','off');
+handles.choix_forme_ROI='polygone';
 
 guidata(handles.figure1,handles);
+selection_region_interet_Callback(hObject, eventdata, handles)
 
 %volumes_filtres=reshape(volume_filtres,taille_axes
 %taille_volumes=[size(handles.volumes,1) size(handles.volumes,2) size(handles.volumes,3) size(handles.volumes,4)];
@@ -1362,6 +1413,7 @@ function pas_de_moyenne_Callback(hObject, eventdata, handles)
 % hObject    handle to pas_de_moyenne (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
 graphique_selon_axe3ou4_choisi = logical(get(handles.graphique_selon_axe3,'value')) || ...
     logical(get(handles.graphique_selon_axe4,'value'));
 if graphique_selon_axe3ou4_choisi
