@@ -5,7 +5,7 @@ function varargout = Bayes4D(varargin)
 %      H = BAYES4D returns the handle to a new BAYES4D or the handle to
 %      the existing singleton*.
 %
-%      BAYES4D('CALLBACK',hObject,eventData,handles,...) calls the local
+%      BAYES4D('CALLBACK',hObject,eventData,ch,...) calls the local
 %      function named CALLBACK in BAYES4D.M with the given input arguments.
 %
 %      BAYES4D('Property','Value',...) creates a new BAYES4D or raises the
@@ -21,7 +21,7 @@ function varargout = Bayes4D(varargin)
 
 % Edit the above text to modify the response to help Bayes4D
 
-% Last Modified by GUIDE v2.5 26-Jul-2016 18:26:17
+% Last Modified by GUIDE v2.5 28-Jul-2016 18:32:27
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -88,6 +88,7 @@ choix_ROI_polygone=strcmp(handles.choix_forme_ROI,'polygone');
 coordonnee_axe3 = int16(str2double(get(handles.valeur_axe3_image,'String')));
 coordonnee_axe4 = int16(str2double(get(handles.valeur_axe4_image,'String')));
 
+handles.choix_ROI_polygone = choix_ROI_polygone;
 
 try
     cla(handles.graphique,'reset'); %Efface le graphique précédent
@@ -547,6 +548,8 @@ graphique_selon_axe2_choisi = get(handles.graphique_selon_axe2,'value');
 graphique_selon_axe3_choisi = get(handles.graphique_selon_axe3,'value');
 graphique_selon_axe4_choisi = get(handles.graphique_selon_axe4,'value');
 
+valeur_nombre_de_pics = str2double(get(handles.valeur_nombre_de_pics,'String'));
+
 try
     taille_fenetre_lissage = str2double(get(handles.valeur_taille_fenetre_lissage,'String'));
     if mod(taille_fenetre_lissage,2) == 0
@@ -554,37 +557,51 @@ try
         erreurImpaire.identifier = 'detection_pics_Callback:taille_fenetre_paire';
         error(erreurImpaire);
     end
+    
+    if ~handles.une_seule_courbe
+        erreurPlusieursCourbes.message = 'Plusieurs courbes affichées.';
+        erreurPlusieursCourbes.identifier = 'detection_pics_Callback:plusieurs_courbes_affichees';
+        error(erreurPlusieursCourbes);
+    end
 
     %On accède aux valeurs des coordonnées
-    valeur_axe1Debut_graphique = get(handles.valeur_axe1Debut_graphique,'UserData');
-    valeur_axe2Debut_graphique = get(handles.valeur_axe2Debut_graphique,'UserData');
-    valeur_axe1Fin_graphique = get(handles.valeur_axe1Fin_graphique,'UserData');
-    valeur_axe2Fin_graphique = get(handles.valeur_axe2Fin_graphique,'UserData');
+    %valeur_axe1Debut_graphique = get(handles.valeur_axe1Debut_graphique,'UserData');
+    %valeur_axe2Debut_graphique = get(handles.valeur_axe2Debut_graphique,'UserData');
+    %valeur_axe1Fin_graphique = get(handles.valeur_axe1Fin_graphique,'UserData');
+    %valeur_axe2Fin_graphique = get(handles.valeur_axe2Fin_graphique,'UserData');
 
     %%Lissage de la courbe
     %On accède la taille de fenêtre de lissage choisie (si ==1 pas de lissage)
 
     taille_fenetre_lissage = str2double(get(handles.valeur_taille_fenetre_lissage,'String'));
 
-    image_ROI = double(handles.image_ROI);
-
+    %image_ROI = double(handles.image_ROI);
+    
+    courbe_ROI = double(handles.courbe_ROI);
+    abscisse_courbe_ROI=double(handles.abscisse_courbe_ROI);
+    
     if taille_fenetre_lissage~=1
         filtre_lissage = (1/taille_fenetre_lissage)*ones(1,taille_fenetre_lissage);
         coefficient_filtre = 1;
-        image_ROI_lissees = filter(filtre_lissage,coefficient_filtre,image_ROI);
-    else
-        image_ROI_lissees = image_ROI;
+        courbe_ROI = filter(filtre_lissage,coefficient_filtre,courbe_ROI);
     end
 
     axes(handles.graphique);
     hold on
     if graphique_selon_axe1_choisi
-        [y_maxs,x_maxs,lmhs,~] = findpeaks(image_ROI_lissees,double(valeur_axe1Debut_graphique):double(valeur_axe1Fin_graphique));
-        findpeaks(image_ROI_lissees,double(valeur_axe1Debut_graphique):double(valeur_axe1Fin_graphique),'Annotate','extents');
+        [y_maxs,x_maxs,lmhs,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
+        findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',valeur_nombre_de_pics);
         y_maxs=y_maxs';
     elseif graphique_selon_axe2_choisi
-        [y_maxs,x_maxs,lmhs,~] = findpeaks(image_ROI_lissees,double(valeur_axe2Debut_graphique):double(valeur_axe2Fin_graphique));
-        findpeaks(image_ROI_lissees,double(valeur_axe2Debut_graphique):double(valeur_axe2Fin_graphique),'Annotate','extents');
+        [y_maxs,x_maxs,lmhs,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
+        findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',valeur_nombre_de_pics);
+    elseif graphique_selon_axe3_choisi
+        [y_maxs,x_maxs,lmhs,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
+        findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',valeur_nombre_de_pics);
+    elseif graphique_selon_axe4_choisi
+        [y_maxs,x_maxs,lmhs,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
+        findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',valeur_nombre_de_pics);
+        y_maxs=y_maxs';
     end
     legend(gca,'off');
     hold off
@@ -592,6 +609,8 @@ try
 
     %Passage de x_maxs en vecteur colonne pour affichage
     x_maxs=x_maxs';
+    
+    handles.x_maxs=x_maxs;
 
 
 
@@ -608,25 +627,33 @@ try
     handles.lmhs=lmhs;
 
     %Affichage des combinaisons de deux pics dans la deuxième liste déroulante
-    combinaisons_de_deux_pics = combnk(1:nombre_de_pics,2);
-    set(handles.choix_de_deux_pics,'String',num2str(combinaisons_de_deux_pics));
-    handles.combinaisons_de_deux_pics = combinaisons_de_deux_pics;
-    numero_combinaison_de_deux_pics_choisie = get(handles.choix_de_deux_pics,'Value');
-    combinaison_pics_choisis = combinaisons_de_deux_pics(numero_combinaison_de_deux_pics_choisie,:);
-    x_plus_grand_des_deux_pics = x_maxs(combinaison_pics_choisis(2));
-    x_plus_petit_des_deux_pics = x_maxs(combinaison_pics_choisis(1));
-    set(handles.dpap_affichage,'String',num2str(x_plus_grand_des_deux_pics-x_plus_petit_des_deux_pics));
+    if valeur_nombre_de_pics>1
+        combinaisons_de_deux_pics = combnk(1:nombre_de_pics,2);
+        set(handles.choix_de_deux_pics,'String',num2str(combinaisons_de_deux_pics));
+        handles.combinaisons_de_deux_pics = combinaisons_de_deux_pics;
+        numero_combinaison_de_deux_pics_choisie = get(handles.choix_de_deux_pics,'Value');
+        combinaison_pics_choisis = combinaisons_de_deux_pics(numero_combinaison_de_deux_pics_choisie,:);
+        x_plus_grand_des_deux_pics = x_maxs(combinaison_pics_choisis(2));
+        x_plus_petit_des_deux_pics = x_maxs(combinaison_pics_choisis(1));
+        set(handles.dpap_affichage,'String',num2str(x_plus_grand_des_deux_pics-x_plus_petit_des_deux_pics));
+    end
 
-    handles.x_maxs=x_maxs;
+
     guidata(hObject, handles);
-catch ME
-    if (strcmp(ME.identifier,'detection_pics_Callback:taille_fenetre_paire'))
+catch erreurs
+    if (strcmp(erreurs.identifier,'detection_pics_Callback:taille_fenetre_paire'))
         warndlg('Merci d''entrer une taille de fenêtre de lissage impaire.');
         causeException = MException(erreurImpaire.identifier,erreurImpaire.message);
-        ME = addCause(ME,causeException);
+        erreurs = addCause(erreurs,causeException);
+        throw(causeException);
+    elseif (strcmp(erreurs.identifier,'detection_pics_Callback:plusieurs_courbes_affichees'))
+        warndlg('Merci de n''afficher qu''une seule courbe dans la partie ''affichage du graphique''.');
+        causeException = MException(erreurPlusieursCourbes.identifier,erreurPlusieursCourbes.message);
+        erreurs = addCause(erreurs,causeException);
         throw(causeException);
     end
-    rethrow(ME)
+    
+    rethrow(erreurs);
 end
     
 
@@ -702,7 +729,7 @@ range = str2num(patient_info{5});
 azimuth = str2num(patient_info{8});
 elevation = str2num(patient_info{11});
 assignin('base', 'patient_info', patient_info);
-disp(patient_info);
+%disp(patient_info);
 nb_fichiers = size(d);
 nb_fichiers = nb_fichiers(1);
 %Les fichiers saufs patientInfo.txt
@@ -711,9 +738,12 @@ fichiers = cell((nb_fichiers-3),1);
 
 %Pour éviter les fichiers . .. et PatientInfo.txt on commence au fichier
 %numéro 4
+
+barre_attente = waitbar(0,'Merci de patienter pendant le chargement des fichiers...');
+
 for ifichier = 1:nb_fichiers-3
     %disp(['1706 exports matlab Virginie\Données exportées\1648550067\RawData_Vol', num2str(i), '.bin']);
-    disp([chemin_dossier,d(ifichier+3).name]);
+    %disp([chemin_dossier,d(ifichier+3).name]);
     %identifiants_fichiers{i}=fopen(['1706 exports matlab Virginie\Données exportées\1648550067\RawData_Vol', num2str(i),'.bin']);
     if ispc
         identifiants_fichiers{ifichier}=fopen([chemin_dossier,'\',d(ifichier+3).name]);
@@ -722,6 +752,7 @@ for ifichier = 1:nb_fichiers-3
     end
     fichiers{ifichier}=fread(identifiants_fichiers{ifichier});
     fichiers{ifichier} =reshape(fichiers{ifichier},range,azimuth,elevation);
+    waitbar(ifichier/(nb_fichiers-3));
 end
 assignin('base', 'fichiers', fichiers);
 volumes = cat(4,fichiers{:});
@@ -737,6 +768,7 @@ handles.vue_choisie = 0;
 
 guidata(hObject, handles);
 afficherImage_Callback(hObject, eventdata, handles);
+close(barre_attente);
 
 % --- Executes on selection change in choix_du_pic.
 function choix_du_pic_Callback(hObject, eventdata, handles)
@@ -1104,8 +1136,9 @@ function moyenne_axe1_Callback(hObject, eventdata, handles)
 % hObject    handle to moyenne_axe1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-graphique_selon_axe1_choisi = logical(get(handles.graphique_selon_axe1,'value'));
-if graphique_selon_axe1_choisi
+graphique_selon_axe1ou3ou4_choisi = get(handles.graphique_selon_axe1,'value') || ...
+    get(handles.graphique_selon_axe3,'value') || get(handles.graphique_selon_axe4,'value') ;
+if graphique_selon_axe1ou3ou4_choisi
     set(handles.graphique_selon_axe2,'value',1);
 end
 guidata(handles.figure1,handles);
@@ -1118,8 +1151,9 @@ function moyenne_axe2_Callback(hObject, eventdata, handles)
 % hObject    handle to moyenne_axe2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-graphique_selon_axe2_choisi = logical(get(handles.graphique_selon_axe2,'value'));
-if graphique_selon_axe2_choisi
+graphique_selon_axe2ou3ou4_choisi = get(handles.graphique_selon_axe2,'value') || ...
+    get(handles.graphique_selon_axe3,'value') || get(handles.graphique_selon_axe4,'value') ;
+if graphique_selon_axe2ou3ou4_choisi
     set(handles.graphique_selon_axe1,'value',1);
 end
 guidata(handles.figure1,handles);
@@ -1168,12 +1202,14 @@ if moyenne_axe1
     image_ROI = mean(image_ROI,ordre_axes(1));
     %Enlever les dimensions inutiles laissées par la moyenne
     image_ROI = squeeze(image_ROI);
+    handles.courbes_ROI=image_ROI;
 elseif moyenne_axe2
     image_ROI = mean(image_ROI,ordre_axes(2));
     %Pour avoir toujours des données en ligne
     image_ROI = image_ROI';
     %Enlever les dimensions inutiles laissées par la moyenne
     image_ROI = squeeze(image_ROI);
+    handles.courbes_ROI=image_ROI;
 elseif moyenne_axe1et2
     volumes_ROI=nanmean(nanmean(volumes_ROI,ordre_axes(1)),ordre_axes(2));
     %Enlever les dimensions inutiles laissées par les moyennes
@@ -1187,18 +1223,24 @@ end
 if graphique_selon_axe1
     plot(int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique),image_ROI,'displayname','Courbe originale','HitTest', 'off');
     xlabel(legende_abscisse_graphique(ordre_axes(1)));
+    handles.abscisse_courbe_ROI=int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique);
 elseif graphique_selon_axe2
     image_ROI = image_ROI';
     plot(int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique),image_ROI,'displayname','Courbe originale','HitTest', 'off');
     xlabel(legende_abscisse_graphique(ordre_axes(2)));
+    handles.abscisse_courbe_ROI=int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique);
 elseif graphique_selon_axe3
     volumes_ROI = volumes_ROI(:,coordonnee_axe4);
     plot(1:int16(taille_axes(ordre_axes(3))),volumes_ROI,'displayname','Courbe originale','HitTest', 'off');
     xlabel(legende_abscisse_graphique(ordre_axes(3)));
+    handles.courbe_ROI = volumes_ROI;
+    handles.abscisse_courbe_ROI=1:int16(taille_axes(ordre_axes(3)));
 elseif graphique_selon_axe4
     volumes_ROI = volumes_ROI(coordonnee_axe3,:);
     plot(1:int16(taille_axes(ordre_axes(4))),volumes_ROI,'displayname','Courbe originale','HitTest', 'off');
     xlabel(legende_abscisse_graphique(ordre_axes(4)));
+    handles.courbe_ROI = volumes_ROI;
+    handles.abscisse_courbe_ROI=1:int16(taille_axes(ordre_axes(4)));
 end
 
 
@@ -1209,9 +1251,9 @@ else
     ligne = false;
 end
 
-une_seule_courbe = ligne || moyenne_axe1 || moyenne_axe2 || moyenne_axe1et2;
+handles.une_seule_courbe = ligne || moyenne_axe1 || moyenne_axe2 || moyenne_axe1et2;
 
-if une_seule_courbe
+if handles.une_seule_courbe
     title('Courbe d''intensité');
 else
     title('Courbes d''intensité');
@@ -1230,74 +1272,14 @@ elseif moyenne_axe1et2
 elseif pas_de_moyenne
     ylabel('Intensité (en niveaux)');
 end
-
-
-%Détermination du nom de l'axe des abscisses du graphique
-% coupe_frontale = 0;
-% coupe_transverse = 1;
-% coupe_sagittale = 2;
-% coupe_X_temps = 3;
-% coupe_Y_temps = 4;
-% coupe_Z_temps = 5;
-% 
-% switch handles.vue_choisie
-%     case coupe_frontale
-%         if graphique_selon_axe1
-%             xlabel('X (en pixels)');
-%         elseif graphique_selon_axe2
-%             xlabel('Y (en pixels)');
-%         end
-%     case coupe_transverse
-%         if graphique_selon_axe1
-%             xlabel('X (en pixels)');
-%         elseif graphique_selon_axe2
-%             xlabel('Z (en pixels)');
-%         end
-%     case coupe_sagittale
-%         if graphique_selon_axe1
-%             xlabel('Y (en pixels)');
-%         elseif graphique_selon_axe2
-%             xlabel('Z (en pixels)');
-%         end
-%     case coupe_X_temps
-%         if graphique_selon_axe1
-%             xlabel('Temps (en numéro de volume)');
-%         elseif graphique_selon_axe2
-%             xlabel('X (en pixels)');
-%         end
-%     case coupe_Y_temps
-%         if graphique_selon_axe1
-%             xlabel('Temps (en numéro de volume)');
-%         elseif graphique_selon_axe2
-%             xlabel('Y (en pixels)');
-%         end
-%     case coupe_Z_temps
-%         if graphique_selon_axe1
-%             xlabel('Temps (en numéro de volume)');
-%         elseif graphique_selon_axe2
-%             xlabel('X (en pixels)');
-%         end
-% end
  
-% elseif choix_ROI_polygone
-%     volumes_ROI_moyenne_sur_2_1ers_axes=nanmean(nanmean(volumes_ROI,ordre_axes(1)),ordre_axes(2));
-%     volumes_ROI_moyenne_sur_2_1ers_axes=squeeze(volumes_ROI_moyenne_sur_2_1ers_axes);
-%     if graphique_selon_axe3
-%         volumes_ROI_moyenne_sur_2_1ers_axes_selonZ = volumes_ROI_moyenne_sur_2_1ers_axes(:,coordonnee_axe4);
-%         plot(1:int16(taille_axes(3)),volumes_ROI_moyenne_sur_2_1ers_axes_selonZ,'displayname','Courbe originale','HitTest', 'off');
-%     elseif graphique_selon_axe4
-%         volumes_ROI_moyenne_sur_2_1ers_axes_selonT = volumes_ROI_moyenne_sur_2_1ers_axes(coordonnee_axe3,:);
-%         plot(1:int16(taille_axes(4)),volumes_ROI_moyenne_sur_2_1ers_axes_selonT,'displayname','Courbe originale','HitTest', 'off');    
-%     end
-% end
-    
-    
 
 set(handles.choix_du_pic,'enable','on','BackgroundColor','white');
 set(handles.choix_de_deux_pics,'enable','on','BackgroundColor','white');
 set(handles.lmh_affichage,'BackgroundColor','white');
 set(handles.dpap_affichage,'BackgroundColor','white');
 set(handles.valeur_taille_fenetre_lissage,'enable','on','BackgroundColor','white');
+set(handles.valeur_nombre_de_pics,'enable','on','BackgroundColor','white');
 guidata(handles.figure1,handles);
 
 
@@ -1422,3 +1404,64 @@ end
 guidata(handles.figure1,handles);
 
 % Hint: get(hObject,'Value') returns toggle state of pas_de_moyenne
+
+
+
+function valeur_nombre_de_pics_Callback(hObject, eventdata, handles)
+% hObject    handle to valeur_nombre_de_pics (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of valeur_nombre_de_pics as text
+%        str2double(get(hObject,'String')) returns contents of valeur_nombre_de_pics as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function valeur_nombre_de_pics_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to valeur_nombre_de_pics (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in sous_echantillonnage.
+function sous_echantillonnage_Callback(hObject, eventdata, handles)
+% hObject    handle to sous_echantillonnage (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+valeur_nombre_de_pics = str2double(get(handles.valeur_nombre_de_pics,'String'));
+choix_ROI_polygone = handles.choix_ROI_polygone ;
+graphique_selon_axe4_choisi = get(handles.graphique_selon_axe4,'value');
+
+
+sous_echantillonnage_possible = (valeur_nombre_de_pics==1) && choix_ROI_polygone && ...
+    graphique_selon_axe4_choisi;
+if sous_echantillonnage_possible
+    %t_maximum = handles.abscisse_courbe_ROI(2);
+    %a changer
+    t_maximum=16;
+    t_du_maximum_global = handles.x_maxs(1); 
+    [nom_du_fichier,chemin] = uiputfile({'*.mat'});
+    dossier_principal=pwd;
+    cd(chemin);
+    for t=1:t_maximum
+        condition_echantillonnage_normal = t<(3/2)*t_du_maximum_global;
+        if condition_echantillonnage_normal
+            volume_a_enregistrer=handles.volumes(:,:,:,t);
+            volume_a_enregistrer=squeeze(volume_a_enregistrer);
+            save(['test',num2str(t),'.mat'],'volume_a_enregistrer');
+        elseif mod(t,2)==0
+            volume_a_enregistrer=handles.volumes(:,:,:,t);
+            volume_a_enregistrer=squeeze(volume_a_enregistrer);
+            save(['test',num2str(t),'.mat'],'volume_a_enregistrer');
+        end
+    end
+    cd(dossier_principal)
+end
+    
+    
