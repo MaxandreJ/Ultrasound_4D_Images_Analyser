@@ -138,11 +138,14 @@ try
         %ce qui n'est pas l'intuition cartésienne
         %image_ROI = image(int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique),int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique));
         %image_ROI = image(int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique),int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique));
+        taille_volumes=size(volumes);
         volumes_ROI=volumes(int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique),int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique),:,:);
         handles.volumes_ROI=volumes_ROI;
     elseif choix_ROI_polygone
         volumes_ROI=handles.volumes_ROI;
     end
+    
+    taille_volumes=size(volumes_ROI);
 
     image_ROI = volumes_ROI(:,:,coordonnee_axe3,coordonnee_axe4);
     handles.image_ROI = image_ROI;
@@ -388,7 +391,6 @@ coordonnee_axe4 = int16(str2double(get(handles.valeur_axe4_image,'String')));
 %On affiche l'image dans handles.image
 axes(handles.image); %choix de l'endroit où on affiche l'image
 imshow4(handles.volumes,hObject,handles,coordonnee_axe3,coordonnee_axe4); %Appel de la fonction d'affichage d'image 4D
-
 %On ajoute la possibilité de faire un clic droit sur l'image pour afficher
 %un menu contextuel qui permet de sélectionner une région d'intérêt
 uicontextmenu = get(handles.image,'UIContextMenu'); %le menu contextuel est créé sur l'axe grâce à GUIDE...
@@ -894,34 +896,49 @@ if isfield(handles,'polygone_trace')
     delete(handles.polygone_trace);
 end
 
-objet_rectangle = imrect;
+try
+    set(handles.figure1,'KeyPressFcn','')
+    objet_rectangle = imrect;
+    if isempty(objet_rectangle)
+        erreur_ROI_pas_choisi.message = 'La région d''intérêt n''a pas été délimitée avant le changement de vue.';
+        erreur_ROI_pas_choisi.identifier = 'Rectangle_Callback:ROI_pas_choisi';
+        error(erreur_ROI_pas_choisi);
+    end
+    position_rectangle = getPosition(objet_rectangle);
+    valeur_axe1Debut_graphique=position_rectangle(1);
+    valeur_axe2Debut_graphique=position_rectangle(2);
+    largeur_axe1=position_rectangle(3);
+    hauteur_axe2=position_rectangle(4);
+    valeur_axe1Fin_graphique = valeur_axe1Debut_graphique + largeur_axe1;
+    valeur_axe2Fin_graphique = valeur_axe2Debut_graphique + hauteur_axe2;
 
-position_rectangle = getPosition(objet_rectangle);
-valeur_axe1Debut_graphique=position_rectangle(1);
-valeur_axe2Debut_graphique=position_rectangle(2);
-largeur_axe1=position_rectangle(3);
-hauteur_axe2=position_rectangle(4);
-valeur_axe1Fin_graphique = valeur_axe1Debut_graphique + largeur_axe1;
-valeur_axe2Fin_graphique = valeur_axe2Debut_graphique + hauteur_axe2;
+    %On arrondit les valeurs des coordonnées sélectionnées
+    valeur_axe1Debut_graphique=int16(round(valeur_axe1Debut_graphique));
+    valeur_axe2Debut_graphique=int16(round(valeur_axe2Debut_graphique));
+    valeur_axe1Fin_graphique=int16(round(valeur_axe1Fin_graphique));
+    valeur_axe2Fin_graphique=int16(round(valeur_axe2Fin_graphique));
 
-%On arrondit les valeurs des coordonnées sélectionnées
-valeur_axe1Debut_graphique=int16(round(valeur_axe1Debut_graphique));
-valeur_axe2Debut_graphique=int16(round(valeur_axe2Debut_graphique));
-valeur_axe1Fin_graphique=int16(round(valeur_axe1Fin_graphique));
-valeur_axe2Fin_graphique=int16(round(valeur_axe2Fin_graphique));
+    set(handles.valeur_axe1Debut_graphique,'Value',valeur_axe1Debut_graphique,'String',num2str(valeur_axe1Debut_graphique));
+    set(handles.valeur_axe2Debut_graphique,'Value',valeur_axe2Debut_graphique,'String',num2str(valeur_axe2Debut_graphique));
+    set(handles.valeur_axe1Fin_graphique,'Value',valeur_axe1Fin_graphique,'String',num2str(valeur_axe1Fin_graphique));
+    set(handles.valeur_axe2Fin_graphique,'Value',valeur_axe2Fin_graphique,'String',num2str(valeur_axe2Fin_graphique));
 
-set(handles.valeur_axe1Debut_graphique,'Value',valeur_axe1Debut_graphique,'String',num2str(valeur_axe1Debut_graphique));
-set(handles.valeur_axe2Debut_graphique,'Value',valeur_axe2Debut_graphique,'String',num2str(valeur_axe2Debut_graphique));
-set(handles.valeur_axe1Fin_graphique,'Value',valeur_axe1Fin_graphique,'String',num2str(valeur_axe1Fin_graphique));
-set(handles.valeur_axe2Fin_graphique,'Value',valeur_axe2Fin_graphique,'String',num2str(valeur_axe2Fin_graphique));
+    handles.rectangle_trace = rectangle('Position',[valeur_axe1Debut_graphique valeur_axe2Debut_graphique largeur_axe1 hauteur_axe2],'EdgeColor','r');
 
-handles.rectangle_trace = rectangle('Position',[valeur_axe1Debut_graphique valeur_axe2Debut_graphique largeur_axe1 hauteur_axe2],'EdgeColor','r');
+    delete(objet_rectangle);
 
-delete(objet_rectangle);
-
-handles.choix_forme_ROI = 'rectangle';
-guidata(hObject,handles);
-selection_region_interet_Callback(hObject, eventdata, handles)
+    handles.choix_forme_ROI = 'rectangle';
+    guidata(hObject,handles);
+    selection_region_interet_Callback(hObject, eventdata, handles)
+catch erreurs
+    if (strcmp(erreurs.identifier,'Rectangle_Callback:ROI_pas_choisi'))
+        causeException = MException(erreur_ROI_pas_choisi.identifier,erreur_ROI_pas_choisi.message);
+        erreurs = addCause(erreurs,causeException);
+    else
+        rethrow(erreurs);
+    end
+end
+set(handles.figure1,'KeyPressFcn',{@clavier,handles})
 
 
 % --------------------------------------------------------------------
@@ -1183,7 +1200,7 @@ image_ROI=handles.image_ROI;
 ordre_axes=handles.ordre_axes;
 taille_axes=handles.taille_axes;
 
-legende_abscisse_graphique={'X (en pixels)','Y (en pixels)','Z (en pixels)','Temps (en numéro de volume)'};
+legende_abscisse_graphique={'X (en pixels)','Y (en pixels)','Z (en pixels)','Temps (en pas de temps)'};
 noms_axes=['X','Y','Z','Temps'];
 
 
@@ -1197,23 +1214,29 @@ moyenne_axe2 = get(handles.moyenne_axe2,'Value');
 moyenne_axe1et2 = get(handles.moyenne_axe1et2,'Value');
 pas_de_moyenne = get(handles.pas_de_moyenne,'Value');
 
+taille_volumes=size(volumes_ROI);
+
 axes(handles.graphique);
 if moyenne_axe1
-    image_ROI = mean(image_ROI,ordre_axes(1));
+    image_ROI = mean(image_ROI,1);
     %Enlever les dimensions inutiles laissées par la moyenne
     image_ROI = squeeze(image_ROI);
     handles.courbes_ROI=image_ROI;
 elseif moyenne_axe2
-    image_ROI = mean(image_ROI,ordre_axes(2));
+    image_ROI = mean(image_ROI,2);
     %Pour avoir toujours des données en ligne
     image_ROI = image_ROI';
     %Enlever les dimensions inutiles laissées par la moyenne
     image_ROI = squeeze(image_ROI);
     handles.courbes_ROI=image_ROI;
 elseif moyenne_axe1et2
-    volumes_ROI=nanmean(nanmean(volumes_ROI,ordre_axes(1)),ordre_axes(2));
+    volumes_ROI=nanmean(nanmean(volumes_ROI,1),2);
     %Enlever les dimensions inutiles laissées par les moyennes
     volumes_ROI=squeeze(volumes_ROI);
+    %Si l'ordre des axes n'est pas maintenu après moyennage
+    %if ordre_axes(3)>ordre_axes(4)
+    %    volumes_ROI=permute(volumes_ROI,[2,1]);
+    %end
 end
 
 
@@ -1317,27 +1340,44 @@ if isfield(handles,'polygone_trace')
     delete(handles.polygone_trace);
 end
 
-taille_axes=handles.taille_axes;
-polygone=impoly;
-masque_binaire_2D=polygone.createMask();
-%Comme l'image est en coordonnées "indices de matrice"
-masque_binaire_2D=masque_binaire_2D';
-masque_binaire_4D = repmat(masque_binaire_2D,1,1,taille_axes(3),taille_axes(4));
-volumes_ROI=handles.volumes;
-volumes_ROI(masque_binaire_4D==0) = NaN;
-handles.volumes_ROI = volumes_ROI;
+try
+    taille_axes=handles.taille_axes;
+    set(handles.figure1,'KeyPressFcn','')
+    polygone=impoly;
+    if isempty(polygone)
+        erreur_ROI_pas_choisi.message = 'La région d''intérêt n''a pas été délimitée avant le changement de vue.';
+        erreur_ROI_pas_choisi.identifier = 'polygone_Callback:ROI_pas_choisi';
+        error(erreur_ROI_pas_choisi);
+    end
+    masque_binaire_2D=polygone.createMask();
+    %Comme l'image est en coordonnées "indices de matrice"
+    masque_binaire_2D=masque_binaire_2D';
+    masque_binaire_4D = repmat(masque_binaire_2D,1,1,taille_axes(3),taille_axes(4));
+    volumes_ROI=handles.volumes;
+    taille_volumes=size(volumes_ROI);
+    volumes_ROI(masque_binaire_4D==0) = NaN;
+    handles.volumes_ROI = volumes_ROI;
 
 
-position_polygone=getPosition(polygone);
-ordre_des_points=1:size(position_polygone,1);
-polygone_trace=patch('Faces',ordre_des_points,'Vertices',position_polygone,'FaceColor','none','EdgeColor','red');
-handles.polygone_trace=polygone_trace;
-delete(polygone);
+    position_polygone=getPosition(polygone);
+    ordre_des_points=1:size(position_polygone,1);
+    polygone_trace=patch('Faces',ordre_des_points,'Vertices',position_polygone,'FaceColor','none','EdgeColor','red');
+    handles.polygone_trace=polygone_trace;
+    delete(polygone);
 
-handles.choix_forme_ROI='polygone';
+    handles.choix_forme_ROI='polygone';
 
-guidata(handles.figure1,handles);
-selection_region_interet_Callback(hObject, eventdata, handles)
+    guidata(handles.figure1,handles);
+    selection_region_interet_Callback(hObject, eventdata, handles)
+catch erreurs
+    if (strcmp(erreurs.identifier,'polygone_Callback:ROI_pas_choisi'))
+        causeException = MException(erreur_ROI_pas_choisi.identifier,erreur_ROI_pas_choisi.message);
+        erreurs = addCause(erreurs,causeException);
+    else
+        rethrow(erreurs);
+    end
+end
+set(handles.figure1,'KeyPressFcn',{@clavier,handles})
 
 %volumes_filtres=reshape(volume_filtres,taille_axes
 %taille_volumes=[size(handles.volumes,1) size(handles.volumes,2) size(handles.volumes,3) size(handles.volumes,4)];
