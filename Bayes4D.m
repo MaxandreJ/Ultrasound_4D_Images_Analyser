@@ -21,7 +21,7 @@ function varargout = Bayes4D(varargin)
 
 % Edit the above text to modify the response to help Bayes4D
 
-% Last Modified by GUIDE v2.5 28-Jul-2016 18:32:27
+% Last Modified by GUIDE v2.5 02-Aug-2016 18:15:25
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -59,6 +59,10 @@ function Bayes4D_OpeningFcn(hObject, eventdata, handles, varargin)
 %handles.donnees2 = GetRAWframes_B;
 %Choose default command line output for Bayes4D
 handles.output = hObject;
+
+developpement_altmany = fullfile(pwd,'altmany-export_fig');
+chemin_altmany = genpath(developpement_altmany);
+addpath(chemin_altmany);
 
 % Update handles structure
 guidata(hObject, handles);
@@ -630,14 +634,34 @@ try
 
     %Affichage des combinaisons de deux pics dans la deuxième liste déroulante
     if valeur_nombre_de_pics>1
-        combinaisons_de_deux_pics = combnk(1:nombre_de_pics,2);
-        set(handles.choix_de_deux_pics,'String',num2str(combinaisons_de_deux_pics));
+        set(handles.choix_de_deux_pics,'Visible','on');
+        set(handles.texte_choix_de_deux_pics,'Visible','on');
+        set(handles.dpap_affichage,'Visible','on');
+        set(handles.texte_dpap,'Visible','on');
+        set(handles.unite_dpap,'Visible','on');
+        [nb_lignes nb_colonnes]=size(liste_de_pics);
+        liste_de_pics_cellules=mat2cell(liste_de_pics,ones(1,nombre_de_pics),nb_colonnes);
+        combinaisons_indices_de_deux_pics = combnk(1:nombre_de_pics,2);
+        [nb_lignes_indices ~] = size(combinaisons_indices_de_deux_pics);
+        for ligne=1:nb_lignes_indices
+            combinaisons_de_deux_pics = [liste_de_pics_cellules{combinaisons_indices_de_deux_pics(ligne,1),1} ...
+                ' & ' liste_de_pics_cellules{combinaisons_indices_de_deux_pics(ligne,2),1}];
+        end
+        %combinaisons_de_deux_pics = combnk(liste_de_pics,2);
+        %set(handles.choix_de_deux_pics,'String',num2str(combinaisons_de_deux_pics));
+        set(handles.choix_de_deux_pics,'String',combinaisons_de_deux_pics);
         handles.combinaisons_de_deux_pics = combinaisons_de_deux_pics;
         numero_combinaison_de_deux_pics_choisie = get(handles.choix_de_deux_pics,'Value');
-        combinaison_pics_choisis = combinaisons_de_deux_pics(numero_combinaison_de_deux_pics_choisie,:);
+        combinaison_pics_choisis = combinaisons_indices_de_deux_pics(numero_combinaison_de_deux_pics_choisie,:);
         x_plus_grand_des_deux_pics = x_maxs(combinaison_pics_choisis(2));
         x_plus_petit_des_deux_pics = x_maxs(combinaison_pics_choisis(1));
-        set(handles.dpap_affichage,'String',num2str(x_plus_grand_des_deux_pics-x_plus_petit_des_deux_pics));
+        set(handles.dpap_affichage,'String',num2str(abs(x_plus_grand_des_deux_pics-x_plus_petit_des_deux_pics)));
+    else
+        set(handles.choix_de_deux_pics,'Visible','off');
+        set(handles.texte_choix_de_deux_pics,'Visible','off');
+        set(handles.dpap_affichage,'Visible','off');
+        set(handles.texte_dpap,'Visible','off');
+        set(handles.unite_dpap,'Visible','off');
     end
 
 
@@ -713,56 +737,71 @@ function chargement_Callback(hObject, eventdata, handles)
 % hObject    handle to chargement (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-chemin_dossier = uigetdir('C:\Users\m_jacqueline\Downloads\4D_Aplio500_Analyser\Raw','Dossier contenant les volumes en .bin');
-set(handles.chemin_dossier,'String',chemin_dossier);
 
-d = dir(chemin_dossier);
-disp(d(3).name);
-if ispc
-    patient_info_id = fopen([chemin_dossier,'\',d(3).name]);
-elseif ismac
-    patient_info_id = fopen([chemin_dossier,'/',d(3).name]);
-else
-    disp('Tu utilises Linux, il va falloir des petites modifications dans ma fonction chargement pour que ça marche');
+choix_chargement = get(handles.choix_chargement,'Value');
+
+format_bin = 1;
+format_mat = 2;
+
+if choix_chargement==format_bin
+    chemin = uigetdir('C:\Users\m_jacqueline\Downloads\4D_Aplio500_Analyser\Raw','Dossier contenant les volumes en .bin');
+elseif choix_chargement==format_mat
+    [nom_du_fichier, chemin] = uigetfile({'*.mat'},'Choix des volumes 4D en format .mat');
 end
-patient_info = textscan(patient_info_id,'%s',11);
-patient_info = patient_info{1,1};
-range = str2num(patient_info{5});
-azimuth = str2num(patient_info{8});
-elevation = str2num(patient_info{11});
-assignin('base', 'patient_info', patient_info);
-%disp(patient_info);
-nb_fichiers = size(d);
-nb_fichiers = nb_fichiers(1);
-%Les fichiers saufs patientInfo.txt
-identifiants_fichiers = cell((nb_fichiers-3),1);
-fichiers = cell((nb_fichiers-3),1);
+set(handles.chemin_dossier,'String',chemin);
 
-%Pour éviter les fichiers . .. et PatientInfo.txt on commence au fichier
-%numéro 4
-
-barre_attente = waitbar(0,'Merci de patienter pendant le chargement des fichiers...');
-
-for ifichier = 1:nb_fichiers-3
-    %disp(['1706 exports matlab Virginie\Données exportées\1648550067\RawData_Vol', num2str(i), '.bin']);
-    %disp([chemin_dossier,d(ifichier+3).name]);
-    %identifiants_fichiers{i}=fopen(['1706 exports matlab Virginie\Données exportées\1648550067\RawData_Vol', num2str(i),'.bin']);
+if choix_chargement==format_bin
+    d = dir(chemin);
     if ispc
-        identifiants_fichiers{ifichier}=fopen([chemin_dossier,'\',d(ifichier+3).name]);
+        patient_info_id = fopen([chemin,'\',d(3).name]);
     elseif ismac
-        identifiants_fichiers{ifichier}=fopen([chemin_dossier,'/',d(ifichier+3).name]);
+        patient_info_id = fopen([chemin,'/',d(3).name]);
+    else
+        disp('Tu utilises Linux, il va falloir des petites modifications dans ma fonction chargement pour que ça marche');
     end
-    fichiers{ifichier}=fread(identifiants_fichiers{ifichier});
-    fichiers{ifichier} =reshape(fichiers{ifichier},range,azimuth,elevation);
-    waitbar(ifichier/(nb_fichiers-3));
+    patient_info = textscan(patient_info_id,'%s',11);
+    patient_info = patient_info{1,1};
+    range = str2num(patient_info{5});
+    azimuth = str2num(patient_info{8});
+    elevation = str2num(patient_info{11});
+    assignin('base', 'patient_info', patient_info);
+    nb_fichiers = size(d);
+    nb_fichiers = nb_fichiers(1);
+    %Les fichiers saufs patientInfo.txt
+    identifiants_fichiers = cell((nb_fichiers-3),1);
+    fichiers = cell((nb_fichiers-3),1);
+
+    %Pour éviter les fichiers . .. et PatientInfo.txt on commence au fichier
+    %numéro 4
+
+    barre_attente = waitbar(0,'Merci de patienter pendant le chargement des fichiers...');
+
+    for ifichier = 1:nb_fichiers-3
+        %disp(['1706 exports matlab Virginie\Données exportées\1648550067\RawData_Vol', num2str(i), '.bin']);
+        %disp([chemin_dossier,d(ifichier+3).name]);
+        %identifiants_fichiers{i}=fopen(['1706 exports matlab Virginie\Données exportées\1648550067\RawData_Vol', num2str(i),'.bin']);
+        if ispc
+            identifiants_fichiers{ifichier}=fopen([chemin,'\',d(ifichier+3).name]);
+        elseif ismac
+            identifiants_fichiers{ifichier}=fopen([chemin,'/',d(ifichier+3).name]);
+        end
+        fichiers{ifichier}=fread(identifiants_fichiers{ifichier});
+        fichiers{ifichier} =reshape(fichiers{ifichier},range,azimuth,elevation);
+        waitbar(ifichier/(nb_fichiers-3));
+    end
+    assignin('base', 'fichiers', fichiers);
+    volumes = cat(4,fichiers{:});
+    volumes = permute(volumes,[2,1,3,4]);
+    close(barre_attente);
+elseif choix_chargement==format_mat
+    %identifiant_volumes=fopen([chemin, nom_du_fichier]);
+    %volumes=fread(identifiant_volumes);
+    cellules_volumes = struct2cell(load([chemin, nom_du_fichier], '-mat'));
+    volumes = cellules_volumes{1}; 
 end
-assignin('base', 'fichiers', fichiers);
-volumes = cat(4,fichiers{:});
-volumes = permute(volumes,[2,1,3,4]);
+
+    
 handles.volumes = volumes;
-
-
-handles.nb_fichiers = nb_fichiers-3;
 
 set(handles.valeur_axe3_image,'enable','on','BackgroundColor','white','String','1');
 set(handles.valeur_axe4_image,'enable','on','BackgroundColor','white','String','1');
@@ -770,7 +809,7 @@ handles.vue_choisie = 0;
 
 guidata(hObject, handles);
 afficherImage_Callback(hObject, eventdata, handles);
-close(barre_attente);
+
 
 % --- Executes on selection change in choix_du_pic.
 function choix_du_pic_Callback(hObject, eventdata, handles)
@@ -1479,6 +1518,8 @@ nombre_de_pics = str2double(get(handles.valeur_nombre_de_pics,'String'));
 choix_ROI_polygone = handles.choix_ROI_polygone ;
 graphique_selon_axe4_choisi = get(handles.graphique_selon_axe4,'value');
 ordre_axes = handles.ordre_axes;
+facteur_temps_I_max=str2double(get(handles.facteur_temps_I_max,'string'));
+facteur_sous_echantillonnage=str2double(get(handles.facteur_sous_echantillonnage,'string'));
 
 
 %sous_echantillonnage_possible = (valeur_nombre_de_pics==1) && choix_ROI_polygone && ...
@@ -1502,8 +1543,8 @@ try
         
     t_maximum=handles.abscisse_courbe_ROI(end);
     t_du_maximum_global = handles.x_maxs(1); 
-    [prefixe_des_fichiers,chemin_sauvegarde] = uiputfile({'*.*'});
-    choix_annulation = isequal(prefixe_des_fichiers,0) || isequal(chemin_sauvegarde,0);
+    [nom_du_fichier,chemin_sauvegarde] = uiputfile({'*.*'});
+    choix_annulation = isequal(nom_du_fichier,0) || isequal(chemin_sauvegarde,0);
     if choix_annulation
         erreur_choix_annulation.message = 'L''utilisateur a annulé son action de sauvegarde.';
         erreur_choix_annulation.identifier = 'sous_echantillonnage_Callback:choix_annulation';
@@ -1512,19 +1553,26 @@ try
     dossier_principal=pwd;
     cd(chemin_sauvegarde);
     barre_attente = waitbar(0,'Merci de patienter pendant l''enregistrement des fichiers...');
+    compteur_sous_echantillonnage = 0;
+    volumes = cell(t_maximum,1);
     for t=1:t_maximum
-        condition_echantillonnage_normal = t<(3/2)*t_du_maximum_global;
+        condition_echantillonnage_normal = t<facteur_temps_I_max*t_du_maximum_global;
         if condition_echantillonnage_normal
             volume_a_enregistrer=handles.volumes(:,:,:,t);
             volume_a_enregistrer=squeeze(volume_a_enregistrer);
-            save([prefixe_des_fichiers,num2str(t),'.mat'],'volume_a_enregistrer');
-        elseif mod(t,2)==0
+            volumes{t}=volume_a_enregistrer;
+        elseif mod(compteur_sous_echantillonnage,facteur_sous_echantillonnage)==0
+            compteur_sous_echantillonnage = compteur_sous_echantillonnage + 1;
             volume_a_enregistrer=handles.volumes(:,:,:,t);
             volume_a_enregistrer=squeeze(volume_a_enregistrer);
-            save([prefixe_des_fichiers,num2str(t),'.mat'],'volume_a_enregistrer');
+            volumes{t}=volume_a_enregistrer;
+        else
+            compteur_sous_echantillonnage = compteur_sous_echantillonnage + 1;
         end
         waitbar(t/t_maximum);
     end
+    volumes_a_enregistrer = cat(4,volumes{:});
+    save([nom_du_fichier,'.mat'],'volumes_a_enregistrer');
     cd(dossier_principal);
     close(barre_attente);
 catch erreurs
@@ -1552,3 +1600,84 @@ catch erreurs
 end
     
     
+
+
+
+function facteur_temps_I_max_Callback(hObject, eventdata, handles)
+% hObject    handle to facteur_temps_I_max (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of facteur_temps_I_max as text
+%        str2double(get(hObject,'String')) returns contents of facteur_temps_I_max as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function facteur_temps_I_max_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to facteur_temps_I_max (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function facteur_sous_echantillonnage_Callback(hObject, eventdata, handles)
+% hObject    handle to facteur_sous_echantillonnage (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of facteur_sous_echantillonnage as text
+%        str2double(get(hObject,'String')) returns contents of facteur_sous_echantillonnage as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function facteur_sous_echantillonnage_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to facteur_sous_echantillonnage (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in choix_chargement.
+function choix_chargement_Callback(hObject, eventdata, handles)
+% hObject    handle to choix_chargement (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns choix_chargement contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from choix_chargement
+
+
+% --- Executes during object creation, after setting all properties.
+function choix_chargement_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to choix_chargement (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --------------------------------------------------------------------
+function sauvegarde_image_Callback(hObject, eventdata, handles)
+% hObject    handle to sauvegarde_image (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+[nom_du_fichier,chemin] = uiputfile({'*.png';'*.jpeg';'*.bmp';'*.tiff';'*.pdf';'*.eps'});
+dossier_principal=pwd;
+cd(chemin);
+export_fig(handles.image, nom_du_fichier);
+cd(dossier_principal)

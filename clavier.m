@@ -174,8 +174,12 @@ switch mode_out
         title({'Vue de Z selon le temps', [axe3 '=' num2str(valeur_axe3) '/' num2str(rng(2)) ', ' axe4 '=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
         ordre_axes = [4,3,2,1]; % z-temps
 end;
-        xlabel(axe1);
-        ylabel(axe2);
+        if strcmp(axe1,'Temps')
+            xlabel([axe1,' (en pas de temps)']);
+        else
+            xlabel([axe1,' (en pixels)']);
+        end
+        ylabel([axe2, ' (en pixels)']);
         set(handles.valeur_axe3_image,'String',valeur_axe3);
         set(handles.valeur_axe4_image,'String',valeur_axe4);
         set(handles.axe1_graphique,'String',axe1);

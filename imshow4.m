@@ -91,6 +91,7 @@ set(handles.image.Children,'UIContextMenu',uicontextmenu);
 axes(handles.image);
 %pour bon affichage dans l'IHM
 imzobr=imzobr';
+iptsetpref('ImshowAxesVisible','on');
 imshow(imzobr);
 %set(handles.image.Children,'CData',imzobr);
 set(handles.image.Children,'CDataMapping','direct');
@@ -100,8 +101,8 @@ set(handles.image.Children,'UIContextMenu',uicontextmenu);
 %figure(h)
 %set(h,'Name',['Z=' num2str(valeur_axe3) '/' num2str(size(im,3)) ', t=' num2str(valeur_axe4) '/' num2str(size(im,4))])
 
-xlabel('X')
-ylabel('Y')
+xlabel('X (en pixels)')
+ylabel('Y (en pixels)')
 title({'Coupe frontale', ['Z=' num2str(valeur_axe3) '/' num2str(taille_axes(3)) ', t=' num2str(valeur_axe4) '/' num2str(taille_axes(4))]});
 %title('Coupe frontale : \leftarrow\rightarrow = Z-axis, \uparrow\downarrow = t-axis, 0-5 = view')
 %set(h,'Colormap',colormaps);
