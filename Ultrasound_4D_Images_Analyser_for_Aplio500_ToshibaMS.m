@@ -1,34 +1,34 @@
-function varargout = Bayes4D(varargin)
-% BAYES4D M-file for Bayes4D.fig
-%      BAYES4D, by itself, creates a new BAYES4D or raises the existing
+function varargout = Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS(varargin)
+% ULTRASOUND_4D_IMAGES_ANALYSER_FOR_APLIO500_TOSHIBAMS M-file for Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS.fig
+%      ULTRASOUND_4D_IMAGES_ANALYSER_FOR_APLIO500_TOSHIBAMS, by itself, creates a new ULTRASOUND_4D_IMAGES_ANALYSER_FOR_APLIO500_TOSHIBAMS or raises the existing
 %      singleton*.
-%      H = BAYES4D returns the handle to a new BAYES4D or the handle to
+%      H = ULTRASOUND_4D_IMAGES_ANALYSER_FOR_APLIO500_TOSHIBAMS returns the handle to a new ULTRASOUND_4D_IMAGES_ANALYSER_FOR_APLIO500_TOSHIBAMS or the handle to
 %      the existing singleton*.
 %
-%      BAYES4D('CALLBACK',hObject,eventData,ch,...) calls the local
-%      function named CALLBACK in BAYES4D.M with the given input arguments.
+%      ULTRASOUND_4D_IMAGES_ANALYSER_FOR_APLIO500_TOSHIBAMS('CALLBACK',hObject,eventData,ch,...) calls the local
+%      function named CALLBACK in ULTRASOUND_4D_IMAGES_ANALYSER_FOR_APLIO500_TOSHIBAMS.M with the given input arguments.
 %
-%      BAYES4D('Property','Value',...) creates a new BAYES4D or raises the
+%      ULTRASOUND_4D_IMAGES_ANALYSER_FOR_APLIO500_TOSHIBAMS('Property','Value',...) creates a new ULTRASOUND_4D_IMAGES_ANALYSER_FOR_APLIO500_TOSHIBAMS or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before Bayes4D_OpeningFcn gets called.  An
+%      applied to the GUI before Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to Bayes4D_OpeningFcn via varargin.
+%      stop.  All inputs are passed to Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help Bayes4D
+% Edit the above text to modify the response to help Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS
 
-% Last Modified by GUIDE v2.5 02-Aug-2016 18:15:25
+% Last Modified by GUIDE v2.5 04-Aug-2016 18:12:57
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @Bayes4D_OpeningFcn, ...
-                   'gui_OutputFcn',  @Bayes4D_OutputFcn, ...
+                   'gui_OpeningFcn', @Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS_OpeningFcn, ...
+                   'gui_OutputFcn',  @Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 
@@ -44,20 +44,20 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before Bayes4D is made visible.
-function Bayes4D_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS is made visible.
+function Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to Bayes4D (see VARARGIN)
+% varargin   command line arguments to Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS (see VARARGIN)
 
 %Ancien aplio
 %DecodeDicomInfo('C:\Documents and Settings\Administrateur\Mes documents\Downloads\AplioXV\DICOM XV\DICOM XV\20160509\S0000004\US000001');
 %DecodeDicomInfo('DICOM XV\20160509\S0000004\US000001');
 
 %handles.donnees2 = GetRAWframes_B;
-%Choose default command line output for Bayes4D
+%Choose default command line output for Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS
 handles.output = hObject;
 
 developpement_altmany = fullfile(pwd,'altmany-export_fig');
@@ -67,12 +67,12 @@ addpath(chemin_altmany);
 % Update handles structure
 guidata(hObject, handles);
 
-% UIWAIT makes Bayes4D wait for user response (see UIRESUME)
+% UIWAIT makes Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = Bayes4D_OutputFcn(hObject, eventdata, handles) 
+function varargout = Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -93,6 +93,7 @@ coordonnee_axe3 = int16(str2double(get(handles.valeur_axe3_image,'String')));
 coordonnee_axe4 = int16(str2double(get(handles.valeur_axe4_image,'String')));
 
 handles.choix_ROI_polygone = choix_ROI_polygone;
+handles.ss_echantillonnage_effectue = false;
 
 try
     cla(handles.graphique,'reset'); %Efface le graphique précédent
@@ -470,38 +471,16 @@ function heterogeneite_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-%On accède aux choix de coupes par des accesseurs
-%coupeSelonX = get(handles.coupeSelonX,'Value');
-%coupeSelonY = get(handles.coupeSelonY,'Value');
-
-% moyenne_axe1_choisie = logical(get(handles.moyenne_axe1,'value'));
-% moyenne_axe2_choisie = logical(get(handles.moyenne_axe2,'value'));
-% 
-% if moyenne_axe1_choisie || moyenne_axe2_choisie
-%     set(handles.pas_de_moyenne,'value',1);
-%     afficherGraphique_Callback(hObject, eventdata, handles);
-% end
-% 
-% courbes = get(handles.graphique,'Children');
-% [nombre_de_courbes ~]=size(courbes);
-% somme_des_distances=0;
-% for i=1:nombre_de_courbes
-%     for j=i+1:nombre_de_courbes
-%         Y=abs(courbes(i).YData-courbes(j).YData);
-%         somme_des_distances=sum(Y)+somme_des_distances;
-%     end
-% end
-% somme_des_distances_normalises_nombre_de_courbes=somme_des_distances/(2^nombre_de_courbes);
-% 
-% set(handles.affichage_somme_des_distances,'String',num2str(somme_des_distances_normalises_nombre_de_courbes));
-
 %Pour utilisation de l'entropie l'image doit avoir 256 niveaux
 image_ROI=handles.image_ROI;
 image_ROI=image_ROI(~isnan(image_ROI));
 image_ROI_8bits=uint8(image_ROI);
 entropie_region_interet=entropy(image_ROI_8bits);
 set(handles.affichage_entropie,'String',num2str(entropie_region_interet));
+
 guidata(handles.figure1,handles);
+
+
 
 
 
@@ -542,10 +521,14 @@ function detection_pics_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 %On enlève l'éventuel résultat d'une exécution précédente
-[nombre_de_lignes_affichees_graphique ~] = size(handles.graphique.Children);
-if nombre_de_lignes_affichees_graphique>1
-    delete(handles.graphique.Children(1:4));
-end
+%[nombre_de_lignes_affichees_graphique ~] = size(handles.graphique.Children);
+% if nombre_de_lignes_affichees_graphique>2
+%     delete(handles.graphique.Children(2:5));
+% end
+
+cla(handles.graphique);
+afficher_graphique_Callback(hObject, eventdata, handles);
+handles=guidata(hObject);
 
 guidata(hObject, handles);
 
@@ -609,7 +592,7 @@ try
         findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',valeur_nombre_de_pics);
         y_maxs=y_maxs';
     end
-    legend(gca,'off');
+    legend('off');
     hold off
 
 
@@ -639,18 +622,18 @@ try
         set(handles.dpap_affichage,'Visible','on');
         set(handles.texte_dpap,'Visible','on');
         set(handles.unite_dpap,'Visible','on');
-        [nb_lignes nb_colonnes]=size(liste_de_pics);
+        [~,nb_colonnes]=size(liste_de_pics);
         liste_de_pics_cellules=mat2cell(liste_de_pics,ones(1,nombre_de_pics),nb_colonnes);
         combinaisons_indices_de_deux_pics = combnk(1:nombre_de_pics,2);
-        [nb_lignes_indices ~] = size(combinaisons_indices_de_deux_pics);
-        for ligne=1:nb_lignes_indices
-            combinaisons_de_deux_pics = [liste_de_pics_cellules{combinaisons_indices_de_deux_pics(ligne,1),1} ...
+        [nb_combinaisons,~] = size(combinaisons_indices_de_deux_pics);
+        combinaisons_de_deux_pics=cell(nb_combinaisons,1);
+        for ligne=1:nb_combinaisons
+            combinaisons_de_deux_pics{ligne} = [liste_de_pics_cellules{combinaisons_indices_de_deux_pics(ligne,1),1} ...
                 ' & ' liste_de_pics_cellules{combinaisons_indices_de_deux_pics(ligne,2),1}];
         end
-        %combinaisons_de_deux_pics = combnk(liste_de_pics,2);
-        %set(handles.choix_de_deux_pics,'String',num2str(combinaisons_de_deux_pics));
+        
         set(handles.choix_de_deux_pics,'String',combinaisons_de_deux_pics);
-        handles.combinaisons_de_deux_pics = combinaisons_de_deux_pics;
+        handles.combinaisons_indices_de_deux_pics = combinaisons_indices_de_deux_pics;
         numero_combinaison_de_deux_pics_choisie = get(handles.choix_de_deux_pics,'Value');
         combinaison_pics_choisis = combinaisons_indices_de_deux_pics(numero_combinaison_de_deux_pics_choisie,:);
         x_plus_grand_des_deux_pics = x_maxs(combinaison_pics_choisis(2));
@@ -663,8 +646,11 @@ try
         set(handles.texte_dpap,'Visible','off');
         set(handles.unite_dpap,'Visible','off');
     end
-
-
+    set(handles.facteur_temps_I_max,'Enable','on','BackgroundColor','white');
+    set(handles.facteur_sous_echantillonnage,'Enable','on','BackgroundColor','white');
+    
+    handles.detection_pics_effectuee = true;
+    %handles.ss_echantillonnage_effectue = false;
     guidata(hObject, handles);
 catch erreurs
     if (strcmp(erreurs.identifier,'detection_pics_Callback:taille_fenetre_paire'))
@@ -739,6 +725,12 @@ function chargement_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 choix_chargement = get(handles.choix_chargement,'Value');
+cla(handles.graphique);
+set(handles.choix_du_pic,'String',' ');
+set(handles.lmh_affichage,'String',[]);
+set(handles.lmh_affichage,'String',[]);
+set(handles.choix_de_deux_pics,'String',' ');
+set(handles.dpap_affichage,'String',[]);
 
 format_bin = 1;
 format_mat = 2;
@@ -847,10 +839,10 @@ function choix_de_deux_pics_Callback(hObject, eventdata, handles)
 %        contents{get(hObject,'Value')} returns selected item from choix_de_deux_pics
 
 numero_combinaison_de_deux_pics_choisie = get(handles.choix_de_deux_pics,'Value');
-combinaison_pics_choisis = handles.combinaisons_de_deux_pics(numero_combinaison_de_deux_pics_choisie,:);
+combinaison_pics_choisis = handles.combinaisons_indices_de_deux_pics(numero_combinaison_de_deux_pics_choisie,:);
 x_plus_grand_des_deux_pics = handles.x_maxs(combinaison_pics_choisis(2));
 x_plus_petit_des_deux_pics = handles.x_maxs(combinaison_pics_choisis(1));
-set(handles.dpap_affichage,'String',num2str(x_plus_grand_des_deux_pics-x_plus_petit_des_deux_pics));
+set(handles.dpap_affichage,'String',num2str(abs(x_plus_grand_des_deux_pics-x_plus_petit_des_deux_pics)));
 guidata(hObject, handles);
 
 
@@ -1223,9 +1215,10 @@ function afficher_graphique_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-choix_ROI_rectangle=isfield(handles,'rectangle_trace');
-choix_ROI_polygone=isfield(handles,'polygone_trace');
+cla(handles.graphique);
 
+%choix_ROI_rectangle=isfield(handles,'rectangle_trace');
+%choix_ROI_polygone=isfield(handles,'polygone_trace');
 
 coordonnee_axe3 = int16(str2double(get(handles.valeur_axe3_image,'String')));
 coordonnee_axe4 = int16(str2double(get(handles.valeur_axe4_image,'String')));
@@ -1233,6 +1226,8 @@ graphique_selon_axe1 = get(handles.graphique_selon_axe1,'Value');
 graphique_selon_axe2 = get(handles.graphique_selon_axe2,'Value');
 graphique_selon_axe3 = get(handles.graphique_selon_axe3,'Value');
 graphique_selon_axe4 = get(handles.graphique_selon_axe4,'Value');
+
+points_de_donnees = get(handles.points_de_donnees,'Value');
 
 volumes_ROI=handles.volumes_ROI;
 image_ROI=handles.image_ROI;
@@ -1283,28 +1278,47 @@ end
 
 %Problème coordonnées cartésiennes/matrice ici
 if graphique_selon_axe1
-    plot(int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique),image_ROI,'displayname','Courbe originale','HitTest', 'off');
+    x = int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique);
+    y = image_ROI ;
+    %plot(x,image_ROI,'b+',x,image_ROI,'b','displayname','Courbe originale','HitTest', 'off');
     xlabel(legende_abscisse_graphique(ordre_axes(1)));
-    handles.abscisse_courbe_ROI=int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique);
 elseif graphique_selon_axe2
-    image_ROI = image_ROI';
-    plot(int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique),image_ROI,'displayname','Courbe originale','HitTest', 'off');
+    x = int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique);
+    y = image_ROI';
+    %plot(x,image_ROI,'displayname','Courbe originale','HitTest', 'off');
     xlabel(legende_abscisse_graphique(ordre_axes(2)));
     handles.abscisse_courbe_ROI=int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique);
 elseif graphique_selon_axe3
-    volumes_ROI = volumes_ROI(:,coordonnee_axe4);
-    plot(1:int16(taille_axes(ordre_axes(3))),volumes_ROI,'displayname','Courbe originale','HitTest', 'off');
+    y = volumes_ROI(:,coordonnee_axe4);
+    x = 1:int16(taille_axes(ordre_axes(3)));
+    %plot(x,volumes_ROI,'displayname','Courbe originale','HitTest', 'off');
     xlabel(legende_abscisse_graphique(ordre_axes(3)));
-    handles.courbe_ROI = volumes_ROI;
-    handles.abscisse_courbe_ROI=1:int16(taille_axes(ordre_axes(3)));
 elseif graphique_selon_axe4
-    volumes_ROI = volumes_ROI(coordonnee_axe3,:);
-    plot(1:int16(taille_axes(ordre_axes(4))),volumes_ROI,'displayname','Courbe originale','HitTest', 'off');
+    y = volumes_ROI(coordonnee_axe3,:);
+    x = 1:int16(taille_axes(ordre_axes(4)));
+    %plot(x,volumes_ROI,'displayname','Courbe originale','HitTest', 'off');
     xlabel(legende_abscisse_graphique(ordre_axes(4)));
-    handles.courbe_ROI = volumes_ROI;
-    handles.abscisse_courbe_ROI=1:int16(taille_axes(ordre_axes(4)));
 end
 
+handles.courbe_ROI = y;
+handles.abscisse_courbe_ROI=x;
+
+hold on
+plot(x,y,'displayname','Courbe originale','HitTest', 'off');
+
+if points_de_donnees && ~handles.ss_echantillonnage_effectue
+    plot(x,y,'black+','displayname','Point de données','HitTest', 'off');
+end
+
+
+if handles.ss_echantillonnage_effectue
+    vecteur_t_ech_normal = handles.vecteur_t_ech_normal;
+    vecteur_t_ssech = handles.vecteur_t_ssech;
+    handles.points_ech_normal = plot(vecteur_t_ech_normal,y(vecteur_t_ech_normal),'black+','displayname','Echantillonnage normal','HitTest', 'off');
+    handles.points_ssech_normal = plot(vecteur_t_ssech,y(vecteur_t_ssech),'red+','displayname','Sous-échantillonnage','HitTest', 'off');
+    legend([handles.points_ech_normal,handles.points_ssech_normal]);
+end
+hold off
 
 
 if strcmp(handles.choix_forme_ROI,'rectangle');
@@ -1398,9 +1412,21 @@ try
     handles.volumes_ROI = volumes_ROI;
 
 
-    position_polygone=getPosition(polygone);
-    ordre_des_points=1:size(position_polygone,1);
-    polygone_trace=patch('Faces',ordre_des_points,'Vertices',position_polygone,'FaceColor','none','EdgeColor','red');
+    positions_polygone=getPosition(polygone);
+    nb_positions_polygone = size(positions_polygone,1);
+    maximum_axe1=handles.taille_axes(handles.ordre_axes(1));
+    maximum_axe2=handles.taille_axes(handles.ordre_axes(2));
+    for i=1:nb_positions_polygone
+        X_pos_i=positions_polygone(i,1);
+        Y_pos_i=positions_polygone(i,2);
+        if X_pos_i<1 || X_pos_i>maximum_axe1 || Y_pos_i<1 || Y_pos_i>maximum_axe2
+            erreur_sortie_de_image.message = 'La région d''intérêt dépasse de l''image.';
+            erreur_sortie_de_image.identifier = 'polygone_Callback:sortie_de_image';
+            error(erreur_sortie_de_image);
+        end
+    end
+    ordre_des_points=1:nb_positions_polygone;
+    polygone_trace=patch('Faces',ordre_des_points,'Vertices',positions_polygone,'FaceColor','none','EdgeColor','red');
     handles.polygone_trace=polygone_trace;
     delete(polygone);
 
@@ -1412,6 +1438,11 @@ catch erreurs
     if (strcmp(erreurs.identifier,'polygone_Callback:ROI_pas_choisi'))
         causeException = MException(erreur_ROI_pas_choisi.identifier,erreur_ROI_pas_choisi.message);
         erreurs = addCause(erreurs,causeException);
+    elseif (strcmp(erreurs.identifier,'polygone_Callback:sortie_de_image'))
+        warndlg('Merci d''entrer une région d''intérêt incluse dans l''image.');
+        causeException = MException(erreur_sortie_de_image.identifier,erreur_sortie_de_image.message);
+        erreurs = addCause(erreurs,causeException);
+        delete(polygone);
     else
         rethrow(erreurs);
     end
@@ -1555,26 +1586,38 @@ try
     barre_attente = waitbar(0,'Merci de patienter pendant l''enregistrement des fichiers...');
     compteur_sous_echantillonnage = 0;
     volumes = cell(t_maximum,1);
+    vecteur_t_ech_normal = NaN(1,t_maximum);
+    vecteur_t_ssech=NaN(1,t_maximum);
+    
     for t=1:t_maximum
         condition_echantillonnage_normal = t<facteur_temps_I_max*t_du_maximum_global;
         if condition_echantillonnage_normal
             volume_a_enregistrer=handles.volumes(:,:,:,t);
             volume_a_enregistrer=squeeze(volume_a_enregistrer);
             volumes{t}=volume_a_enregistrer;
+            vecteur_t_ech_normal(t)=t;
         elseif mod(compteur_sous_echantillonnage,facteur_sous_echantillonnage)==0
             compteur_sous_echantillonnage = compteur_sous_echantillonnage + 1;
             volume_a_enregistrer=handles.volumes(:,:,:,t);
             volume_a_enregistrer=squeeze(volume_a_enregistrer);
             volumes{t}=volume_a_enregistrer;
+            vecteur_t_ssech(t) = t;
         else
             compteur_sous_echantillonnage = compteur_sous_echantillonnage + 1;
         end
         waitbar(t/t_maximum);
     end
+    
+    vecteur_t_ech_normal(isnan(vecteur_t_ech_normal)) = [];
+    vecteur_t_ssech(isnan(vecteur_t_ssech)) = [];
+    handles.vecteur_t_ech_normal = vecteur_t_ech_normal;
+    handles.vecteur_t_ssech = vecteur_t_ssech;
+    handles.ss_echantillonnage_effectue = true;
     volumes_a_enregistrer = cat(4,volumes{:});
-    save([nom_du_fichier,'.mat'],'volumes_a_enregistrer');
+    save([nom_du_fichier,'.mat'],'volumes_a_enregistrer','-mat');
     cd(dossier_principal);
     close(barre_attente);
+    afficher_graphique_Callback(hObject, eventdata, handles);
 catch erreurs
     if (strcmp(erreurs.identifier,'sous_echantillonnage_Callback:trop_de_pics'))
         warndlg('Merci de choisir de détecter un seul pic à l''étape précédente.');
@@ -1594,10 +1637,10 @@ catch erreurs
     elseif (strcmp(erreurs.identifier, 'sous_echantillonnage_Callback:choix_annulation'))
         causeException = MException(erreur_choix_annulation.identifier,erreur_choix_annulation.message);
         erreurs = addCause(erreurs,causeException);
-    else
-        rethrow(erreurs);
     end   
+    rethrow(erreurs);
 end
+
     
     
 
@@ -1681,3 +1724,12 @@ dossier_principal=pwd;
 cd(chemin);
 export_fig(handles.image, nom_du_fichier);
 cd(dossier_principal)
+
+
+% --- Executes on button press in points_de_donnees.
+function points_de_donnees_Callback(hObject, eventdata, handles)
+% hObject    handle to points_de_donnees (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of points_de_donnees
