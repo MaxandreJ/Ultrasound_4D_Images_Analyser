@@ -55,7 +55,6 @@ function Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS_OpeningFcn(hObject
 %Ancien aplio
 %DecodeDicomInfo('C:\Documents and Settings\Administrateur\Mes documents\Downloads\AplioXV\DICOM XV\DICOM XV\20160509\S0000004\US000001');
 %DecodeDicomInfo('DICOM XV\20160509\S0000004\US000001');
-
 %handles.donnees2 = GetRAWframes_B;
 %Choose default command line output for Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS
 handles.output = hObject;
@@ -68,9 +67,6 @@ handles.sauvegarde_sous_echantillonnage = true;
 
 % Update handles structure
 guidata(hObject, handles);
-
-% UIWAIT makes Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.

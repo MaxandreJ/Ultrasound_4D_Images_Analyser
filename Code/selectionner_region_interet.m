@@ -35,7 +35,7 @@ try
         set(handles.valeur_axe1Fin_graphique,'UserData',valeur_axe1Fin_graphique);
         set(handles.valeur_axe2Fin_graphique,'UserData',valeur_axe2Fin_graphique);
         
-        volumes = handles.volumes;
+        volumes = handles.volumes.donnees;
 
         %Les Y sont en abscisse et les X en ordonnées parce que Matlab voie les Y
         %comme des noms de colonne de matrice

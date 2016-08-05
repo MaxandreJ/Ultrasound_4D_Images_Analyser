@@ -13,7 +13,11 @@ if isfield(handles,'polygone_trace')
 end
 
 try
-    taille_axes=handles.taille_axes;
+    volumes = handles.volumes;
+    volumes_ROI= volumes.donnees;
+    taille_axes = volumes.taille_axes;
+    ordre_axes = volumes.ordre_axes;
+    
     set(handles.figure1,'KeyPressFcn','')
     polygone=impoly;
     if isempty(polygone)
@@ -25,16 +29,15 @@ try
     %Comme l'image est en coordonnées "indices de matrice"
     masque_binaire_2D=masque_binaire_2D';
     masque_binaire_4D = repmat(masque_binaire_2D,1,1,taille_axes(3),taille_axes(4));
-    volumes_ROI=handles.volumes;
-    taille_volumes=size(volumes_ROI);
     volumes_ROI(masque_binaire_4D==0) = NaN;
     handles.volumes_ROI = volumes_ROI;
+    
 
 
     positions_polygone=getPosition(polygone);
     nb_positions_polygone = size(positions_polygone,1);
-    maximum_axe1=handles.taille_axes(handles.ordre_axes(1));
-    maximum_axe2=handles.taille_axes(handles.ordre_axes(2));
+    maximum_axe1=taille_axes(ordre_axes(1));
+    maximum_axe2=taille_axes(ordre_axes(2));
     for i=1:nb_positions_polygone
         X_pos_i=positions_polygone(i,1);
         Y_pos_i=positions_polygone(i,2);

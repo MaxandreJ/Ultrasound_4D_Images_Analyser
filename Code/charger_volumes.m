@@ -68,18 +68,18 @@ if choix_chargement==format_bin
         waitbar(ifichier/(nb_fichiers-3));
     end
     assignin('base', 'fichiers', fichiers);
-    volumes = cat(4,fichiers{:});
-    volumes = permute(volumes,[2,1,3,4]);
+    donnees_4D = cat(4,fichiers{:});
+    donnees_4D = permute(donnees_4D,[2,1,3,4]);
     close(barre_attente);
 elseif choix_chargement==format_mat
     %identifiant_volumes=fopen([chemin, nom_du_fichier]);
     %volumes=fread(identifiant_volumes);
-    cellules_volumes = struct2cell(load([chemin, nom_du_fichier], '-mat'));
-    volumes = cellules_volumes{1}; 
+    cellules_donnees_4D = struct2cell(load([chemin, nom_du_fichier], '-mat'));
+    donnees_4D = cellules_donnees_4D{1}; 
 end
 
-    
-handles.volumes = volumes;
+ordre_axes = [1,2,3,4];    
+handles.volumes = Volumes(donnees_4D,ordre_axes);
 
 set(handles.valeur_axe3_image,'enable','on','BackgroundColor','white','String','1');
 set(handles.valeur_axe4_image,'enable','on','BackgroundColor','white','String','1');

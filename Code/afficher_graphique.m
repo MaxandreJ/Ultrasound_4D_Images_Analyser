@@ -20,8 +20,8 @@ points_de_donnees = get(handles.points_de_donnees,'Value');
 
 volumes_ROI=handles.volumes_ROI;
 image_ROI=handles.image_ROI;
-ordre_axes=handles.ordre_axes;
-taille_axes=handles.taille_axes;
+ordre_axes=handles.volumes.ordre_axes;
+taille_axes=handles.volumes.taille_axes;
 
 legende_abscisse_graphique={'X (en pixels)','Y (en pixels)','Z (en pixels)','Temps (en pas de temps)'};
 noms_axes=['X','Y','Z','Temps'];

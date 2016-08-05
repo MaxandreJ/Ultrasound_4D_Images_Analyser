@@ -14,7 +14,7 @@ coordonnee_axe4 = int16(str2double(get(handles.valeur_axe4_image,'String')));
 
 %On affiche l'image dans handles.image
 axes(handles.image); %choix de l'endroit où on affiche l'image
-imshow4(handles.volumes,hObject,handles,coordonnee_axe3,coordonnee_axe4); %Appel de la fonction d'affichage d'image 4D
+imshow4(handles,coordonnee_axe3,coordonnee_axe4); %Appel de la fonction d'affichage d'image 4D
 handles = guidata(handles.figure1);
 %On ajoute la possibilité de faire un clic droit sur l'image pour afficher
 %un menu contextuel qui permet de sélectionner une région d'intérêt

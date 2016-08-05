@@ -1,11 +1,10 @@
 function clavier(~,eventdata,handles)
-global valeur_axe3 valeur_axe4 im mode_out inter colormaps isfused taille_axes
+global valeur_axe3 valeur_axe4 im mode_out inter
 cla(handles.graphique,'reset'); %Efface le graphique précédent
 rng=size(im,3);
 rng=[1 rng];
 rng_t=size(im,4);
 rng_t=[1 rng_t];
-
 %On ajoute la possibilité à l'utilisateur de choisir son plan de coupe et
 %naviguer entre les images au moyen des flèches multidirectionnelles
 if valeur_axe3>=min(rng) && valeur_axe3<=max(rng) && valeur_axe4>=min(rng_t) && valeur_axe4<=max(rng_t)
@@ -33,15 +32,12 @@ if valeur_axe3>=min(rng) && valeur_axe3<=max(rng) && valeur_axe4>=min(rng_t) && 
         case {'0','numpad0'}
             if mode_out ~= 0;
                 im = ipermutation(im,mode_out);
-                handles.volumes = ipermutation(handles.volumes,mode_out);
             end;
             mode_out = 0;
             inter = 0;
         case {'1','numpad1'}
             mode_in = 1;
             if mode_in ~= mode_out
-                handles.volumes = ipermutation(handles.volumes,mode_out);
-                handles.volumes = permutation(handles.volumes,mode_in);
                 im = ipermutation(im,mode_out);
                 im = permutation(im,mode_in);
             end;
@@ -50,8 +46,6 @@ if valeur_axe3>=min(rng) && valeur_axe3<=max(rng) && valeur_axe4>=min(rng_t) && 
         case {'2','numpad2'}
             mode_in = 2;
             if mode_in ~= mode_out
-                handles.volumes = ipermutation(handles.volumes,mode_out);
-                handles.volumes = permutation(handles.volumes,mode_in);
                 im = ipermutation(im,mode_out);
                 im = permutation(im,mode_in);
             end;
@@ -60,8 +54,6 @@ if valeur_axe3>=min(rng) && valeur_axe3<=max(rng) && valeur_axe4>=min(rng_t) && 
         case {'3','numpad3'}
             mode_in = 3;
             if mode_in ~= mode_out
-                handles.volumes = ipermutation(handles.volumes,mode_out);
-                handles.volumes = permutation(handles.volumes,mode_in);
                 im = ipermutation(im,mode_out);
                 im = permutation(im,mode_in);
             end;
@@ -70,8 +62,6 @@ if valeur_axe3>=min(rng) && valeur_axe3<=max(rng) && valeur_axe4>=min(rng_t) && 
         case {'4','numpad4'}
             mode_in = 4;
             if mode_in ~= mode_out
-                handles.volumes = ipermutation(handles.volumes,mode_out);
-                handles.volumes = permutation(handles.volumes,mode_in);
                 im = ipermutation(im,mode_out);
                 im = permutation(im,mode_in);
             end;
@@ -80,8 +70,6 @@ if valeur_axe3>=min(rng) && valeur_axe3<=max(rng) && valeur_axe4>=min(rng_t) && 
         case {'5','numpad5'}
             mode_in = 5;
             if mode_in ~= mode_out
-                handles.volumes = ipermutation(handles.volumes,mode_out);
-                handles.volumes = permutation(handles.volumes,mode_in);
                 im = ipermutation(im,mode_out);
                 im = permutation(im,mode_in);
             end;
@@ -109,6 +97,8 @@ if rng(end)~=size(im,3) || rng_t(end)~=size(im,4)
     end
 end;
 %figure(h)
+
+handles.volumes.donnees = im;
 
 imzobr = im(:,:,valeur_axe3,valeur_axe4);
 
@@ -180,6 +170,9 @@ end;
             xlabel([axe1,' (en pixels)']);
         end
         ylabel([axe2, ' (en pixels)']);
+        
+        taille_axes = handles.volumes.taille_axes;
+        
         set(handles.valeur_axe3_image,'String',valeur_axe3);
         set(handles.valeur_axe4_image,'String',valeur_axe4);
         set(handles.axe1_graphique,'String',axe1);
@@ -200,7 +193,9 @@ end;
         set(handles.total_axe3_image,'String',['sur ', num2str(taille_axes(ordre_axes(3)))]);
         set(handles.total_axe4_image,'String',['sur ', num2str(taille_axes(ordre_axes(4)))]);
         
-        handles.ordre_axes=ordre_axes;
+        
+        handles.volumes.taille_axes = taille_axes;
+        handles.volumes.ordre_axes=ordre_axes;
         guidata(handles.figure1,handles);
 end
 

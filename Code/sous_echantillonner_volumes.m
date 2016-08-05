@@ -4,10 +4,12 @@ function sous_echantillonner_volumes(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+volumes = handles.volumes;
+
 nombre_de_pics = str2double(get(handles.valeur_nombre_de_pics,'String'));
 choix_ROI_polygone = handles.choix_ROI_polygone ;
 graphique_selon_axe4_choisi = get(handles.graphique_selon_axe4,'value');
-ordre_axes = handles.ordre_axes;
+ordre_axes = volumes.ordre_axes;
 facteur_temps_I_max=str2double(get(handles.facteur_temps_I_max,'string'));
 facteur_sous_echantillonnage=str2double(get(handles.facteur_sous_echantillonnage,'string'));
 sauvegarde_sous_echantillonnage = handles.sauvegarde_sous_echantillonnage;
@@ -54,14 +56,14 @@ try
         condition_echantillonnage_normal = t<facteur_temps_I_max*t_du_maximum_global;
         if condition_echantillonnage_normal
             if sauvegarde_sous_echantillonnage
-                volume_a_enregistrer=handles.volumes(:,:,:,t);
+                volume_a_enregistrer=handles.volumes.donnees(:,:,:,t);
                 volume_a_enregistrer=squeeze(volume_a_enregistrer);
                 volumes{t}=volume_a_enregistrer;
             end
             vecteur_t_ech_normal(t)=t;
         elseif mod(compteur_sous_echantillonnage,facteur_sous_echantillonnage)==0
             if sauvegarde_sous_echantillonnage
-                volume_a_enregistrer=handles.volumes(:,:,:,t);
+                volume_a_enregistrer=handles.volumes.donnees(:,:,:,t);
                 volume_a_enregistrer=squeeze(volume_a_enregistrer);
                 volumes{t}=volume_a_enregistrer;
             end
