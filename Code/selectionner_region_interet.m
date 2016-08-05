@@ -16,8 +16,6 @@ try
     cla(handles.graphique,'reset'); %Efface le graphique précédent
     cla(handles.image.Children);
 
-    %Conversion des indices de matrice (lignes/colonnes) en coordonnées
-    %cartésiennes par transposition de la matrice
 
     if choix_ROI_rectangle
         
