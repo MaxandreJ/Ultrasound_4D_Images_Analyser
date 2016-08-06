@@ -1,6 +1,6 @@
 function clavier(~,eventdata,handles)
 global valeur_axe3 valeur_axe4 im mode_out inter
-cla(handles.graphique,'reset'); %Efface le graphique précédent
+cla(handles.affichage_graphique,'reset'); %Efface le graphique précédent
 rng=size(im,3);
 rng=[1 rng];
 rng_t=size(im,4);
@@ -97,8 +97,8 @@ if rng(end)~=size(im,3) || rng_t(end)~=size(im,4)
     end
 end;
 %figure(h)
-
-handles.volumes.donnees = im;
+volumes=handles.volumes;
+volumes.donnees = im;
 
 imzobr = im(:,:,valeur_axe3,valeur_axe4);
 
@@ -117,8 +117,7 @@ end;
 
 handles.vue_choisie = mode_out;
 
-%Ajout ci-dessous
-guidata(handles.figure1,handles);
+
 
 switch mode_out
     case 0
@@ -171,7 +170,8 @@ end;
         end
         ylabel([axe2, ' (en pixels)']);
         
-        taille_axes = handles.volumes.taille_axes;
+        volumes.ordre_axes=ordre_axes;
+        taille_axes = volumes.taille_axes;
         
         set(handles.valeur_axe3_image,'String',valeur_axe3);
         set(handles.valeur_axe4_image,'String',valeur_axe4);
@@ -186,16 +186,15 @@ end;
         set(handles.moyenne_axe1et2,'String',[axe1, ' et ', axe2]);
         set(handles.texte_axe3_image,'String',axe3);
         set(handles.texte_axe4_image,'String',axe4);
-        set(handles.maximum_axe1_1,'String',['/',num2str(taille_axes(ordre_axes(1)))]);
-        set(handles.maximum_axe1_2,'String',['/',num2str(taille_axes(ordre_axes(1)))]);
-        set(handles.maximum_axe2_1,'String',['/',num2str(taille_axes(ordre_axes(2)))]);
-        set(handles.maximum_axe2_2,'String',['/',num2str(taille_axes(ordre_axes(2)))]);
-        set(handles.total_axe3_image,'String',['sur ', num2str(taille_axes(ordre_axes(3)))]);
-        set(handles.total_axe4_image,'String',['sur ', num2str(taille_axes(ordre_axes(4)))]);
+        set(handles.maximum_axe1_1,'String',['/',num2str(taille_axes(1))]);
+        set(handles.maximum_axe1_2,'String',['/',num2str(taille_axes(1))]);
+        set(handles.maximum_axe2_1,'String',['/',num2str(taille_axes(2))]);
+        set(handles.maximum_axe2_2,'String',['/',num2str(taille_axes(2))]);
+        set(handles.total_axe3_image,'String',['sur ', num2str(taille_axes(3))]);
+        set(handles.total_axe4_image,'String',['sur ', num2str(taille_axes(4))]);
         
-        
-        handles.volumes.taille_axes = taille_axes;
-        handles.volumes.ordre_axes=ordre_axes;
+        handles.volumes = volumes;
+        %handles.volumes.taille_axes = taille_axes;
         guidata(handles.figure1,handles);
 end
 

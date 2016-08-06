@@ -7,7 +7,7 @@ function charger_volumes(hObject, eventdata, handles)
 
 
 choix_chargement = get(handles.choix_chargement,'Value');
-cla(handles.graphique);
+cla(handles.affichage_graphique);
 set(handles.choix_du_pic,'String',' ');
 set(handles.lmh_affichage,'String',[]);
 set(handles.lmh_affichage,'String',[]);

@@ -5,25 +5,36 @@ classdef Volumes < handle
     properties
         donnees
         ordre_axes
-        taille_axes
         donnees_ROI
-        image_ROI
         coordonnee_axe3_selectionnee
         coordonnee_axe4_selectionnee
+        choix_forme_ROI
     end
     
-    methods (Access = public)
-        function objet = Volumes(donnees,ordre_axes)
-         objet.donnees = donnees;
-         objet.ordre_axes = ordre_axes;
-         objet.taille_axes = objet.Taille_axes();
-        end
+    properties (Dependent)
+        taille_axes
+        image_ROI
     end
     
-    methods (Access = private)
-        function taille_axes = Taille_axes(objet)
-           taille_axes=[size(objet.donnees,1),size(objet.donnees,2),size(objet.donnees,3),size(objet.donnees,4)]; 
+    methods
+        function soi = Volumes(donnees,ordre_axes)
+         soi.donnees = donnees;
+         soi.ordre_axes = ordre_axes;
         end
+    
+        function valeur = get.taille_axes(soi)
+           valeur=[size(soi.donnees,1),...
+               size(soi.donnees,2),...
+               size(soi.donnees,3),...
+               size(soi.donnees,4)]; 
+        end
+        
+        function im_ROI = get.image_ROI(soi)
+            im_ROI = soi.donnees_ROI(:,:,...
+                soi.coordonnee_axe3_selectionnee,...
+                soi.coordonnee_axe4_selectionnee);
+        end
+        
     end
     
 end

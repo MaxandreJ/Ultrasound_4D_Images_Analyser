@@ -21,7 +21,7 @@ function varargout = Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS(vararg
 
 % Edit the above text to modify the response to help Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS
 
-% Last Modified by GUIDE v2.5 05-Aug-2016 16:44:37
+% Last Modified by GUIDE v2.5 06-Aug-2016 16:02:50
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -159,13 +159,13 @@ set(handles.dpap_affichage,'String',num2str(abs(x_plus_grand_des_deux_pics-x_plu
 guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
-function graphique_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to graphique (see GCBO)
+function affichage_graphique_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to affichage_graphique (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
 
-% Hint: place code in OpeningFcn to populate graphique
+% Hint: place code in OpeningFcn to populate affichage_graphique
 
 function valeur_axe1Debut_graphique_Callback(hObject, eventdata, handles)
 % hObject    handle to valeur_axe1Debut_graphique (see GCBO)
@@ -594,7 +594,7 @@ function sauvegarde_graphique_Callback(hObject, eventdata, handles)
 [nom_du_fichier,chemin] = uiputfile({'*.png';'*.jpeg';'*.bmp';'*.tiff';'*.pdf';'*.eps'});
 dossier_principal=pwd;
 cd(chemin);
-export_fig(handles.graphique, nom_du_fichier);
+export_fig(handles.affichage_graphique, nom_du_fichier);
 cd(dossier_principal)
 
 % --------------------------------------------------------------------

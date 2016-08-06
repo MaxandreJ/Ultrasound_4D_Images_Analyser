@@ -30,7 +30,7 @@ try
         error(erreur_axe_abscisse_pas_temps);
     end
         
-    t_maximum=handles.abscisse_courbe_ROI(end);
+    t_maximum=handles.graphique.abscisses(end);
     t_du_maximum_global = handles.x_maxs(1);
     if sauvegarde_sous_echantillonnage
         [nom_du_fichier,chemin_sauvegarde] = uiputfile({'*.*'});

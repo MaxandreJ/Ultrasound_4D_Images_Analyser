@@ -16,9 +16,9 @@ try
     volumes = handles.volumes;
     volumes_ROI= volumes.donnees;
     taille_axes = volumes.taille_axes;
-    ordre_axes = volumes.ordre_axes;
     
     set(handles.figure1,'KeyPressFcn','')
+    axes(handles.image);
     polygone=impoly;
     if isempty(polygone)
         erreur_ROI_pas_choisi.message = 'La région d''intérêt n''a pas été délimitée avant le changement de vue.';
@@ -30,14 +30,14 @@ try
     masque_binaire_2D=masque_binaire_2D';
     masque_binaire_4D = repmat(masque_binaire_2D,1,1,taille_axes(3),taille_axes(4));
     volumes_ROI(masque_binaire_4D==0) = NaN;
-    handles.volumes_ROI = volumes_ROI;
+    handles.volumes.donnees_ROI = volumes_ROI;
     
 
 
     positions_polygone=getPosition(polygone);
     nb_positions_polygone = size(positions_polygone,1);
-    maximum_axe1=taille_axes(ordre_axes(1));
-    maximum_axe2=taille_axes(ordre_axes(2));
+    maximum_axe1=taille_axes(1);
+    maximum_axe2=taille_axes(2);
     for i=1:nb_positions_polygone
         X_pos_i=positions_polygone(i,1);
         Y_pos_i=positions_polygone(i,2);
@@ -51,9 +51,7 @@ try
     polygone_trace=patch('Faces',ordre_des_points,'Vertices',positions_polygone,'FaceColor','none','EdgeColor','red');
     handles.polygone_trace=polygone_trace;
     delete(polygone);
-
-    handles.choix_forme_ROI='polygone';
-
+    handles.volumes.choix_forme_ROI='polygone';
     guidata(handles.figure1,handles);
     selectionner_region_interet(hObject, eventdata, handles)
 catch erreurs

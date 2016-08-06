@@ -4,10 +4,7 @@ function afficher_graphique(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-cla(handles.graphique);
-
-%choix_ROI_rectangle=isfield(handles,'rectangle_trace');
-%choix_ROI_polygone=isfield(handles,'polygone_trace');
+cla(handles.affichage_graphique);
 
 coordonnee_axe3 = int16(str2double(get(handles.valeur_axe3_image,'String')));
 coordonnee_axe4 = int16(str2double(get(handles.valeur_axe4_image,'String')));
@@ -18,11 +15,10 @@ graphique_selon_axe4 = get(handles.graphique_selon_axe4,'Value');
 
 points_de_donnees = get(handles.points_de_donnees,'Value');
 
-volumes_ROI=handles.volumes_ROI;
-image_ROI=handles.image_ROI;
-ordre_axes=handles.volumes.ordre_axes;
+volumes_ROI=handles.volumes.donnees_ROI;
+image_ROI=handles.volumes.image_ROI;
 taille_axes=handles.volumes.taille_axes;
-
+ordre_axes=handles.volumes.ordre_axes;
 legende_abscisse_graphique={'X (en pixels)','Y (en pixels)','Z (en pixels)','Temps (en pas de temps)'};
 noms_axes=['X','Y','Z','Temps'];
 
@@ -37,9 +33,7 @@ moyenne_axe2 = get(handles.moyenne_axe2,'Value');
 moyenne_axe1et2 = get(handles.moyenne_axe1et2,'Value');
 pas_de_moyenne = get(handles.pas_de_moyenne,'Value');
 
-taille_volumes=size(volumes_ROI);
-
-axes(handles.graphique);
+axes(handles.affichage_graphique);
 if moyenne_axe1
     image_ROI = mean(image_ROI,1);
     %Enlever les dimensions inutiles laissées par la moyenne
@@ -56,10 +50,6 @@ elseif moyenne_axe1et2
     volumes_ROI=nanmean(nanmean(volumes_ROI,1),2);
     %Enlever les dimensions inutiles laissées par les moyennes
     volumes_ROI=squeeze(volumes_ROI);
-    %Si l'ordre des axes n'est pas maintenu après moyennage
-    %if ordre_axes(3)>ordre_axes(4)
-    %    volumes_ROI=permute(volumes_ROI,[2,1]);
-    %end
 end
 
 
@@ -67,50 +57,45 @@ end
 
 %Problème coordonnées cartésiennes/matrice ici
 if graphique_selon_axe1
-    x = int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique);
-    y = image_ROI ;
-    %plot(x,image_ROI,'b+',x,image_ROI,'b','displayname','Courbe originale','HitTest', 'off');
+    abscisses = int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique);
+    ordonnees = image_ROI ;
     xlabel(legende_abscisse_graphique(ordre_axes(1)));
 elseif graphique_selon_axe2
-    x = int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique);
-    y = image_ROI';
-    %plot(x,image_ROI,'displayname','Courbe originale','HitTest', 'off');
+    abscisses = int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique);
+    ordonnees = image_ROI';
     xlabel(legende_abscisse_graphique(ordre_axes(2)));
     handles.abscisse_courbe_ROI=int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique);
 elseif graphique_selon_axe3
-    y = volumes_ROI(:,coordonnee_axe4);
-    x = 1:int16(taille_axes(ordre_axes(3)));
-    %plot(x,volumes_ROI,'displayname','Courbe originale','HitTest', 'off');
+    ordonnees = volumes_ROI(:,coordonnee_axe4);
+    abscisses = 1:int16(taille_axes(3));
     xlabel(legende_abscisse_graphique(ordre_axes(3)));
 elseif graphique_selon_axe4
-    y = volumes_ROI(coordonnee_axe3,:);
-    x = 1:int16(taille_axes(ordre_axes(4)));
-    %plot(x,volumes_ROI,'displayname','Courbe originale','HitTest', 'off');
+    ordonnees = volumes_ROI(coordonnee_axe3,:);
+    abscisses = 1:int16(taille_axes(4));
     xlabel(legende_abscisse_graphique(ordre_axes(4)));
 end
 
-handles.courbe_ROI = y;
-handles.abscisse_courbe_ROI=x;
+handles.graphique = Graphique(abscisses,ordonnees);
 
 hold on
-plot(x,y,'displayname','Courbe originale','HitTest', 'off');
+plot(abscisses,ordonnees,'displayname','Courbe originale','HitTest', 'off');
 
 if points_de_donnees && ~handles.ss_echantillonnage_effectue
-    plot(x,y,'black+','displayname','Point de données','HitTest', 'off');
+    plot(abscisses,ordonnees,'black+','displayname','Point de données','HitTest', 'off');
 end
 
 
 if handles.ss_echantillonnage_effectue
     vecteur_t_ech_normal = handles.vecteur_t_ech_normal;
     vecteur_t_ssech = handles.vecteur_t_ssech;
-    handles.points_ech_normal = plot(vecteur_t_ech_normal,y(vecteur_t_ech_normal),'black+','displayname','Echantillonnage normal','HitTest', 'off');
-    handles.points_ssech_normal = plot(vecteur_t_ssech,y(vecteur_t_ssech),'red+','displayname','Sous-échantillonnage','HitTest', 'off');
+    handles.points_ech_normal = plot(vecteur_t_ech_normal,ordonnees(vecteur_t_ech_normal),'black+','displayname','Echantillonnage normal','HitTest', 'off');
+    handles.points_ssech_normal = plot(vecteur_t_ssech,ordonnees(vecteur_t_ssech),'red+','displayname','Sous-échantillonnage','HitTest', 'off');
     legend([handles.points_ech_normal,handles.points_ssech_normal]);
 end
 hold off
 
 
-if strcmp(handles.choix_forme_ROI,'rectangle');
+if strcmp(handles.volumes.choix_forme_ROI,'rectangle');
     ligne = xor(handles.valeurs_axe1_DebutFin_distinctes,handles.valeurs_axe2_DebutFin_distinctes);
 else
     ligne = false;

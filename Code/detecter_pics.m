@@ -4,7 +4,7 @@ function detecter_pics(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-cla(handles.graphique);
+cla(handles.affichage_graphique);
 afficher_graphique(hObject, eventdata, handles);
 handles=guidata(hObject);
 
@@ -34,8 +34,8 @@ try
 
     taille_fenetre_lissage = str2double(get(handles.valeur_taille_fenetre_lissage,'String'));
     
-    courbe_ROI = double(handles.courbe_ROI);
-    abscisse_courbe_ROI=double(handles.abscisse_courbe_ROI);
+    courbe_ROI = double(handles.graphique.ordonnees);
+    abscisse_courbe_ROI=double(handles.graphique.abscisses);
     
     if taille_fenetre_lissage~=1
         filtre_lissage = (1/taille_fenetre_lissage)*ones(1,taille_fenetre_lissage);
@@ -43,7 +43,7 @@ try
         courbe_ROI = filter(filtre_lissage,coefficient_filtre,courbe_ROI);
     end
 
-    axes(handles.graphique);
+    axes(handles.affichage_graphique);
     hold on
     if graphique_selon_axe1_choisi
         [y_maxs,x_maxs,lmhs,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
