@@ -100,6 +100,7 @@ if handles.ss_echantillonnage_effectue
     handles.points_ech_normal = plot(vecteur_t_ech_normal,ordonnees(vecteur_t_ech_normal),'black+','displayname','Echantillonnage normal','HitTest', 'off');
     handles.points_ssech_normal = plot(vecteur_t_ssech,ordonnees(vecteur_t_ssech),'red+','displayname','Sous-échantillonnage','HitTest', 'off');
     legend([handles.points_ech_normal,handles.points_ssech_normal]);
+    handles.graphique.affichage_resultat_sous_echantillonnage = false;
 end
 hold off
 

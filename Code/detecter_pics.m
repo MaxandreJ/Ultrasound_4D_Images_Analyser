@@ -85,6 +85,7 @@ try
     set(handles.choix_du_pic,'String',liste_de_pics);
     pic_choisi = get(handles.choix_du_pic,'Value');
     set(handles.lmh_affichage,'String',lmhs(pic_choisi));
+    handles.lmhs = lmhs;
 
     %Affichage des combinaisons de deux pics dans la deuxième liste déroulante
     if valeur_nombre_de_pics>1

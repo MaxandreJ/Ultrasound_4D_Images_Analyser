@@ -81,7 +81,7 @@ try
     vecteur_t_ssech(isnan(vecteur_t_ssech)) = [];
     handles.vecteur_t_ech_normal = vecteur_t_ech_normal;
     handles.vecteur_t_ssech = vecteur_t_ssech;
-    handles.ss_echantillonnage_effectue = true;
+    handles.graphique.affichage_resultat_sous_echantillonnage = true;
     if sauvegarde_sous_echantillonnage
         volumes_a_enregistrer = cat(4,volumes{:});
         save([nom_du_fichier,'.mat'],'volumes_a_enregistrer','-mat');

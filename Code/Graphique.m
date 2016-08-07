@@ -7,6 +7,13 @@ classdef Graphique < handle
         ordonnees
         axe_abscisses_choisi
         axe_moyenne_choisi
+        abscisses_intensites_maximales
+        largeurs_a_mi_hauteur
+        affichage_resultat_sous_echantillonnage
+    end
+    
+    properties (Dependent)
+        une_seule_courbe
     end
 
     methods
