@@ -10,10 +10,10 @@ handles=guidata(hObject);
 
 guidata(hObject, handles);
 
-graphique_selon_axe1_choisi = get(handles.graphique_selon_axe1,'value');
-graphique_selon_axe2_choisi = get(handles.graphique_selon_axe2,'value');
-graphique_selon_axe3_choisi = get(handles.graphique_selon_axe3,'value');
-graphique_selon_axe4_choisi = get(handles.graphique_selon_axe4,'value');
+% graphique_selon_axe1_choisi = get(handles.graphique_selon_axe1,'value');
+% graphique_selon_axe2_choisi = get(handles.graphique_selon_axe2,'value');
+% graphique_selon_axe3_choisi = get(handles.graphique_selon_axe3,'value');
+% graphique_selon_axe4_choisi = get(handles.graphique_selon_axe4,'value');
 
 valeur_nombre_de_pics = str2double(get(handles.valeur_nombre_de_pics,'String'));
 
@@ -34,8 +34,11 @@ try
 
     taille_fenetre_lissage = str2double(get(handles.valeur_taille_fenetre_lissage,'String'));
     
-    courbe_ROI = double(handles.graphique.ordonnees);
-    abscisse_courbe_ROI=double(handles.graphique.abscisses);
+    graphique = handles.graphique;
+    axe_abscisses_choisi=graphique.axe_abscisses_choisi;
+    
+    courbe_ROI = double(graphique.ordonnees);
+    abscisse_courbe_ROI=double(graphique.abscisses);
     
     if taille_fenetre_lissage~=1
         filtre_lissage = (1/taille_fenetre_lissage)*ones(1,taille_fenetre_lissage);
@@ -45,20 +48,21 @@ try
 
     axes(handles.affichage_graphique);
     hold on
-    if graphique_selon_axe1_choisi
-        [y_maxs,x_maxs,lmhs,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
-        findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',valeur_nombre_de_pics);
-        y_maxs=y_maxs';
-    elseif graphique_selon_axe2_choisi
-        [y_maxs,x_maxs,lmhs,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
-        findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',valeur_nombre_de_pics);
-    elseif graphique_selon_axe3_choisi
-        [y_maxs,x_maxs,lmhs,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
-        findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',valeur_nombre_de_pics);
-    elseif graphique_selon_axe4_choisi
-        [y_maxs,x_maxs,lmhs,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
-        findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',valeur_nombre_de_pics);
-        y_maxs=y_maxs';
+    switch axe_abscisses_choisi
+        case 1
+            [y_maxs,x_maxs,lmhs,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
+            findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',valeur_nombre_de_pics);
+            y_maxs=y_maxs';
+        case 2
+            [y_maxs,x_maxs,lmhs,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
+            findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',valeur_nombre_de_pics);
+        case 3
+            [y_maxs,x_maxs,lmhs,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
+            findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',valeur_nombre_de_pics);
+        case 4
+            [y_maxs,x_maxs,lmhs,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
+            findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',valeur_nombre_de_pics);
+            y_maxs=y_maxs';
     end
     legend('off');
     hold off
@@ -81,7 +85,6 @@ try
     set(handles.choix_du_pic,'String',liste_de_pics);
     pic_choisi = get(handles.choix_du_pic,'Value');
     set(handles.lmh_affichage,'String',lmhs(pic_choisi));
-    handles.lmhs=lmhs;
 
     %Affichage des combinaisons de deux pics dans la deuxième liste déroulante
     if valeur_nombre_de_pics>1
@@ -117,7 +120,6 @@ try
     set(handles.facteur_temps_I_max,'Enable','on','BackgroundColor','white');
     set(handles.facteur_sous_echantillonnage,'Enable','on','BackgroundColor','white');
     
-    handles.detection_pics_effectuee = true;
     guidata(hObject, handles);
 catch erreurs
     if (strcmp(erreurs.identifier,'detection_pics_Callback:taille_fenetre_paire'))

@@ -102,6 +102,9 @@ volumes.donnees = im;
 
 imzobr = im(:,:,valeur_axe3,valeur_axe4);
 
+volumes.coordonnee_axe3_selectionnee=valeur_axe3;
+volumes.coordonnee_axe4_selectionnee=valeur_axe4;
+
 
 axes(handles.image);
 imzobr=imzobr';
@@ -171,7 +174,7 @@ end;
         ylabel([axe2, ' (en pixels)']);
         
         volumes.ordre_axes=ordre_axes;
-        taille_axes = volumes.taille_axes;
+        taille_axes = volumes.taille_axes_enregistree;
         
         set(handles.valeur_axe3_image,'String',valeur_axe3);
         set(handles.valeur_axe4_image,'String',valeur_axe4);

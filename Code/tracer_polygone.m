@@ -4,6 +4,9 @@ function tracer_polygone(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+cla(handles.affichage_graphique,'reset'); %Efface le graphique précédent
+cla(handles.image.Children);
+
 if isfield(handles,'rectangle_trace')
     delete(handles.rectangle_trace);
 end
@@ -15,7 +18,7 @@ end
 try
     volumes = handles.volumes;
     volumes_ROI= volumes.donnees;
-    taille_axes = volumes.taille_axes;
+    taille_axes = volumes.taille_axes_enregistree;
     
     set(handles.figure1,'KeyPressFcn','')
     axes(handles.image);
@@ -30,7 +33,7 @@ try
     masque_binaire_2D=masque_binaire_2D';
     masque_binaire_4D = repmat(masque_binaire_2D,1,1,taille_axes(3),taille_axes(4));
     volumes_ROI(masque_binaire_4D==0) = NaN;
-    handles.volumes.donnees_ROI = volumes_ROI;
+    handles.volumes.donnees_ROI = volumes_ROI; 
     
 
 
@@ -52,8 +55,19 @@ try
     handles.polygone_trace=polygone_trace;
     delete(polygone);
     handles.volumes.choix_forme_ROI='polygone';
+    
+    set(handles.moyenne_axe1et2,'Value',1);
+    set(handles.moyenne_axe1,'Visible','off');
+    set(handles.moyenne_axe2,'Visible','off');
+    set(handles.pas_de_moyenne,'Visible','off');
+
+    set(handles.graphique_selon_axe4,'Value',1);
+    set(handles.graphique_selon_axe1,'Visible','off');
+    set(handles.graphique_selon_axe2,'Visible','off');
+    
+    set(handles.affichage_entropie,'BackgroundColor','white');
+
     guidata(handles.figure1,handles);
-    selectionner_region_interet(hObject, eventdata, handles)
 catch erreurs
     if (strcmp(erreurs.identifier,'polygone_Callback:ROI_pas_choisi'))
         causeException = MException(erreur_ROI_pas_choisi.identifier,erreur_ROI_pas_choisi.message);

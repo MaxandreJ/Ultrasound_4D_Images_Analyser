@@ -55,9 +55,6 @@ if choix_chargement==format_bin
     barre_attente = waitbar(0,'Merci de patienter pendant le chargement des fichiers...');
 
     for ifichier = 1:nb_fichiers-3
-        %disp(['1706 exports matlab Virginie\Données exportées\1648550067\RawData_Vol', num2str(i), '.bin']);
-        %disp([chemin_dossier,d(ifichier+3).name]);
-        %identifiants_fichiers{i}=fopen(['1706 exports matlab Virginie\Données exportées\1648550067\RawData_Vol', num2str(i),'.bin']);
         if ispc
             identifiants_fichiers{ifichier}=fopen([chemin,'\',d(ifichier+3).name]);
         elseif ismac
@@ -72,8 +69,6 @@ if choix_chargement==format_bin
     donnees_4D = permute(donnees_4D,[2,1,3,4]);
     close(barre_attente);
 elseif choix_chargement==format_mat
-    %identifiant_volumes=fopen([chemin, nom_du_fichier]);
-    %volumes=fread(identifiant_volumes);
     cellules_donnees_4D = struct2cell(load([chemin, nom_du_fichier], '-mat'));
     donnees_4D = cellules_donnees_4D{1}; 
 end

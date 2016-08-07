@@ -12,6 +12,9 @@ function afficher_image(hObject, eventdata, handles)
 coordonnee_axe3 = int16(str2double(get(handles.valeur_axe3_image,'String')));
 coordonnee_axe4 = int16(str2double(get(handles.valeur_axe4_image,'String')));
 
+handles.volumes.coordonnee_axe3_selectionnee=coordonnee_axe3;
+handles.volumes.coordonnee_axe4_selectionnee=coordonnee_axe4;
+
 %On affiche l'image dans handles.image
 axes(handles.image); %choix de l'endroit où on affiche l'image
 imshow4(handles,coordonnee_axe3,coordonnee_axe4); %Appel de la fonction d'affichage d'image 4D

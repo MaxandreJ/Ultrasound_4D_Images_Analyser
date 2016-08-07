@@ -7,7 +7,7 @@ function sous_echantillonner_volumes(hObject, eventdata, handles)
 volumes = handles.volumes;
 
 nombre_de_pics = str2double(get(handles.valeur_nombre_de_pics,'String'));
-choix_ROI_polygone = handles.choix_ROI_polygone ;
+choix_forme_ROI = handles.volumes.choix_forme_ROI;
 graphique_selon_axe4_choisi = get(handles.graphique_selon_axe4,'value');
 ordre_axes = volumes.ordre_axes;
 facteur_temps_I_max=str2double(get(handles.facteur_temps_I_max,'string'));
@@ -20,7 +20,7 @@ try
         erreur_trop_de_pics.message = 'Le nombre de pics détectés est strictement supérieur à 1.';
         erreur_trop_de_pics.identifier = 'sous_echantillonnage_Callback:trop_de_pics';
         error(erreur_trop_de_pics);
-    elseif ~choix_ROI_polygone
+    elseif ~strcmp(choix_forme_ROI,'polygone')
         erreur_polygone_pas_choisi.message = 'La région d''intérêt n''a pas été choisie avec un polygone.';
         erreur_polygone_pas_choisi.identifier = 'sous_echantillonnage_Callback:polygone_pas_choisi';
         error(erreur_polygone_pas_choisi);

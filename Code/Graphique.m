@@ -8,20 +8,13 @@ classdef Graphique < handle
         axe_abscisses_choisi
         axe_moyenne_choisi
     end
-    
-    properties (Hidden)
-        noms_axes
-    end
-    
-    properties (Dependent)
-        legende_abscisses
-        legende_ordonnees
-    end
-    
+
     methods
-        function soi = Graphique(abscisses,ordonnees)
+        function soi = Graphique(abscisses,ordonnees,axe_abscisses_choisi,axe_moyenne_choisi)
          soi.abscisses=abscisses;
          soi.ordonnees=ordonnees;
+         soi.axe_abscisses_choisi=axe_abscisses_choisi;
+         soi.axe_moyenne_choisi=axe_moyenne_choisi;
         end
     end
     

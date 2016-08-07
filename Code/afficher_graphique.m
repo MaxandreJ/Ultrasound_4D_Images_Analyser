@@ -6,6 +6,9 @@ function afficher_graphique(hObject, eventdata, handles)
 
 cla(handles.affichage_graphique);
 
+texte_legende_abscisses_graphique={'X (en pixels)','Y (en pixels)','Z (en pixels)','Temps (en pas de temps)'};
+noms_axes=['X','Y','Z','Temps'];
+
 coordonnee_axe3 = int16(str2double(get(handles.valeur_axe3_image,'String')));
 coordonnee_axe4 = int16(str2double(get(handles.valeur_axe4_image,'String')));
 graphique_selon_axe1 = get(handles.graphique_selon_axe1,'Value');
@@ -15,18 +18,20 @@ graphique_selon_axe4 = get(handles.graphique_selon_axe4,'Value');
 
 points_de_donnees = get(handles.points_de_donnees,'Value');
 
-volumes_ROI=handles.volumes.donnees_ROI;
-image_ROI=handles.volumes.image_ROI;
-taille_axes=handles.volumes.taille_axes;
-ordre_axes=handles.volumes.ordre_axes;
-legende_abscisse_graphique={'X (en pixels)','Y (en pixels)','Z (en pixels)','Temps (en pas de temps)'};
-noms_axes=['X','Y','Z','Temps'];
+volumes = handles.volumes;
 
+volumes_ROI=volumes.donnees_ROI;
+image_ROI=volumes.image_ROI;
+taille_axes=volumes.taille_axes_enregistree;
+ordre_axes=volumes.ordre_axes;
 
-valeur_axe1Debut_graphique = get(handles.valeur_axe1Debut_graphique,'UserData');
-valeur_axe2Debut_graphique = get(handles.valeur_axe2Debut_graphique,'UserData');
-valeur_axe1Fin_graphique = get(handles.valeur_axe1Fin_graphique,'UserData');
-valeur_axe2Fin_graphique = get(handles.valeur_axe2Fin_graphique,'UserData');
+coordonnee_axe1_debut_ROI = volumes.coordonnee_axe1_debut_ROI;
+coordonnee_axe2_debut_ROI = volumes.coordonnee_axe2_debut_ROI;
+coordonnee_axe1_fin_ROI = volumes.coordonnee_axe1_fin_ROI;
+coordonnee_axe2_fin_ROI = volumes.coordonnee_axe2_fin_ROI;
+
+coordonnees_axe1_distinctes = volumes.coordonnees_axe1_distinctes;
+coordonnees_axe2_distinctes = volumes.coordonnees_axe2_distinctes;
 
 moyenne_axe1 = get(handles.moyenne_axe1,'Value');
 moyenne_axe2 = get(handles.moyenne_axe2,'Value');
@@ -38,44 +43,48 @@ if moyenne_axe1
     image_ROI = mean(image_ROI,1);
     %Enlever les dimensions inutiles laissées par la moyenne
     image_ROI = squeeze(image_ROI);
-    handles.courbes_ROI=image_ROI;
+    axe_moyenne_choisi='1';
 elseif moyenne_axe2
     image_ROI = mean(image_ROI,2);
     %Pour avoir toujours des données en ligne
     image_ROI = image_ROI';
     %Enlever les dimensions inutiles laissées par la moyenne
     image_ROI = squeeze(image_ROI);
-    handles.courbes_ROI=image_ROI;
+    %handles.courbes_ROI=image_ROI;
+    axe_moyenne_choisi='2';
 elseif moyenne_axe1et2
     volumes_ROI=nanmean(nanmean(volumes_ROI,1),2);
     %Enlever les dimensions inutiles laissées par les moyennes
     volumes_ROI=squeeze(volumes_ROI);
+    axe_moyenne_choisi='1 et 2';
+elseif pas_de_moyenne
+    axe_moyenne_choisi='pas de moyenne';
 end
-
-
-
 
 %Problème coordonnées cartésiennes/matrice ici
 if graphique_selon_axe1
-    abscisses = int16(valeur_axe1Debut_graphique):int16(valeur_axe1Fin_graphique);
+    abscisses = int16(coordonnee_axe1_debut_ROI):int16(coordonnee_axe1_fin_ROI);
     ordonnees = image_ROI ;
-    xlabel(legende_abscisse_graphique(ordre_axes(1)));
+    axe_abscisses_choisi=1;
+    xlabel(texte_legende_abscisses_graphique(ordre_axes(1)));
 elseif graphique_selon_axe2
-    abscisses = int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique);
+    abscisses = int16(coordonnee_axe2_debut_ROI):int16(coordonnee_axe2_fin_ROI);
     ordonnees = image_ROI';
-    xlabel(legende_abscisse_graphique(ordre_axes(2)));
-    handles.abscisse_courbe_ROI=int16(valeur_axe2Debut_graphique):int16(valeur_axe2Fin_graphique);
+    axe_abscisses_choisi=2;
+    xlabel(texte_legende_abscisses_graphique(ordre_axes(2)));
 elseif graphique_selon_axe3
     ordonnees = volumes_ROI(:,coordonnee_axe4);
     abscisses = 1:int16(taille_axes(3));
-    xlabel(legende_abscisse_graphique(ordre_axes(3)));
+    axe_abscisses_choisi=3;
+    xlabel(texte_legende_abscisses_graphique(ordre_axes(3)));
 elseif graphique_selon_axe4
     ordonnees = volumes_ROI(coordonnee_axe3,:);
     abscisses = 1:int16(taille_axes(4));
-    xlabel(legende_abscisse_graphique(ordre_axes(4)));
+    axe_abscisses_choisi=4;
+    xlabel(texte_legende_abscisses_graphique(ordre_axes(4)));
 end
 
-handles.graphique = Graphique(abscisses,ordonnees);
+handles.graphique = Graphique(abscisses,ordonnees,axe_abscisses_choisi,axe_moyenne_choisi);
 
 hold on
 plot(abscisses,ordonnees,'displayname','Courbe originale','HitTest', 'off');
@@ -96,7 +105,7 @@ hold off
 
 
 if strcmp(handles.volumes.choix_forme_ROI,'rectangle');
-    ligne = xor(handles.valeurs_axe1_DebutFin_distinctes,handles.valeurs_axe2_DebutFin_distinctes);
+    ligne = xor(coordonnees_axe1_distinctes,coordonnees_axe2_distinctes);
 else
     ligne = false;
 end
@@ -109,18 +118,19 @@ else
     title('Courbes d''intensité');
 end
 
-if moyenne_axe1
-    ylabel({'Intensité (en niveaux)',...
-['moyennée sur ',noms_axes(ordre_axes(1)),' dans la région d''intérêt']});
-elseif moyenne_axe2
-    ylabel({'Intensité (en niveaux)',...
-['moyennée sur ',noms_axes(ordre_axes(2)),' dans la région d''intérêt']});
-elseif moyenne_axe1et2
-    ylabel({'Intensité (en niveaux)',...
-['moyennée sur ',noms_axes(ordre_axes(1)),' et ',noms_axes(ordre_axes(2))],...
-' dans la région d''intérêt'});
-elseif pas_de_moyenne
-    ylabel('Intensité (en niveaux)');
+switch axe_moyenne_choisi
+    case '1'
+        ylabel({'Intensité (en niveaux)',...
+    ['moyennée sur ',noms_axes(ordre_axes(1)),' dans la région d''intérêt']});
+    case '2'
+        ylabel({'Intensité (en niveaux)',...
+    ['moyennée sur ',noms_axes(ordre_axes(2)),' dans la région d''intérêt']});
+    case '1 et 2'
+        ylabel({'Intensité (en niveaux)',...
+    ['moyennée sur ',noms_axes(ordre_axes(1)),' et ',noms_axes(ordre_axes(2))],...
+    ' dans la région d''intérêt'});
+    case 'pas de moyenne'
+        ylabel('Intensité (en niveaux)');
 end
  
 

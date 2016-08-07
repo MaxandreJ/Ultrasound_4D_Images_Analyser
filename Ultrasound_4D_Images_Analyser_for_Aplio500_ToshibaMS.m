@@ -63,6 +63,7 @@ code = fullfile(pwd,'Code');
 chemin_code = genpath(code);
 addpath(chemin_code);
 
+handles.ss_echantillonnage_effectue = false;
 handles.sauvegarde_sous_echantillonnage = true;
 
 % Update handles structure
