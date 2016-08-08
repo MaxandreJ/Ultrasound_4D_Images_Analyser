@@ -8,7 +8,6 @@ cla(handles.affichage_graphique,'reset'); %Efface le graphique précédent
 cla(handles.image.Children);
 
 
-
 if isfield(handles,'rectangle_trace')
     delete(handles.rectangle_trace);
 end

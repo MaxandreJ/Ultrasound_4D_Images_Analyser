@@ -10,11 +10,6 @@ handles=guidata(hObject);
 
 guidata(hObject, handles);
 
-% graphique_selon_axe1_choisi = get(handles.graphique_selon_axe1,'value');
-% graphique_selon_axe2_choisi = get(handles.graphique_selon_axe2,'value');
-% graphique_selon_axe3_choisi = get(handles.graphique_selon_axe3,'value');
-% graphique_selon_axe4_choisi = get(handles.graphique_selon_axe4,'value');
-
 valeur_nombre_de_pics = str2double(get(handles.valeur_nombre_de_pics,'String'));
 
 try
@@ -25,7 +20,7 @@ try
         error(erreurImpaire);
     end
     
-    if ~handles.une_seule_courbe
+    if ~handles.graphique.une_seule_courbe
         erreurPlusieursCourbes.message = 'Plusieurs courbes affichées.';
         erreurPlusieursCourbes.identifier = 'detection_pics_Callback:plusieurs_courbes_affichees';
         error(erreurPlusieursCourbes);
@@ -50,17 +45,17 @@ try
     hold on
     switch axe_abscisses_choisi
         case 1
-            [y_maxs,x_maxs,lmhs,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
+            [y_maxs,abscisses_intensites_maximales,largeurs_a_mi_hauteur,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
             findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',valeur_nombre_de_pics);
             y_maxs=y_maxs';
         case 2
-            [y_maxs,x_maxs,lmhs,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
+            [y_maxs,abscisses_intensites_maximales,largeurs_a_mi_hauteur,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
             findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',valeur_nombre_de_pics);
         case 3
-            [y_maxs,x_maxs,lmhs,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
+            [y_maxs,abscisses_intensites_maximales,largeurs_a_mi_hauteur,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
             findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',valeur_nombre_de_pics);
         case 4
-            [y_maxs,x_maxs,lmhs,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
+            [y_maxs,abscisses_intensites_maximales,largeurs_a_mi_hauteur,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',valeur_nombre_de_pics);
             findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',valeur_nombre_de_pics);
             y_maxs=y_maxs';
     end
@@ -68,10 +63,8 @@ try
     hold off
 
 
-    %Passage de x_maxs en vecteur colonne pour affichage
-    x_maxs=x_maxs';
-    
-    handles.x_maxs=x_maxs;
+    %Passage de graphique.abscisses_intensites_maximales en vecteur colonne pour affichage
+    graphique.abscisses_intensites_maximales=abscisses_intensites_maximales';
 
 
 
@@ -80,12 +73,12 @@ try
     crochet_ouvrant = repmat('[', nombre_de_pics , 1);
     virgule = repmat(', ',nombre_de_pics,1);
     crochet_fermant = repmat(']',nombre_de_pics,1);
-    liste_de_pics = [crochet_ouvrant num2str(x_maxs) virgule ...
+    liste_de_pics = [crochet_ouvrant num2str(graphique.abscisses_intensites_maximales) virgule ...
         num2str(y_maxs) crochet_fermant];
     set(handles.choix_du_pic,'String',liste_de_pics);
     pic_choisi = get(handles.choix_du_pic,'Value');
-    set(handles.lmh_affichage,'String',lmhs(pic_choisi));
-    handles.lmhs = lmhs;
+    set(handles.lmh_affichage,'String',largeurs_a_mi_hauteur(pic_choisi));
+    graphique.largeurs_a_mi_hauteur = largeurs_a_mi_hauteur;
 
     %Affichage des combinaisons de deux pics dans la deuxième liste déroulante
     if valeur_nombre_de_pics>1
@@ -108,8 +101,8 @@ try
         handles.combinaisons_indices_de_deux_pics = combinaisons_indices_de_deux_pics;
         numero_combinaison_de_deux_pics_choisie = get(handles.choix_de_deux_pics,'Value');
         combinaison_pics_choisis = combinaisons_indices_de_deux_pics(numero_combinaison_de_deux_pics_choisie,:);
-        x_plus_grand_des_deux_pics = x_maxs(combinaison_pics_choisis(2));
-        x_plus_petit_des_deux_pics = x_maxs(combinaison_pics_choisis(1));
+        x_plus_grand_des_deux_pics = graphique.abscisses_intensites_maximales(combinaison_pics_choisis(2));
+        x_plus_petit_des_deux_pics = graphique.abscisses_intensites_maximales(combinaison_pics_choisis(1));
         set(handles.dpap_affichage,'String',num2str(abs(x_plus_grand_des_deux_pics-x_plus_petit_des_deux_pics)));
     else
         set(handles.choix_de_deux_pics,'Visible','off');
@@ -121,6 +114,7 @@ try
     set(handles.facteur_temps_I_max,'Enable','on','BackgroundColor','white');
     set(handles.facteur_sous_echantillonnage,'Enable','on','BackgroundColor','white');
     
+    handles.graphique = graphique;
     guidata(hObject, handles);
 catch erreurs
     if (strcmp(erreurs.identifier,'detection_pics_Callback:taille_fenetre_paire'))

@@ -21,7 +21,7 @@ function varargout = Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS(vararg
 
 % Edit the above text to modify the response to help Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS
 
-% Last Modified by GUIDE v2.5 06-Aug-2016 16:02:50
+% Last Modified by GUIDE v2.5 08-Aug-2016 18:23:12
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -127,7 +127,7 @@ function choix_du_pic_Callback(hObject, eventdata, handles)
 % Hints: contents = cellstr(get(hObject,'String')) returns choix_du_pic contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from choix_du_pic
 pic_choisi = get(handles.choix_du_pic,'Value');
-set(handles.lmh_affichage,'String',handles.lmhs(pic_choisi));
+set(handles.lmh_affichage,'String',handles.graphique.largeurs_a_mi_hauteur(pic_choisi));
 guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
@@ -154,8 +154,8 @@ function choix_de_deux_pics_Callback(hObject, eventdata, handles)
 
 numero_combinaison_de_deux_pics_choisie = get(handles.choix_de_deux_pics,'Value');
 combinaison_pics_choisis = handles.combinaisons_indices_de_deux_pics(numero_combinaison_de_deux_pics_choisie,:);
-x_plus_grand_des_deux_pics = handles.x_maxs(combinaison_pics_choisis(2));
-x_plus_petit_des_deux_pics = handles.x_maxs(combinaison_pics_choisis(1));
+x_plus_grand_des_deux_pics = handles.graphique.abscisses_intensites_maximales(combinaison_pics_choisis(2));
+x_plus_petit_des_deux_pics = handles.graphique.abscisses_intensites_maximales(combinaison_pics_choisis(1));
 set(handles.dpap_affichage,'String',num2str(abs(x_plus_grand_des_deux_pics-x_plus_petit_des_deux_pics)));
 guidata(hObject, handles);
 
@@ -525,9 +525,9 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on button press in graphique_selon_axe1.
-function graphique_selon_axe1_Callback(hObject, eventdata, handles)
-% hObject    handle to graphique_selon_axe1 (see GCBO)
+% --- Executes on button press in abscisses_axe1.
+function abscisses_axe1_Callback(hObject, eventdata, handles)
+% hObject    handle to abscisses_axe1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 moyenne_axe1_ou_axe1et2_choisie = logical(get(handles.moyenne_axe1,'value')) || ...
@@ -537,12 +537,12 @@ if moyenne_axe1_ou_axe1et2_choisie
 end
 guidata(handles.figure1,handles);
 
-% Hint: get(hObject,'Value') returns toggle state of graphique_selon_axe1
+% Hint: get(hObject,'Value') returns toggle state of abscisses_axe1
 
 
-% --- Executes on button press in graphique_selon_axe2.
-function graphique_selon_axe2_Callback(hObject, eventdata, handles)
-% hObject    handle to graphique_selon_axe2 (see GCBO)
+% --- Executes on button press in abscisses_axe2.
+function abscisses_axe2_Callback(hObject, eventdata, handles)
+% hObject    handle to abscisses_axe2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 moyenne_axe2_ou_axe1et2_choisie = logical(get(handles.moyenne_axe2,'value')) || ...
@@ -552,7 +552,7 @@ if moyenne_axe2_ou_axe1et2_choisie
 end
 guidata(handles.figure1,handles);
 
-% Hint: get(hObject,'Value') returns toggle state of graphique_selon_axe2
+% Hint: get(hObject,'Value') returns toggle state of abscisses_axe2
 
 
 % --- Executes on button press in moyenne_axe1.
@@ -560,10 +560,10 @@ function moyenne_axe1_Callback(hObject, eventdata, handles)
 % hObject    handle to moyenne_axe1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-graphique_selon_axe1ou3ou4_choisi = get(handles.graphique_selon_axe1,'value') || ...
-    get(handles.graphique_selon_axe3,'value') || get(handles.graphique_selon_axe4,'value') ;
+graphique_selon_axe1ou3ou4_choisi = get(handles.abscisses_axe1,'value') || ...
+    get(handles.abscisses_axe3,'value') || get(handles.abscisses_axe4,'value') ;
 if graphique_selon_axe1ou3ou4_choisi
-    set(handles.graphique_selon_axe2,'value',1);
+    set(handles.abscisses_axe2,'value',1);
 end
 guidata(handles.figure1,handles);
 
@@ -575,10 +575,10 @@ function moyenne_axe2_Callback(hObject, eventdata, handles)
 % hObject    handle to moyenne_axe2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-graphique_selon_axe2ou3ou4_choisi = get(handles.graphique_selon_axe2,'value') || ...
-    get(handles.graphique_selon_axe3,'value') || get(handles.graphique_selon_axe4,'value') ;
+graphique_selon_axe2ou3ou4_choisi = get(handles.abscisses_axe2,'value') || ...
+    get(handles.abscisses_axe3,'value') || get(handles.abscisses_axe4,'value') ;
 if graphique_selon_axe2ou3ou4_choisi
-    set(handles.graphique_selon_axe1,'value',1);
+    set(handles.abscisses_axe1,'value',1);
 end
 guidata(handles.figure1,handles);
 
@@ -620,17 +620,17 @@ function moyenne_axe1et2_Callback(hObject, eventdata, handles)
 % hObject    handle to moyenne_axe1et2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-graphique_selon_axe1ou2_choisi = logical(get(handles.graphique_selon_axe1,'value')) || logical(get(handles.graphique_selon_axe2,'value'));
+graphique_selon_axe1ou2_choisi = logical(get(handles.abscisses_axe1,'value')) || logical(get(handles.abscisses_axe2,'value'));
 if graphique_selon_axe1ou2_choisi
-    set(handles.graphique_selon_axe4,'value',1);
+    set(handles.abscisses_axe4,'value',1);
 end
 
 % Hint: get(hObject,'Value') returns toggle state of moyenne_axe1et2
 
 
-% --- Executes on button press in graphique_selon_axe3.
-function graphique_selon_axe3_Callback(hObject, eventdata, handles)
-% hObject    handle to graphique_selon_axe3 (see GCBO)
+% --- Executes on button press in abscisses_axe3.
+function abscisses_axe3_Callback(hObject, eventdata, handles)
+% hObject    handle to abscisses_axe3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 moyenne_axe1ou2oupas_choisie = logical(get(handles.moyenne_axe1,'value')) || logical(get(handles.moyenne_axe2,'value')) || ...
@@ -639,12 +639,12 @@ if moyenne_axe1ou2oupas_choisie
     set(handles.moyenne_axe1et2,'value',1);
 end
 
-% Hint: get(hObject,'Value') returns toggle state of graphique_selon_axe3
+% Hint: get(hObject,'Value') returns toggle state of abscisses_axe3
 
 
-% --- Executes on button press in graphique_selon_axe4.
-function graphique_selon_axe4_Callback(hObject, eventdata, handles)
-% hObject    handle to graphique_selon_axe4 (see GCBO)
+% --- Executes on button press in abscisses_axe4.
+function abscisses_axe4_Callback(hObject, eventdata, handles)
+% hObject    handle to abscisses_axe4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 moyenne_axe1ou2oupas_choisie = logical(get(handles.moyenne_axe1,'value')) || logical(get(handles.moyenne_axe2,'value')) || ...
@@ -653,7 +653,7 @@ if moyenne_axe1ou2oupas_choisie
     set(handles.moyenne_axe1et2,'value',1);
 end
 
-% Hint: get(hObject,'Value') returns toggle state of graphique_selon_axe4
+% Hint: get(hObject,'Value') returns toggle state of abscisses_axe4
 
 
 % --- Executes on button press in pas_de_moyenne.
@@ -662,10 +662,10 @@ function pas_de_moyenne_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-graphique_selon_axe3ou4_choisi = logical(get(handles.graphique_selon_axe3,'value')) || ...
-    logical(get(handles.graphique_selon_axe4,'value'));
+graphique_selon_axe3ou4_choisi = logical(get(handles.abscisses_axe3,'value')) || ...
+    logical(get(handles.abscisses_axe4,'value'));
 if graphique_selon_axe3ou4_choisi
-    set(handles.graphique_selon_axe1,'value',1);
+    set(handles.abscisses_axe1,'value',1);
 end
 guidata(handles.figure1,handles);
 

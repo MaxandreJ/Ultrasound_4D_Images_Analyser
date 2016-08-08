@@ -8,5 +8,4 @@ handles.volumes.methode_trace_ROI = 'coordonnees';
 
 tracer_rectangle(hObject, eventdata, handles)
 
-
 guidata(hObject, handles);

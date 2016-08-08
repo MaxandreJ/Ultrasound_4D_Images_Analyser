@@ -114,9 +114,9 @@ uicontextmenu = get(handles.image,'UIContextMenu');
 set(handles.image.Children,'UIContextMenu',uicontextmenu);
 
 
-if size(imzobr,2)<200 && inter==1
-    imzobr = imresize(imzobr,[size(imzobr,1),200]);
-end;
+% if size(imzobr,2)<200 && inter==1
+%     imzobr = imresize(imzobr,[size(imzobr,1),200]);
+% end;
 
 handles.vue_choisie = mode_out;
 
@@ -197,7 +197,6 @@ end;
         set(handles.total_axe4_image,'String',['sur ', num2str(taille_axes(4))]);
         
         handles.volumes = volumes;
-        %handles.volumes.taille_axes = taille_axes;
         guidata(handles.figure1,handles);
 end
 
