@@ -58,18 +58,18 @@ classdef Graphique < handle
         function charger_donnees(soi,handles)
             %Chargement des valeurs d'ordonnées et d'abscisses du graphique
             
-            %Importation des paramètres nécessaires venant du volume
+            %Importation des paramètres nécessaires
             volumes = handles.volumes;
-            
-            donnees_ROI=volumes.donnees_ROI;
-            image_ROI=volumes.image_ROI;
+            region_interet = handles.region_interet;
+            donnees_ROI=region_interet.donnees_4D;
+            image_ROI=region_interet.donnees_2D;
             taille_axes=volumes.taille_axes_enregistree;
             coordonnee_axe3_selectionnee=volumes.coordonnee_axe3_selectionnee;
             coordonnee_axe4_selectionnee=volumes.coordonnee_axe4_selectionnee;
-            coordonnee_axe1_debut_ROI = volumes.coordonnee_axe1_debut_ROI;
-            coordonnee_axe2_debut_ROI = volumes.coordonnee_axe2_debut_ROI;
-            coordonnee_axe1_fin_ROI = volumes.coordonnee_axe1_fin_ROI;
-            coordonnee_axe2_fin_ROI = volumes.coordonnee_axe2_fin_ROI;
+            coordonnee_axe1_debut_ROI = region_interet.coordonnee_axe1_debut;
+            coordonnee_axe2_debut_ROI = region_interet.coordonnee_axe2_debut;
+            coordonnee_axe1_fin_ROI = region_interet.coordonnee_axe1_fin;
+            coordonnee_axe2_fin_ROI = region_interet.coordonnee_axe2_fin;
             
             %Moyennage des données selon l'axe ou les axes choisis
             switch soi.axe_moyenne_choisi

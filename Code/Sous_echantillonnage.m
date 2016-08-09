@@ -14,7 +14,7 @@ classdef Sous_echantillonnage < handle
             
             nombre_de_pics = str2double(get(handles.valeur_nombre_de_pics,'String'));
             choix_forme_ROI = volumes.choix_forme_ROI;
-            graphique_selon_axe4_choisi = get(handles.graphique_selon_axe4,'value');
+            graphique_selon_axe4_choisi = get(handles.abscisses_axe4,'value');
             ordre_axes = volumes.ordre_axes;
             
             try

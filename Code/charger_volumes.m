@@ -61,7 +61,7 @@ if choix_chargement==format_bin
             identifiants_fichiers{ifichier}=fopen([chemin,'/',d(ifichier+3).name]);
         end
         fichiers{ifichier}=fread(identifiants_fichiers{ifichier});
-        fichiers{ifichier} =reshape(fichiers{ifichier},range,azimuth,elevation);
+        %fichiers{ifichier} =reshape(fichiers{ifichier},range,azimuth,elevation);
         waitbar(ifichier/(nb_fichiers-3));
     end
     assignin('base', 'fichiers', fichiers);

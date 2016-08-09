@@ -6,6 +6,7 @@ classdef Volumes < handle
         donnees
         ordre_axes
         donnees_ROI
+        taille_axes_enregistree
         coordonnee_axe1_debut_ROI
         coordonnee_axe2_debut_ROI
         coordonnee_axe1_fin_ROI
@@ -14,7 +15,6 @@ classdef Volumes < handle
         coordonnee_axe4_selectionnee
         choix_forme_ROI
         methode_trace_ROI
-        taille_axes_enregistree
         image_ROI_enregistree
     end
     

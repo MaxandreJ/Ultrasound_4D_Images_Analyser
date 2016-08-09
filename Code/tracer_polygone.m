@@ -61,9 +61,9 @@ try
     set(handles.moyenne_axe2,'Visible','off');
     set(handles.pas_de_moyenne,'Visible','off');
 
-    set(handles.graphique_selon_axe4,'Value',1);
-    set(handles.graphique_selon_axe1,'Visible','off');
-    set(handles.graphique_selon_axe2,'Visible','off');
+    set(handles.abscisses_axe4,'Value',1);
+    set(handles.abscisses_axe1,'Visible','off');
+    set(handles.abscisses_axe2,'Visible','off');
     
     set(handles.affichage_entropie,'BackgroundColor','white');
 
