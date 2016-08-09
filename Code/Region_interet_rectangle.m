@@ -13,17 +13,6 @@ classdef Region_interet_rectangle < Region_interet
     
     methods
         function tracer(soi,handles)
-%             cla(handles.affichage_graphique,'reset'); %Efface le graphique précédent
-%             cla(handles.image.Children);
-% 
-%             if isfield(handles,'rectangle_trace')
-%                 delete(handles.rectangle_trace);
-%             end
-% 
-%             if isfield(handles,'polygone_trace')
-%                 delete(handles.polygone_trace);
-%             end
-            
                 try
                     set(handles.figure1,'KeyPressFcn','');
                     axes(handles.image);
@@ -78,6 +67,15 @@ classdef Region_interet_rectangle < Region_interet
                 end
                 rethrow(erreurs);
              end
+         end
+         
+         function obtenir_coordonnees(soi,handles)
+            soi.coordonnee_axe1_debut = str2double(get(handles.valeur_axe1Debut_graphique,'String'));
+            soi.coordonnee_axe2_debut = str2double(get(handles.valeur_axe2Debut_graphique,'String'));
+            soi.coordonnee_axe1_fin = str2double(get(handles.valeur_axe1Fin_graphique,'String'));
+            soi.coordonnee_axe2_fin = str2double(get(handles.valeur_axe2Fin_graphique,'String'));
+            soi.largeur_axe1 = soi.coordonnee_axe1_fin - soi.coordonnee_axe1_debut;
+            soi.hauteur_axe2 = soi.coordonnee_axe2_fin - soi.coordonnee_axe1_fin;
          end
          
          function afficher_coordonnees(soi,handles)

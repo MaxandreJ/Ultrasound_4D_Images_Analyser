@@ -97,7 +97,7 @@ afficher_image(hObject, eventdata, handles);
 
 % --- Executes on button press in selectionner_region_interet.
 function selectionner_region_interet_Callback(hObject, eventdata, handles)
-selectionner_region_interet(hObject, eventdata, handles)
+selectionner_manuellement_region_interet(hObject, eventdata, handles)
 
 % --- Executes on button press in afficher_graphique.
 function afficher_graphique_Callback(hObject, eventdata, handles)
@@ -418,7 +418,10 @@ function tracer_rectangle_Callback(hObject, eventdata, handles)
 % hObject    handle to tracer_rectangle (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-tracer_rectangle(hObject, eventdata, handles)
+handles.region_interet = Region_interet_rectangle;
+guidata(handles.figure1,handles);
+selectionner_visuellement_region(hObject, eventdata, handles)
+%tracer_rectangle(hObject, eventdata, handles)
 
 
 % --------------------------------------------------------------------
@@ -610,7 +613,10 @@ function tracer_polygone_Callback(hObject, eventdata, handles)
 % hObject    handle to tracer_polygone (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-tracer_polygone(hObject, eventdata, handles)
+handles.region_interet = Region_interet_polygone;
+guidata(handles.figure1,handles);
+selectionner_visuellement_region(hObject, eventdata, handles)
+%tracer_polygone(hObject, eventdata, handles)
 
 
 

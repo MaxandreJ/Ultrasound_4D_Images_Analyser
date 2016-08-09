@@ -11,9 +11,9 @@ classdef Sous_echantillonnage < handle
     methods
         function sous_echantillonner(soi,handles)
             volumes = handles.volumes;
+            region_interet = handles.region_interet;
             
             nombre_de_pics = str2double(get(handles.valeur_nombre_de_pics,'String'));
-            choix_forme_ROI = volumes.choix_forme_ROI;
             graphique_selon_axe4_choisi = get(handles.abscisses_axe4,'value');
             ordre_axes = volumes.ordre_axes;
             
@@ -23,7 +23,7 @@ classdef Sous_echantillonnage < handle
                     erreur_trop_de_pics.message = 'Le nombre de pics détectés est strictement supérieur à 1.';
                     erreur_trop_de_pics.identifier = 'sous_echantillonnage_Callback:trop_de_pics';
                     error(erreur_trop_de_pics);
-                elseif ~strcmp(choix_forme_ROI,'polygone')
+                elseif ~isa(region_interet,'Region_interet_polygone')
                     erreur_polygone_pas_choisi.message = 'La région d''intérêt n''a pas été choisie avec un polygone.';
                     erreur_polygone_pas_choisi.identifier = 'sous_echantillonnage_Callback:polygone_pas_choisi';
                     error(erreur_polygone_pas_choisi);

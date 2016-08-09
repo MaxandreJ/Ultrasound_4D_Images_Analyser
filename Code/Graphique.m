@@ -66,10 +66,13 @@ classdef Graphique < handle
             taille_axes=volumes.taille_axes_enregistree;
             coordonnee_axe3_selectionnee=volumes.coordonnee_axe3_selectionnee;
             coordonnee_axe4_selectionnee=volumes.coordonnee_axe4_selectionnee;
-            coordonnee_axe1_debut_ROI = region_interet.coordonnee_axe1_debut;
-            coordonnee_axe2_debut_ROI = region_interet.coordonnee_axe2_debut;
-            coordonnee_axe1_fin_ROI = region_interet.coordonnee_axe1_fin;
-            coordonnee_axe2_fin_ROI = region_interet.coordonnee_axe2_fin;
+            
+            if isa(region_interet,'Region_interet_rectangle')
+                coordonnee_axe1_debut_ROI = region_interet.coordonnee_axe1_debut;
+                coordonnee_axe2_debut_ROI = region_interet.coordonnee_axe2_debut;
+                coordonnee_axe1_fin_ROI = region_interet.coordonnee_axe1_fin;
+                coordonnee_axe2_fin_ROI = region_interet.coordonnee_axe2_fin;
+            end
             
             %Moyennage des données selon l'axe ou les axes choisis
             switch soi.axe_moyenne_choisi
