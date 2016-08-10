@@ -1,40 +1,45 @@
 function clavier(~,eventdata,handles)
-global valeur_axe3 valeur_axe4 im mode_out inter
+handles = guidata(handles.figure1);
+
 cla(handles.affichage_graphique,'reset'); %Efface le graphique précédent
-rng=size(im,3);
-rng=[1 rng];
-rng_t=size(im,4);
-rng_t=[1 rng_t];
+
+volumes = handles.volumes;
+im = volumes.donnees;
+taille_axes=volumes.taille_axes;
+
+mode_out = volumes.vue_choisie;
+coordonnee_axe3_selectionnee = volumes.coordonnee_axe3_selectionnee;
+coordonnee_axe4_selectionnee = volumes.coordonnee_axe4_selectionnee;
+
 %On ajoute la possibilité à l'utilisateur de choisir son plan de coupe et
 %naviguer entre les images au moyen des flèches multidirectionnelles
-if valeur_axe3>=min(rng) && valeur_axe3<=max(rng) && valeur_axe4>=min(rng_t) && valeur_axe4<=max(rng_t)
+if coordonnee_axe3_selectionnee>=1 && coordonnee_axe3_selectionnee<=taille_axes(3) && coordonnee_axe4_selectionnee>=1 && coordonnee_axe4_selectionnee<=taille_axes(4)
     switch eventdata.Key
         case  'rightarrow'
-            valeur_axe3=valeur_axe3+1;
-            if valeur_axe3>max(rng)
-                valeur_axe3=max(rng);
+            coordonnee_axe3_selectionnee=coordonnee_axe3_selectionnee+1;
+            if coordonnee_axe3_selectionnee>taille_axes(3)
+                coordonnee_axe3_selectionnee=taille_axes(3);
             end
         case 'leftarrow'
-            valeur_axe3=valeur_axe3-1;
-            if valeur_axe3<min(rng)
-                valeur_axe3=min(rng);
+            coordonnee_axe3_selectionnee=coordonnee_axe3_selectionnee-1;
+            if coordonnee_axe3_selectionnee<1
+                coordonnee_axe3_selectionnee=1;
             end
         case 'downarrow'
-            valeur_axe4=valeur_axe4-1;
-            if valeur_axe4<min(rng_t)
-                valeur_axe4=min(rng_t);
+            coordonnee_axe4_selectionnee=coordonnee_axe4_selectionnee-1;
+            if coordonnee_axe4_selectionnee<1
+                coordonnee_axe4_selectionnee=1;
             end
         case 'uparrow'
-            valeur_axe4=valeur_axe4+1;
-            if valeur_axe4>max(rng_t)
-                valeur_axe4=max(rng_t);
+            coordonnee_axe4_selectionnee=coordonnee_axe4_selectionnee+1;
+            if coordonnee_axe4_selectionnee>taille_axes(4)
+                coordonnee_axe4_selectionnee=taille_axes(4);
             end
         case {'0','numpad0'}
             if mode_out ~= 0;
                 im = ipermutation(im,mode_out);
             end;
             mode_out = 0;
-            inter = 0;
         case {'1','numpad1'}
             mode_in = 1;
             if mode_in ~= mode_out
@@ -42,7 +47,6 @@ if valeur_axe3>=min(rng) && valeur_axe3<=max(rng) && valeur_axe4>=min(rng_t) && 
                 im = permutation(im,mode_in);
             end;
             mode_out = 1;
-            inter = 0;
         case {'2','numpad2'}
             mode_in = 2;
             if mode_in ~= mode_out
@@ -50,7 +54,6 @@ if valeur_axe3>=min(rng) && valeur_axe3<=max(rng) && valeur_axe4>=min(rng_t) && 
                 im = permutation(im,mode_in);
             end;
             mode_out = 2;
-            inter = 0;
         case {'3','numpad3'}
             mode_in = 3;
             if mode_in ~= mode_out
@@ -58,7 +61,6 @@ if valeur_axe3>=min(rng) && valeur_axe3<=max(rng) && valeur_axe4>=min(rng_t) && 
                 im = permutation(im,mode_in);
             end;
             mode_out = 3;
-            inter = 1;
         case {'4','numpad4'}
             mode_in = 4;
             if mode_in ~= mode_out
@@ -66,7 +68,6 @@ if valeur_axe3>=min(rng) && valeur_axe3<=max(rng) && valeur_axe4>=min(rng_t) && 
                 im = permutation(im,mode_in);
             end;
             mode_out = 4;
-            inter = 1;
         case {'5','numpad5'}
             mode_in = 5;
             if mode_in ~= mode_out
@@ -74,36 +75,16 @@ if valeur_axe3>=min(rng) && valeur_axe3<=max(rng) && valeur_axe4>=min(rng_t) && 
                 im = permutation(im,mode_in);
             end;
             mode_out = 5;
-            inter = 1;
     end
 end
 
-if rng(end)~=size(im,3) || rng_t(end)~=size(im,4)
-    rng=size(im,3);
-    rng=[1 rng];
-    rng_t=size(im,4);
-    rng_t=[1 rng_t];
-    if valeur_axe3>max(rng)
-        valeur_axe3=max(rng);
-    end
-    if valeur_axe3<min(rng)
-        valeur_axe3=min(rng);
-    end
-    if valeur_axe4<min(rng_t)
-        valeur_axe4=min(rng_t);
-    end
-    if valeur_axe4>max(rng_t)
-        valeur_axe4=max(rng_t);
-    end
-end;
-%figure(h)
-volumes=handles.volumes;
+volumes.coordonnee_axe3_selectionnee = coordonnee_axe3_selectionnee;
+volumes.coordonnee_axe4_selectionnee = coordonnee_axe4_selectionnee;
 volumes.donnees = im;
+volumes.vue_choisie = mode_out;
 
-imzobr = im(:,:,valeur_axe3,valeur_axe4);
+imzobr = im(:,:,coordonnee_axe3_selectionnee,coordonnee_axe4_selectionnee);
 
-volumes.coordonnee_axe3_selectionnee=valeur_axe3;
-volumes.coordonnee_axe4_selectionnee=valeur_axe4;
 
 
 axes(handles.image);
@@ -114,56 +95,48 @@ uicontextmenu = get(handles.image,'UIContextMenu');
 set(handles.image.Children,'UIContextMenu',uicontextmenu);
 
 
-% if size(imzobr,2)<200 && inter==1
-%     imzobr = imresize(imzobr,[size(imzobr,1),200]);
-% end;
-
-handles.vue_choisie = mode_out;
-
-
-
 switch mode_out
     case 0
         axe1='X';
         axe2='Y';
         axe3='Z';
         axe4='Temps';
-        title({'Coupe frontale', [axe3 '=' num2str(valeur_axe3) '/' num2str(rng(2)) ', ' axe4 '=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
+        title({'Coupe frontale', [axe3 '=' num2str(coordonnee_axe3_selectionnee) '/' num2str(taille_axes(3)) ', ' axe4 '=' num2str(coordonnee_axe4_selectionnee) '/' num2str(taille_axes(4))]});
         ordre_axes = [1,2,3,4]; % frontal
     case 1
         axe1='X';
         axe2='Z';
         axe3='Y';
         axe4='Temps';
-        title({'Coupe transverse',[axe3 '=' num2str(valeur_axe3) '/' num2str(rng(2)) ', ' axe4 '=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
+        title({'Coupe transverse',[axe3 '=' num2str(coordonnee_axe3_selectionnee) '/' num2str(taille_axes(3)) ', ' axe4 '=' num2str(coordonnee_axe4_selectionnee) '/' num2str(taille_axes(4))]});
         ordre_axes = [1,3,2,4]; % transversal
     case 2
         axe1='Y';
         axe2='Z';
         axe3='X';
         axe4='Temps';
-        title({'Coupe sagittale', [axe3 '=' num2str(valeur_axe3) '/' num2str(rng(2)) ', ' axe4 '=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
+        title({'Coupe sagittale', [axe3 '=' num2str(coordonnee_axe3_selectionnee) '/' num2str(taille_axes(3)) ', ' axe4 '=' num2str(coordonnee_axe4_selectionnee) '/' num2str(taille_axes(4))]});
         ordre_axes = [2,3,1,4]; % sagittal
     case 3
         axe1='Temps';
         axe2='X';
         axe3='Z';
         axe4='Y';
-        title({'Coupe de X selon le temps', [axe3 '=' num2str(valeur_axe3) '/' num2str(rng(2)) ', ' axe4 '=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
+        title({'Coupe de X selon le temps', [axe3 '=' num2str(coordonnee_axe3_selectionnee) '/' num2str(taille_axes(3)) ', ' axe4 '=' num2str(coordonnee_axe4_selectionnee) '/' num2str(taille_axes(4))]});
         ordre_axes = [4,1,3,2]; % x-temps
     case 4
         axe1='Temps';
         axe2='Y';
         axe3='Z';
         axe4='X';
-        title({'Coupe de Y selon le temps', [axe3 '=' num2str(valeur_axe3) '/' num2str(rng(2)) ', ' axe4 '=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
+        title({'Coupe de Y selon le temps', [axe3 '=' num2str(coordonnee_axe3_selectionnee) '/' num2str(taille_axes(3)) ', ' axe4 '=' num2str(coordonnee_axe4_selectionnee) '/' num2str(taille_axes(4))]});
         ordre_axes = [4,2,3,1]; % y-temps
     case 5
         axe1='Temps';
         axe2='Z';
         axe3='Y';
         axe4='X';
-        title({'Vue de Z selon le temps', [axe3 '=' num2str(valeur_axe3) '/' num2str(rng(2)) ', ' axe4 '=' num2str(valeur_axe4) '/' num2str(rng_t(2))]});
+        title({'Vue de Z selon le temps', [axe3 '=' num2str(coordonnee_axe3_selectionnee) '/' num2str(taille_axes(3)) ', ' axe4 '=' num2str(coordonnee_axe4_selectionnee) '/' num2str(taille_axes(4))]});
         ordre_axes = [4,3,2,1]; % z-temps
 end;
         if strcmp(axe1,'Temps')
@@ -174,10 +147,9 @@ end;
         ylabel([axe2, ' (en pixels)']);
         
         volumes.ordre_axes=ordre_axes;
-        taille_axes = volumes.taille_axes_enregistree;
         
-        set(handles.valeur_axe3_image,'String',valeur_axe3);
-        set(handles.valeur_axe4_image,'String',valeur_axe4);
+        set(handles.valeur_axe3_image,'String',coordonnee_axe3_selectionnee);
+        set(handles.valeur_axe4_image,'String',coordonnee_axe4_selectionnee);
         set(handles.axe1_graphique,'String',axe1);
         set(handles.axe2_graphique,'String',axe2);
         set(handles.abscisses_axe1,'String',axe1);

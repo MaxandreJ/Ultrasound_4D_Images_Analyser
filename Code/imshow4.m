@@ -1,4 +1,4 @@
-function [] = imshow4(varargin)
+function [] = imshow4(handles)
 % Function for 2D, 3D or 4D image display. Required Matlab version 2012a
 % or newer. Recomended Matlab 2013a or newer.
 % -------------------------------------------------------------------------
@@ -28,30 +28,14 @@ function [] = imshow4(varargin)
 % valeur_axe4 - number of valeur_axe4 sample (default = 1)
 % method - method from imfuse function -
 % 'falsecolor'/'blend'/'diff'/'montage' (default = 'falsecolor')
-global valeur_axe3 valeur_axe4 im mode_out inter colormaps isfused
 
-%im = varargin{1};
 
-valeur_axe3 = 1;
-valeur_axe4 = 1;
-mode_out = 0;
-inter = 0;
-colormaps = colormap('gray');
-isfused = 0;
 
-%Interversion des dimensions 1 et 2 pour passer de la taille de matrice à
-%un repère cartésien
-%taille_axes=[size(im,1),size(im,2),size(im,3),size(im,4)];
+volumes = handles.volumes;
+coordonnee_axe3_selectionnee = volumes.coordonnee_axe3_selectionnee;
+coordonnee_axe4_selectionnee = volumes.coordonnee_axe4_selectionnee;
+taille_axes = volumes.taille_axes;
 
-N = nargin;
-if N==2
-    handles = varargin{2};
-elseif N==3
-    handles = varargin{1};
-    valeur_axe3 = varargin{2};
-    valeur_axe4 = varargin{3};
-end
-taille_axes = handles.volumes.taille_axes;
 im = handles.volumes.donnees;
 
 set(handles.maximum_axe1_1,'String',['/',num2str(taille_axes(1))]);
@@ -62,7 +46,7 @@ set(handles.total_axe3_image,'String',['sur ', num2str(taille_axes(3))]);
 set(handles.total_axe4_image,'String',['sur ', num2str(taille_axes(4))]);
 
 %Ajout ci-dessous
-imzobr = im(:,:,valeur_axe3,valeur_axe4);
+imzobr = im(:,:,coordonnee_axe3_selectionnee,coordonnee_axe4_selectionnee);
 
 
 %Ajout
@@ -78,7 +62,7 @@ set(handles.image.Children,'UIContextMenu',uicontextmenu);
 
 xlabel('X (en pixels)')
 ylabel('Y (en pixels)')
-title({'Coupe frontale', ['Z=' num2str(valeur_axe3) '/' num2str(taille_axes(3)) ', t=' num2str(valeur_axe4) '/' num2str(taille_axes(4))]});
+title({'Coupe frontale', ['Z=' num2str(coordonnee_axe3_selectionnee) '/' num2str(taille_axes(3)) ', Temps=' num2str(coordonnee_axe4_selectionnee) '/' num2str(taille_axes(4))]});
 
 if size(im,3)>1 || size(im,4)>1
     set(handles.figure1,'KeyPressFcn',{@clavier,handles})

@@ -11,6 +11,11 @@ classdef Region_interet_rectangle < Region_interet
         hauteur_axe2
     end
     
+    properties (Dependent)
+        coordonnees_axe1_distinctes
+        coordonnees_axe2_distinctes
+    end
+    
     methods
         function tracer(soi,handles)
                 try
@@ -101,6 +106,14 @@ classdef Region_interet_rectangle < Region_interet
             set(handles.affichage_entropie,'BackgroundColor','white');
             guidata(handles.figure1,handles);
          end
+         
+        function valeur = get.coordonnees_axe1_distinctes(soi)
+            valeur = (soi.coordonnee_axe1_debut~=soi.coordonnee_axe1_fin);
+        end
+
+        function valeur = get.coordonnees_axe2_distinctes(soi)
+            valeur = (soi.coordonnee_axe2_debut~=soi.coordonnee_axe2_fin);
+        end
     end
     
    

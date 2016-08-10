@@ -117,8 +117,8 @@ classdef Graphique < handle
             %Si on a choisi un rectangle, la region d'interêt est une ligne
             %si les coordonnees soit de l'axe1 soit de l'axe2 de départ et d'arrivée  
             %sont les mêmes
-            if strcmp(handles.volumes.choix_forme_ROI,'rectangle');
-                ROI_en_ligne = xor(handles.volumes.coordonnees_axe1_distinctes,handles.volumes.coordonnees_axe2_distinctes);
+            if isa(handles.region_interet,'Region_interet_rectangle')
+                ROI_en_ligne = xor(handles.region_interet.coordonnees_axe1_distinctes,handles.region_interet.coordonnees_axe2_distinctes);
             else
                 ROI_en_ligne = false;
             end

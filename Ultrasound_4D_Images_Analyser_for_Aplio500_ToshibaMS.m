@@ -63,8 +63,8 @@ code = fullfile(pwd,'Code');
 chemin_code = genpath(code);
 addpath(chemin_code);
 
-handles.ss_echantillonnage_effectue = false;
-handles.sauvegarde_sous_echantillonnage = true;
+% handles.ss_echantillonnage_effectue = false;
+% handles.sauvegarde_sous_echantillonnage = true;
 
 % Update handles structure
 guidata(hObject, handles);
@@ -87,6 +87,8 @@ function chargement_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 charger_volumes(hObject, eventdata, handles);
+handles=guidata(handles.figure1);
+guidata(handles.figure1,handles);
 
 % --- Executes on button press in afficher_image.
 function afficher_image_Callback(hObject, eventdata, handles)
