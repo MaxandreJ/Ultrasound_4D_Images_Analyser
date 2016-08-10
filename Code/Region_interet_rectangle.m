@@ -42,8 +42,8 @@ classdef Region_interet_rectangle < Region_interet
                     soi.coordonnee_axe2_fin=int16(round(valeur_axe2Fin_graphique));
                     
                     delete(objet_rectangle);
-                    set(handles.figure1,'KeyPressFcn',{@clavier,handles})
-
+                    %set(handles.figure1,'KeyPressFcn',{@clavier,handles})
+                    set(handles.figure1,'KeyPressFcn',{@volumes.mettre_a_jour_image,handles})
                     %guidata(handles.figure1,handles);
                 catch erreurs
                     if (strcmp(erreurs.identifier,'Rectangle_Callback:ROI_pas_choisi'))

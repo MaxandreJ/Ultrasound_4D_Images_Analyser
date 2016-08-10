@@ -43,36 +43,36 @@ if coordonnee_axe3_selectionnee>=1 && coordonnee_axe3_selectionnee<=taille_axes(
         case {'1','numpad1'}
             mode_in = 1;
             if mode_in ~= mode_out
-                im = ipermutation(im,mode_out);
-                im = permutation(im,mode_in);
+                im = permutation(im,mode_out);
+                im = ipermutation(im,mode_in);
             end;
             mode_out = 1;
         case {'2','numpad2'}
             mode_in = 2;
             if mode_in ~= mode_out
-                im = ipermutation(im,mode_out);
-                im = permutation(im,mode_in);
+                im = permutation(im,mode_out);
+                im = ipermutation(im,mode_in);
             end;
             mode_out = 2;
         case {'3','numpad3'}
             mode_in = 3;
             if mode_in ~= mode_out
-                im = ipermutation(im,mode_out);
-                im = permutation(im,mode_in);
+                im = permutation(im,mode_out);
+                im = ipermutation(im,mode_in);
             end;
             mode_out = 3;
         case {'4','numpad4'}
             mode_in = 4;
             if mode_in ~= mode_out
-                im = ipermutation(im,mode_out);
-                im = permutation(im,mode_in);
+                im = permutation(im,mode_out);
+                im = ipermutation(im,mode_in);
             end;
             mode_out = 4;
         case {'5','numpad5'}
             mode_in = 5;
             if mode_in ~= mode_out
-                im = ipermutation(im,mode_out);
-                im = permutation(im,mode_in);
+                im = permutation(im,mode_out);
+                im = ipermutation(im,mode_in);
             end;
             mode_out = 5;
     end
