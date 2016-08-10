@@ -129,7 +129,7 @@ function choix_du_pic_Callback(hObject, eventdata, handles)
 % Hints: contents = cellstr(get(hObject,'String')) returns choix_du_pic contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from choix_du_pic
 pic_choisi = get(handles.choix_du_pic,'Value');
-set(handles.lmh_affichage,'String',handles.graphique.largeurs_a_mi_hauteur(pic_choisi));
+set(handles.lmh_affichage,'String',handles.graphique.pics.largeurs_a_mi_hauteur(pic_choisi));
 guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
@@ -155,9 +155,9 @@ function choix_de_deux_pics_Callback(hObject, eventdata, handles)
 %        contents{get(hObject,'Value')} returns selected item from choix_de_deux_pics
 
 numero_combinaison_de_deux_pics_choisie = get(handles.choix_de_deux_pics,'Value');
-combinaison_pics_choisis = handles.combinaisons_indices_de_deux_pics(numero_combinaison_de_deux_pics_choisie,:);
-x_plus_grand_des_deux_pics = handles.graphique.abscisses_intensites_maximales(combinaison_pics_choisis(2));
-x_plus_petit_des_deux_pics = handles.graphique.abscisses_intensites_maximales(combinaison_pics_choisis(1));
+combinaison_pics_choisis = handles.graphique.pics.combinaisons_indices_de_deux_pics(numero_combinaison_de_deux_pics_choisie,:);
+x_plus_grand_des_deux_pics = handles.graphique.pics.abscisses(combinaison_pics_choisis(2));
+x_plus_petit_des_deux_pics = handles.graphique.pics.abscisses(combinaison_pics_choisis(1));
 set(handles.dpap_affichage,'String',num2str(abs(x_plus_grand_des_deux_pics-x_plus_petit_des_deux_pics)));
 guidata(hObject, handles);
 

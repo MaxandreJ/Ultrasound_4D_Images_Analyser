@@ -4,6 +4,8 @@ function calculer_heterogeneite(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+%Fait partie de la classe region d'interet
+
 %Pour utilisation de l'entropie l'image doit avoir 256 niveaux
 image_ROI=handles.region_interet.donnees_2D;
 image_ROI=image_ROI(~isnan(image_ROI));

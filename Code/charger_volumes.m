@@ -26,21 +26,23 @@ volumes.afficher_image(handles);
 handles=guidata(handles.figure1);
 handles.volumes = volumes;
 
+
+%transformer en "mettre à jour IHM"
 set(handles.choix_du_pic,'String',' ');
 set(handles.lmh_affichage,'String',[]);
 set(handles.lmh_affichage,'String',[]);
 set(handles.choix_de_deux_pics,'String',' ');
 set(handles.dpap_affichage,'String',[]);
-set(handles.valeur_axe1Debut_graphique,'String',[]);
-set(handles.valeur_axe2Debut_graphique,'String',[]);
-set(handles.valeur_axe1Fin_graphique,'String',[]);
-set(handles.valeur_axe2Fin_graphique,'String',[]);
+set(handles.valeur_axe1Debut_graphique,'String',[],'enable','on','BackgroundColor','white');
+set(handles.valeur_axe2Debut_graphique,'String',[],'enable','on','BackgroundColor','white');
+set(handles.valeur_axe1Fin_graphique,'String',[],'enable','on','BackgroundColor','white');
+set(handles.valeur_axe2Fin_graphique,'String',[],'enable','on','BackgroundColor','white');
 
 set(handles.valeur_axe3_image,'enable','on','BackgroundColor','white','String','1');
 set(handles.valeur_axe4_image,'enable','on','BackgroundColor','white','String','1');
 
-
+uicontextmenu = get(handles.image,'UIContextMenu'); %le menu contextuel est créé sur l'axe grâce à GUIDE...
+set(handles.image.Children,'UIContextMenu',uicontextmenu); %mais doit être récupéré puis reparamétré pour fonctionner sur l'image qui s'affiche sur l'axe.
 
 guidata(handles.figure1, handles);
-%afficher_image(hObject, eventdata, handles);
 

@@ -55,6 +55,29 @@ classdef Graphique < handle
          end
         end
         
+        function creer_pics(soi)
+            soi.pics = Pics(soi); %The child is now informed of his parent
+        end
+        
+        function afficher(soi,handles)
+            handles=guidata(handles.figure1);
+            
+            soi.charger_donnees(handles);
+
+            soi.afficher_courbe(handles);
+
+            soi.afficher_titre(handles);
+
+            soi.afficher_legende_abscisses(handles);
+
+            soi.afficher_legende_ordonnees(handles);
+            
+            soi.mettre_a_jour_IHM(handles);
+            handles=guidata(handles.figure1);
+            
+            guidata(handles.figure1,handles);
+        end
+        
         function charger_donnees(soi,handles)
             %Chargement des valeurs d'ordonnées et d'abscisses du graphique
             
@@ -215,7 +238,16 @@ classdef Graphique < handle
             legend([points_ech_normal,points_ssech_normal]);
             hold off
         end
-    end
     
+        function mettre_a_jour_IHM(~,handles)
+            set(handles.choix_du_pic,'enable','on','BackgroundColor','white');
+            set(handles.choix_de_deux_pics,'enable','on','BackgroundColor','white');
+            set(handles.lmh_affichage,'BackgroundColor','white');
+            set(handles.dpap_affichage,'BackgroundColor','white');
+            set(handles.valeur_taille_fenetre_lissage,'enable','on','BackgroundColor','white');
+            set(handles.valeur_nombre_de_pics,'enable','on','BackgroundColor','white');
+            guidata(handles.figure1,handles);
+        end
+    end
 end
 

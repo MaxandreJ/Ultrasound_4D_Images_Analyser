@@ -6,18 +6,24 @@ function afficher_image(hObject, eventdata, handles)
 % hObject    handle to afficherImage (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+handles = guidata(handles.figure1);
+volumes = handles.volumes;
 
 %Récupère les coordonnées de l'axe 3 et l'axe 4 choisis par l'utilisateur
 %et les convertit en entier signés codés sur 16 bits
 coordonnee_axe3 = int16(str2double(get(handles.valeur_axe3_image,'String')));
 coordonnee_axe4 = int16(str2double(get(handles.valeur_axe4_image,'String')));
 
-handles.volumes.coordonnee_axe3_selectionnee=coordonnee_axe3;
-handles.volumes.coordonnee_axe4_selectionnee=coordonnee_axe4;
+volumes.coordonnee_axe3_selectionnee=coordonnee_axe3;
+volumes.coordonnee_axe4_selectionnee=coordonnee_axe4;
+
+handles.volumes = volumes;
 
 %On affiche l'image dans handles.image
-axes(handles.image); %choix de l'endroit où on affiche l'image
-imshow4(handles); %Appel de la fonction d'affichage d'image 4D
+%axes(handles.image); %choix de l'endroit où on affiche l'image
+
+volumes.afficher_image(handles)
+%imshow4(handles); %Appel de la fonction d'affichage d'image 4D
 handles = guidata(handles.figure1);
 %On ajoute la possibilité de faire un clic droit sur l'image pour afficher
 %un menu contextuel qui permet de sélectionner une région d'intérêt

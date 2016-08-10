@@ -56,12 +56,13 @@ classdef (Abstract) Volumes < handle
             uicontextmenu = get(handles.image,'UIContextMenu');
             set(handles.image.Children,'UIContextMenu',uicontextmenu);
 
-
-            xlabel('X (en pixels)')
-            ylabel('Y (en pixels)')
-            title({'Coupe frontale', ['Z=' num2str(soi.coordonnee_axe3_selectionnee) ...
-                '/' num2str(soi.taille_axes(3)) ', Temps=' num2str(soi.coordonnee_axe4_selectionnee) ...
-                '/' num2str(soi.taille_axes(4))]});
+            if soi.vue_choisie == 0
+                xlabel('X (en pixels)')
+                ylabel('Y (en pixels)')
+                title({'Coupe frontale', ['Z=' num2str(soi.coordonnee_axe3_selectionnee) ...
+                    '/' num2str(soi.taille_axes(3)) ', Temps=' num2str(soi.coordonnee_axe4_selectionnee) ...
+                    '/' num2str(soi.taille_axes(4))]});
+            end
 
             if soi.taille_axes(3)>1 || soi.taille_axes(4)>1
                 set(handles.figure1,'KeyPressFcn',{@clavier,handles})
