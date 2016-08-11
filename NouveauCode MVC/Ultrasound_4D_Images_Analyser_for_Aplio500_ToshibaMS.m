@@ -59,9 +59,19 @@ function Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS_OpeningFcn(hObject
 %Choose default command line output for Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS
 handles.output = hObject;
 
-code = fullfile(pwd,'Code');
-chemin_code = genpath(code);
-addpath(chemin_code);
+% get handle to the controller
+for i = 1:2:length(varargin)
+    switch varargin{i}
+        case 'controleur'
+            handles.controleur = varargin{i+1};
+        otherwise
+            error('unknown input')
+    end
+end
+
+% code = fullfile(pwd,'Code');
+% chemin_code = genpath(code);
+% addpath(chemin_code);
 
 % handles.ss_echantillonnage_effectue = false;
 % handles.sauvegarde_sous_echantillonnage = true;
@@ -86,16 +96,37 @@ function chargement_Callback(hObject, eventdata, handles)
 % hObject    handle to chargement (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-charger_volumes(hObject, eventdata, handles);
-handles=guidata(handles.figure1);
-guidata(handles.figure1,handles);
+choix_chargement = get(handles.choix_chargement,'Value');
+
+format_bin = 1;
+format_mat = 2;
+
+if choix_chargement==format_bin
+    handles.controleur.charger_volumes_RawData_bin;
+elseif choix_chargement==format_mat
+    handles.controleur.charger_volumes_mat;
+end
+
+
+
+
+% charger_volumes(hObject, eventdata, handles);
+% handles=guidata(handles.figure1);
+% guidata(handles.figure1,handles);
+
+function figure1_KeyPressFcn(hObject, eventdata, handles)
+handles.controleur.mettre_a_jour_image_clavier(eventdata);
 
 % --- Executes on button press in afficher_image.
 function afficher_image_Callback(hObject, eventdata, handles)
 %Affiche l'image dans handles.image 
 %correspondant à la coordonnée dans l'axe 3 et l'axe 4
-%choisie dans les champs correspondants
-afficher_image(hObject, eventdata, handles);
+%choisie dans les champs correspondants.
+coordonnee_axe3_selectionnee = int16(str2double(get(handles.valeur_axe3_image,'String')));
+coordonnee_axe4_selectionnee = int16(str2double(get(handles.valeur_axe4_image,'String')));
+
+handles.controleur.mettre_a_jour_image_bouton(coordonnee_axe3_selectionnee,coordonnee_axe4_selectionnee);
+%afficher_image(hObject, eventdata, handles);
 
 % --- Executes on button press in selectionner_region_interet.
 function selectionner_region_interet_Callback(hObject, eventdata, handles)
