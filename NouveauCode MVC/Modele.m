@@ -2,10 +2,17 @@ classdef Modele < handle
     properties (SetObservable)
         image
         chemin_donnees
+        donnees_region_interet
+        entropie_region_interet
+        abscisses_graphique
+        ordonnees_graphique
+        largeurs_a_mi_hauteur_pics
     end
     
     properties
         volumes
+        region_interet
+        graphique
     end
         
     methods
@@ -19,6 +26,18 @@ classdef Modele < handle
         
         function creer_volumes_RawData_bin(soi)
             soi.volumes = Volumes_RawData_bin(soi); %The child is now informed of his parent
+        end
+        
+        function creer_region_interet_rectangle(soi)
+            soi.region_interet = Region_interet_rectangle(soi); %The child is now informed of his parent
+        end
+        
+        function creer_region_interet_polygone(soi)
+            soi.region_interet = Region_interet_polygone(soi); %The child is now informed of his parent
+        end
+        
+        function creer_graphique(soi,axe_abscisses_choisi,axe_moyenne_choisi)
+            soi.graphique = Graphique(soi,axe_abscisses_choisi,axe_moyenne_choisi);
         end
         
 %         function definir_volumes_donnees(soi,donnees)

@@ -130,19 +130,51 @@ handles.controleur.mettre_a_jour_image_bouton(coordonnee_axe3_selectionnee,coord
 
 % --- Executes on button press in selectionner_region_interet.
 function selectionner_region_interet_Callback(hObject, eventdata, handles)
-selectionner_manuellement_region_interet(hObject, eventdata, handles)
+coordonnee_axe1_debut = str2double(get(handles.valeur_axe1Debut_graphique,'String'));
+coordonnee_axe2_debut = str2double(get(handles.valeur_axe2Debut_graphique,'String'));
+coordonnee_axe1_fin = str2double(get(handles.valeur_axe1Fin_graphique,'String'));
+coordonnee_axe2_fin = str2double(get(handles.valeur_axe2Fin_graphique,'String'));
+
+handles.controleur.selectionner_manuellement_region_interet(coordonnee_axe1_debut,...
+    coordonnee_axe1_fin,coordonnee_axe2_debut,coordonnee_axe2_fin);
 
 % --- Executes on button press in afficher_graphique.
 function afficher_graphique_Callback(hObject, eventdata, handles)
-afficher_graphique(hObject, eventdata, handles)
+%%Pour le choix de l'axe des abscisses
+if handles.abscisses_axe1.Value
+    axe_abscisses_choisi=1;
+elseif handles.abscisses_axe2.Value
+    axe_abscisses_choisi=2;
+elseif handles.abscisses_axe3.Value
+    axe_abscisses_choisi=3;
+elseif handles.abscisses_axe4.Value
+    axe_abscisses_choisi=4;
+end
+
+%%Pour le choix de l'axe ou des axes de moyennage
+if handles.moyenne_axe1.Value
+    axe_moyenne_choisi='1';
+elseif handles.moyenne_axe2.Value
+    axe_moyenne_choisi='2';
+elseif handles.moyenne_axe1et2.Value
+    axe_moyenne_choisi='1 et 2';
+elseif handles.pas_de_moyenne.Value
+    axe_moyenne_choisi='pas de moyenne';
+end
+handles.controleur.definir_graphique(axe_abscisses_choisi,axe_moyenne_choisi);
+% afficher_graphique(hObject, eventdata, handles)
 
 % --- Executes on button press in calculer_heterogeneite.
 function calculer_heterogeneite_Callback(hObject, eventdata, handles)
-calculer_heterogeneite(hObject, eventdata, handles)
+handles.controleur.calculer_entropie;
 
 % --- Executes on button press in detecter_pics.
 function detecter_pics_Callback(hObject, eventdata, handles)
-detecter_pics(hObject, eventdata, handles)
+taille_fenetre_lissage = str2double(get(handles.valeur_taille_fenetre_lissage,'String'));
+nombre_de_pics = str2double(get(handles.valeur_nombre_de_pics,'String'));
+
+handles.controleur.detecter_pics(taille_fenetre_lissage,nombre_de_pics);
+% detecter_pics(hObject, eventdata, handles)
 
 % --- Executes on button press in previsualiser_sous_echantillonnage.
 function previsualiser_sous_echantillonnage_Callback(hObject, eventdata, handles)
@@ -451,9 +483,10 @@ function tracer_rectangle_Callback(hObject, eventdata, handles)
 % hObject    handle to tracer_rectangle (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.region_interet = Region_interet_rectangle;
-guidata(handles.figure1,handles);
-selectionner_visuellement_region(hObject, eventdata, handles)
+handles.controleur.selectionner_visuellement_region_interet_rectangulaire;
+% handles.region_interet = Region_interet_rectangle;
+% guidata(handles.figure1,handles);
+% selectionner_visuellement_region(hObject, eventdata, handles)
 %tracer_rectangle(hObject, eventdata, handles)
 
 
@@ -646,9 +679,7 @@ function tracer_polygone_Callback(hObject, eventdata, handles)
 % hObject    handle to tracer_polygone (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.region_interet = Region_interet_polygone;
-guidata(handles.figure1,handles);
-selectionner_visuellement_region(hObject, eventdata, handles)
+handles.controleur.selectionner_visuellement_region_interet_polygonale;
 %tracer_polygone(hObject, eventdata, handles)
 
 
