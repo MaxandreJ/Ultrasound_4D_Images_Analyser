@@ -63,6 +63,33 @@ classdef Controleur < handle
             soi.modele.graphique.pics.detecter(taille_fenetre_lissage,nombre_de_pics);
         end
         
+        function mettre_a_jour_largeur_a_mi_hauteur_pic_choisi(soi,pic_choisi)
+            soi.modele.graphique.pics.mettre_a_jour_largeur_a_mi_hauteur_pic_choisi(pic_choisi);
+        end
+        
+        function mettre_a_jour_distance_pic_a_pic_choisie(soi,numero_combinaison_de_deux_pics_choisie)
+            soi.modele.graphique.pics.mettre_a_jour_distance_pic_a_pic_choisie(numero_combinaison_de_deux_pics_choisie);
+        end
+        
+        function definir_et_sauvegarder_sous_echantillonnage(soi,facteur_temps_I_max,facteur_sous_echantillonnage)
+            soi.modele.creer_sous_echantillonnage;
+            soi.modele.sous_echantillonnage.definir(facteur_temps_I_max,facteur_sous_echantillonnage);
+            soi.modele.sous_echantillonnage.sauvegarder;
+        end
+        
+        function previsualiser_sous_echantillonnage(soi,facteur_temps_I_max,facteur_sous_echantillonnage)
+            soi.modele.creer_sous_echantillonnage;
+            soi.modele.sous_echantillonnage.definir(facteur_temps_I_max,facteur_sous_echantillonnage);
+        end
+        
+        function exporter_graphique(soi)
+            soi.modele.graphique.exporter;
+        end
+        
+        function exporter_image(soi)
+            soi.modele.exporter_image;
+        end
+        
 %         function setDensity(obj,density)
 %             obj.model.setDensity(density)
 %         end

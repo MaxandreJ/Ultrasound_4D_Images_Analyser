@@ -178,11 +178,16 @@ handles.controleur.detecter_pics(taille_fenetre_lissage,nombre_de_pics);
 
 % --- Executes on button press in previsualiser_sous_echantillonnage.
 function previsualiser_sous_echantillonnage_Callback(hObject, eventdata, handles)
-previsualiser_sous_echantillonnage(hObject, eventdata, handles)
+facteur_temps_I_max=str2double(get(handles.facteur_temps_I_max,'string'));
+facteur_sous_echantillonnage=str2double(get(handles.facteur_sous_echantillonnage,'string'));
+handles.controleur.previsualiser_sous_echantillonnage(facteur_temps_I_max,facteur_sous_echantillonnage);
 
 % --- Executes on button press in sous_echantillonner_volumes.
 function sous_echantillonner_volumes_Callback(hObject, eventdata, handles)
-sous_echantillonner_volumes(hObject, eventdata, handles)
+facteur_temps_I_max=str2double(get(handles.facteur_temps_I_max,'string'));
+facteur_sous_echantillonnage=str2double(get(handles.facteur_sous_echantillonnage,'string'));
+handles.controleur.definir_et_sauvegarder_sous_echantillonnage(facteur_temps_I_max,facteur_sous_echantillonnage);
+% sous_echantillonner_volumes(hObject, eventdata, handles)
 
 % --- Executes on selection change in choix_du_pic.
 function choix_du_pic_Callback(hObject, eventdata, handles)
@@ -192,8 +197,9 @@ function choix_du_pic_Callback(hObject, eventdata, handles)
 % Hints: contents = cellstr(get(hObject,'String')) returns choix_du_pic contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from choix_du_pic
 pic_choisi = get(handles.choix_du_pic,'Value');
-set(handles.lmh_affichage,'String',handles.graphique.pics.largeurs_a_mi_hauteur(pic_choisi));
-guidata(hObject, handles);
+handles.controleur.mettre_a_jour_largeur_a_mi_hauteur_pic_choisi(pic_choisi);
+% set(handles.lmh_affichage,'String',handles.graphique.pics.largeurs_a_mi_hauteur(pic_choisi));
+% guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
 function choix_du_pic_CreateFcn(hObject, eventdata, handles)
@@ -218,11 +224,14 @@ function choix_de_deux_pics_Callback(hObject, eventdata, handles)
 %        contents{get(hObject,'Value')} returns selected item from choix_de_deux_pics
 
 numero_combinaison_de_deux_pics_choisie = get(handles.choix_de_deux_pics,'Value');
-combinaison_pics_choisis = handles.graphique.pics.combinaisons_indices_de_deux_pics(numero_combinaison_de_deux_pics_choisie,:);
-x_plus_grand_des_deux_pics = handles.graphique.pics.abscisses(combinaison_pics_choisis(2));
-x_plus_petit_des_deux_pics = handles.graphique.pics.abscisses(combinaison_pics_choisis(1));
-set(handles.dpap_affichage,'String',num2str(abs(x_plus_grand_des_deux_pics-x_plus_petit_des_deux_pics)));
-guidata(hObject, handles);
+
+handles.controleur.mettre_a_jour_distance_pic_a_pic_choisie(numero_combinaison_de_deux_pics_choisie);
+
+% combinaison_pics_choisis = handles.graphique.pics.combinaisons_indices_de_deux_pics(numero_combinaison_de_deux_pics_choisie,:);
+% x_plus_grand_des_deux_pics = handles.graphique.pics.abscisses(combinaison_pics_choisis(2));
+% x_plus_petit_des_deux_pics = handles.graphique.pics.abscisses(combinaison_pics_choisis(1));
+% set(handles.dpap_affichage,'String',num2str(abs(x_plus_grand_des_deux_pics-x_plus_petit_des_deux_pics)));
+% guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
 function affichage_graphique_CreateFcn(hObject, eventdata, handles)
@@ -661,11 +670,12 @@ function sauvegarde_graphique_Callback(hObject, eventdata, handles)
 % hObject    handle to sauvegarde_graphique (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-[nom_du_fichier,chemin] = uiputfile({'*.png';'*.jpeg';'*.bmp';'*.tiff';'*.pdf';'*.eps'});
-dossier_principal=pwd;
-cd(chemin);
-export_fig(handles.affichage_graphique, nom_du_fichier);
-cd(dossier_principal)
+handles.controleur.exporter_graphique;
+% [nom_du_fichier,chemin] = uiputfile({'*.png';'*.jpeg';'*.bmp';'*.tiff';'*.pdf';'*.eps'});
+% %dossier_principal=pwd;
+% chemin_fichier_a_enregistrer = fullfile(chemin,nom_du_fichier);
+% export_fig(handles.affichage_graphique, chemin_fichier_a_enregistrer);
+%cd(dossier_principal)
 
 % --------------------------------------------------------------------
 function ContexteGraphique_Callback(hObject, eventdata, handles)
@@ -845,11 +855,14 @@ function sauvegarde_image_Callback(hObject, eventdata, handles)
 % hObject    handle to sauvegarde_image (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-[nom_du_fichier,chemin] = uiputfile({'*.png';'*.jpeg';'*.bmp';'*.tiff';'*.pdf';'*.eps'});
-dossier_principal=pwd;
-cd(chemin);
-export_fig(handles.image, nom_du_fichier);
-cd(dossier_principal)
+handles.controleur.exporter_image;
+% [nom_du_fichier,chemin] = uiputfile({'*.png';'*.jpeg';'*.bmp';'*.tiff';'*.pdf';'*.eps'});
+% %dossier_principal=pwd;
+% chemin_fichier_a_enregistrer = fullfile(chemin,nom_du_fichier);
+% export_fig(handles.image, chemin_fichier_a_enregistrer);
+%cd(chemin);
+%export_fig(handles.image, nom_du_fichier);
+%cd(dossier_principal)
 
 
 % --- Executes on button press in points_de_donnees.

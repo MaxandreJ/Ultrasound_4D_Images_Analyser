@@ -10,7 +10,7 @@ classdef Vue < handle
             soi.controleur = controleur;
             soi.modele = controleur.modele;
             soi.ihm = Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS('controleur',soi.controleur);
-            
+           
             
             addlistener(soi.modele,'image','PostSet', ...
                 @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
@@ -22,10 +22,17 @@ classdef Vue < handle
                 @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
             addlistener(soi.modele,'ordonnees_graphique','PostSet', ...
                 @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
-            addlistener(soi.modele,'largeurs_a_mi_hauteur_pics','PostSet', ...
+            addlistener(soi.modele,'largeur_a_mi_hauteur_pic_choisi','PostSet', ...
                 @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
-%             addlistener(obj.modele,'mass','PostSet', ...
-%                 @(src,evnt)view.handlePropEvents(obj,src,evnt));
+            addlistener(soi.modele,'distance_pic_a_pic_choisie','PostSet', ...
+                @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
+            addlistener(soi.modele,'vecteur_t_sous_echantillonnage','PostSet', ...
+                @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
+            addlistener(soi.modele,'chemin_enregistrement_export_graphique','PostSet', ...
+                @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
+            addlistener(soi.modele,'chemin_enregistrement_export_image','PostSet', ...
+                @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
+            
         end
     end
     
@@ -211,18 +218,7 @@ classdef Vue < handle
                     hold off
                     
                     %%Afficher le titre
-                    
-%                     %On détermine si une seule courbe est affichée ou non
-%                     if isa(evntobj.region_interet,'Region_interet_rectangle')
-%                         ROI_en_ligne = xor(evntobj.region_interet.coordonnees_axe1_distinctes,evntobj.region_interet.coordonnees_axe2_distinctes);
-%                     else
-%                         ROI_en_ligne = false;
-%                     end
-%                     
-%                     %On a une seule courbe si la region d'interêt est une ligne ou
-%                     %si on a moyenné les valeurs dans les région d'intérêt
-%                     une_seule_courbe = ROI_en_ligne || ~strcmp(evntobj.graphique.axe_moyenne_choisi,'pas de moyenne');
-                    
+                   
                     %Selon le nombre de courbes, on affiche le titre
                     if evntobj.graphique.une_seule_courbe
                         titre='Courbe d''intensité';
@@ -276,36 +272,32 @@ classdef Vue < handle
                     set(handles.dpap_affichage,'BackgroundColor','white');
                     set(handles.valeur_taille_fenetre_lissage,'enable','on','BackgroundColor','white');
                     set(handles.valeur_nombre_de_pics,'enable','on','BackgroundColor','white');
-                case 'largeurs_a_mi_hauteur_pics'
-                    crochet_ouvrant = repmat('[', evntobj.graphique.pics.nombre , 1);
-                    virgule = repmat(', ',evntobj.graphique.pics.nombre,1);
-                    crochet_fermant = repmat(']',evntobj.graphique.pics.nombre,1);
-                    liste_de_pics = [crochet_ouvrant num2str(evntobj.graphique.pics.abscisses) virgule ...
-                        num2str(evntobj.graphique.pics.ordonnees) crochet_fermant];
-                    set(handles.choix_du_pic,'String',liste_de_pics);
-                    pic_choisi = get(handles.choix_du_pic,'Value');
-                    set(handles.lmh_affichage,'String', evntobj.largeurs_a_mi_hauteur_pics(pic_choisi));
+                case 'largeur_a_mi_hauteur_pic_choisi'
+                    set(handles.choix_du_pic,'String',evntobj.graphique.pics.liste);
+                    set(handles.lmh_affichage,'String', evntobj.largeur_a_mi_hauteur_pic_choisi);
+                    
+                    %% Montrer que l'on peut sous-échantillonner les données
+                    set(handles.facteur_temps_I_max,'Enable','on','BackgroundColor','white');
+                    set(handles.facteur_sous_echantillonnage,'Enable','on','BackgroundColor','white');
+                case 'distance_pic_a_pic_choisie'
+                    set(handles.choix_de_deux_pics,'String',evntobj.graphique.pics.liste_combinaisons_de_deux_pics);
+                    set(handles.dpap_affichage,'String',evntobj.distance_pic_a_pic_choisie);
+                case 'vecteur_t_sous_echantillonnage'
+                    cla(handles.affichage_graphique);
+                    axes(handles.affichage_graphique);
+                    hold on
+                    plot(evntobj.graphique.abscisses,evntobj.graphique.ordonnees,'displayname','Courbe originale','HitTest', 'off');
+                    vecteur_t_ech_normal = evntobj.vecteur_t_echantillonnage_normal;
+                    vecteur_t_ssech = evntobj.vecteur_t_sous_echantillonnage;
+                    points_ech_normal = plot(vecteur_t_ech_normal,evntobj.graphique.ordonnees(vecteur_t_ech_normal),'black+','displayname','Echantillonnage normal','HitTest', 'off');
+                    points_ssech_normal = plot(vecteur_t_ssech,evntobj.graphique.ordonnees(vecteur_t_ssech),'red+','displayname','Sous-échantillonnage','HitTest', 'off');
+                    legend([points_ech_normal,points_ssech_normal]);
+                    hold off
+                case 'chemin_enregistrement_export_graphique'
+                    export_fig(handles.affichage_graphique, evntobj.chemin_enregistrement_export_graphique);
+                case 'chemin_enregistrement_export_image'
+                    export_fig(handles.image, evntobj.chemin_enregistrement_export_image);
             end
-%                 case 'density'
-%                     set(handles.density, 'String', evntobj.density);
-%                 case 'volume'
-%                     set(handles.volume, 'String', evntobj.volume);
-%                 case 'units'
-%                     switch evntobj.units
-%                         case 'english'
-%                             set(handles.text4, 'String', 'lb/cu.in');
-%                             set(handles.text5, 'String', 'cu.in');
-%                             set(handles.text6, 'String', 'lb');
-%                         case 'si'
-%                             set(handles.text4, 'String', 'kg/cu.m');
-%                             set(handles.text5, 'String', 'cu.m');
-%                             set(handles.text6, 'String', 'kg');
-%                         otherwise
-%                             error('unknown units')
-%                     end
-%                 case 'mass'
-%                     set(handles.mass,'String',evntobj.mass);
-%             end
         guidata(handles.figure1,handles);
         end
         

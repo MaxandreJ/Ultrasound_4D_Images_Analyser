@@ -6,13 +6,19 @@ classdef Modele < handle
         entropie_region_interet
         abscisses_graphique
         ordonnees_graphique
-        largeurs_a_mi_hauteur_pics
+        largeur_a_mi_hauteur_pic_choisi
+        distance_pic_a_pic_choisie
+        vecteur_t_echantillonnage_normal
+        vecteur_t_sous_echantillonnage
+        chemin_enregistrement_export_graphique
+        chemin_enregistrement_export_image
     end
     
     properties
         volumes
         region_interet
         graphique
+        sous_echantillonnage
     end
         
     methods
@@ -38,6 +44,15 @@ classdef Modele < handle
         
         function creer_graphique(soi,axe_abscisses_choisi,axe_moyenne_choisi)
             soi.graphique = Graphique(soi,axe_abscisses_choisi,axe_moyenne_choisi);
+        end
+        
+        function creer_sous_echantillonnage(soi)
+            soi.sous_echantillonnage = Sous_echantillonnage(soi);
+        end
+        
+        function exporter_image(soi)
+            [nom_du_fichier,chemin] = uiputfile({'*.png';'*.jpeg';'*.bmp';'*.tiff';'*.pdf';'*.eps'});
+            soi.chemin_enregistrement_export_image = fullfile(chemin,nom_du_fichier);
         end
         
 %         function definir_volumes_donnees(soi,donnees)
