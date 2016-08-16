@@ -300,8 +300,8 @@ function valeur_axe1Fin_graphique_Callback(hObject, eventdata, handles)
 % hObject    handle to valeur_axe1Fin_graphique (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-set(hObject,'Value',int16(str2double(get(hObject,'String'))));
-guidata(hObject,handles);
+set(hObject,'Value',int16(str2double(get(hObject,'String')))); %A supprimer ?
+guidata(hObject,handles); %A supprimer ?
 
 % Hints: get(hObject,'String') returns contents of valeur_axe1Fin_graphique as text
 %        str2double(get(hObject,'String')) returns contents of valeur_axe1Fin_graphique as a double
@@ -326,8 +326,8 @@ function valeur_axe2Fin_graphique_Callback(hObject, eventdata, handles)
 % hObject    handle to valeur_axe2Fin_graphique (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-set(hObject,'Value',int16(str2double(get(hObject,'String'))));
-guidata(hObject,handles);
+set(hObject,'Value',int16(str2double(get(hObject,'String')))); %A supprimer ?
+guidata(hObject,handles); %A supprimer ?
 
 % Hints: get(hObject,'String') returns contents of valeur_axe2Fin_graphique as text
 %        str2double(get(hObject,'String')) returns contents of valeur_axe2Fin_graphique as a double
@@ -860,13 +860,6 @@ function sauvegarde_image_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 handles.controleur.exporter_image;
-% [nom_du_fichier,chemin] = uiputfile({'*.png';'*.jpeg';'*.bmp';'*.tiff';'*.pdf';'*.eps'});
-% %dossier_principal=pwd;
-% chemin_fichier_a_enregistrer = fullfile(chemin,nom_du_fichier);
-% export_fig(handles.image, chemin_fichier_a_enregistrer);
-%cd(chemin);
-%export_fig(handles.image, nom_du_fichier);
-%cd(dossier_principal)
 
 
 % --- Executes on button press in points_de_donnees.
