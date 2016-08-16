@@ -98,10 +98,13 @@ function chargement_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 choix_chargement = get(handles.choix_chargement,'Value');
 
-format_bin = 1;
-format_mat = 2;
+format_VoxelData_bin = 1;
+format_RawData_bin = 2;
+format_mat = 3;
 
-if choix_chargement==format_bin
+if choix_chargement==format_VoxelData_bin
+    handles.controleur.charger_volumes_VoxelData_bin;
+elseif choix_chargement==format_RawData_bin
     handles.controleur.charger_volumes_RawData_bin;
 elseif choix_chargement==format_mat
     handles.controleur.charger_volumes_mat;
@@ -297,8 +300,8 @@ function valeur_axe1Fin_graphique_Callback(hObject, eventdata, handles)
 % hObject    handle to valeur_axe1Fin_graphique (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-set(hObject,'Value',int16(str2double(get(hObject,'String'))));
-guidata(hObject,handles);
+set(hObject,'Value',int16(str2double(get(hObject,'String')))); %A supprimer ?
+guidata(hObject,handles); %A supprimer ?
 
 % Hints: get(hObject,'String') returns contents of valeur_axe1Fin_graphique as text
 %        str2double(get(hObject,'String')) returns contents of valeur_axe1Fin_graphique as a double
@@ -323,8 +326,8 @@ function valeur_axe2Fin_graphique_Callback(hObject, eventdata, handles)
 % hObject    handle to valeur_axe2Fin_graphique (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-set(hObject,'Value',int16(str2double(get(hObject,'String'))));
-guidata(hObject,handles);
+set(hObject,'Value',int16(str2double(get(hObject,'String')))); %A supprimer ?
+guidata(hObject,handles); %A supprimer ?
 
 % Hints: get(hObject,'String') returns contents of valeur_axe2Fin_graphique as text
 %        str2double(get(hObject,'String')) returns contents of valeur_axe2Fin_graphique as a double
@@ -511,15 +514,16 @@ function Aide_Callback(hObject, eventdata, handles)
 % hObject    handle to Aide (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-msgbox({'Le passage entre les types de coupes est permise par les touches du clavier suivantes :', ...
-'0 : coupe frontale (Y en fonction de X) ;', ...
-'1 : coupe transversale (Z en fonction de X) ;', ...
-'2 : coupe sagittale (Z en fonction de Y);', ...
-'3 : coupe de X en fonction du temps ;', ...
-'4 : coupe de Y en fonction du temps ;', ...
-'5 : coupe de Z en fonction du temps.', ...
+msgbox({'Les plans sont définis par rapport à la sonde et non par rapport à l''objet étudié (voir schémas sur le README de mon répertoire Github)',... 
+    'Le passage entre les orientation de plans est permise par les touches du clavier suivantes :', ...
+'0 : plan axial (Y en ordonnées et X en abscisses) ;', ...
+'1 : plan latéral (Z en ordonnées et X en abscisses) ;', ...
+'2 : plan transverse (Z en ordonnées et Y en abscisses);', ...
+'3 : plan X-Temps (X en ordonnées et le temps en abscisses);', ...
+'4 : plan Y-Temps (Y en ordonnées et le temps en abscisses);', ...
+'5 : plan Z-Temps (Z en ordonnées et le temps en abscisses).', ...
 '',...
-'Pour une même coupe, on peut glisser entre les plans par les flèches multidirectionnelles du clavier :',...
+'Pour une même orientation de plan, on peut glisser entre les plans par les flèches multidirectionnelles du clavier :',...
 'flèches gauche et droite pour glisser selon le premier axe mentionné dans le titre de l''image ;',...
 'flèches bas et haut pour glisser selon le deuxième axe mentionné dans le titre de l''image.'})
 
@@ -856,13 +860,6 @@ function sauvegarde_image_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 handles.controleur.exporter_image;
-% [nom_du_fichier,chemin] = uiputfile({'*.png';'*.jpeg';'*.bmp';'*.tiff';'*.pdf';'*.eps'});
-% %dossier_principal=pwd;
-% chemin_fichier_a_enregistrer = fullfile(chemin,nom_du_fichier);
-% export_fig(handles.image, chemin_fichier_a_enregistrer);
-%cd(chemin);
-%export_fig(handles.image, nom_du_fichier);
-%cd(dossier_principal)
 
 
 % --- Executes on button press in points_de_donnees.

@@ -20,6 +20,11 @@ classdef Controleur < handle
             soi.modele.volumes.charger;
         end
         
+        function charger_volumes_VoxelData_bin(soi)
+            soi.modele.creer_volumes_VoxelData_bin;
+            soi.modele.volumes.charger;
+        end
+        
         function mettre_a_jour_image_clavier(soi,eventdata)
             soi.modele.volumes.mettre_a_jour_image_clavier(eventdata);
         end

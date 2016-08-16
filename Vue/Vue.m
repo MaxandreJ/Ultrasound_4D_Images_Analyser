@@ -56,37 +56,37 @@ classdef Vue < handle
                             axe2='Y';
                             axe3='Z';
                             axe4='Temps';
-                            title({'Coupe frontale', [axe3 '=' num2str(evntobj.volumes.coordonnee_axe3_selectionnee) '/' num2str(evntobj.volumes.taille_axes(3)) ', ' axe4 '=' num2str(evntobj.volumes.coordonnee_axe4_selectionnee) '/' num2str(evntobj.volumes.taille_axes(4))]});
+                            title({'Plan axial', [axe3 '=' num2str(evntobj.volumes.coordonnee_axe3_selectionnee) '/' num2str(evntobj.volumes.taille_axes(3)) ', ' axe4 '=' num2str(evntobj.volumes.coordonnee_axe4_selectionnee) '/' num2str(evntobj.volumes.taille_axes(4))]});
                         case 1
                             axe1='X';
                             axe2='Z';
                             axe3='Y';
                             axe4='Temps';
-                            title({'Coupe transverse',[axe3 '=' num2str(evntobj.volumes.coordonnee_axe3_selectionnee) '/' num2str(evntobj.volumes.taille_axes(3)) ', ' axe4 '=' num2str(evntobj.volumes.coordonnee_axe4_selectionnee) '/' num2str(evntobj.volumes.taille_axes(4))]});
+                            title({'Plan latéral',[axe3 '=' num2str(evntobj.volumes.coordonnee_axe3_selectionnee) '/' num2str(evntobj.volumes.taille_axes(3)) ', ' axe4 '=' num2str(evntobj.volumes.coordonnee_axe4_selectionnee) '/' num2str(evntobj.volumes.taille_axes(4))]});
                         case 2
                             axe1='Y';
                             axe2='Z';
                             axe3='X';
                             axe4='Temps';
-                            title({'Coupe sagittale', [axe3 '=' num2str(evntobj.volumes.coordonnee_axe3_selectionnee) '/' num2str(evntobj.volumes.taille_axes(3)) ', ' axe4 '=' num2str(evntobj.volumes.coordonnee_axe4_selectionnee) '/' num2str(evntobj.volumes.taille_axes(4))]});
+                            title({'Plan transverse', [axe3 '=' num2str(evntobj.volumes.coordonnee_axe3_selectionnee) '/' num2str(evntobj.volumes.taille_axes(3)) ', ' axe4 '=' num2str(evntobj.volumes.coordonnee_axe4_selectionnee) '/' num2str(evntobj.volumes.taille_axes(4))]});
                         case 3
                             axe1='Temps';
                             axe2='X';
                             axe3='Z';
                             axe4='Y';
-                            title({'Coupe de X selon le temps', [axe3 '=' num2str(evntobj.volumes.coordonnee_axe3_selectionnee) '/' num2str(evntobj.volumes.taille_axes(3)) ', ' axe4 '=' num2str(evntobj.volumes.coordonnee_axe4_selectionnee) '/' num2str(evntobj.volumes.taille_axes(4))]});
+                            title({'Plan X-Temps', [axe3 '=' num2str(evntobj.volumes.coordonnee_axe3_selectionnee) '/' num2str(evntobj.volumes.taille_axes(3)) ', ' axe4 '=' num2str(evntobj.volumes.coordonnee_axe4_selectionnee) '/' num2str(evntobj.volumes.taille_axes(4))]});
                         case 4
                             axe1='Temps';
                             axe2='Y';
                             axe3='Z';
                             axe4='X';
-                            title({'Coupe de Y selon le temps', [axe3 '=' num2str(evntobj.volumes.coordonnee_axe3_selectionnee) '/' num2str(evntobj.volumes.taille_axes(3)) ', ' axe4 '=' num2str(evntobj.volumes.coordonnee_axe4_selectionnee) '/' num2str(evntobj.volumes.taille_axes(4))]});
+                            title({'Plan Y-Temps', [axe3 '=' num2str(evntobj.volumes.coordonnee_axe3_selectionnee) '/' num2str(evntobj.volumes.taille_axes(3)) ', ' axe4 '=' num2str(evntobj.volumes.coordonnee_axe4_selectionnee) '/' num2str(evntobj.volumes.taille_axes(4))]});
                         case 5
                             axe1='Temps';
                             axe2='Z';
                             axe3='Y';
                             axe4='X';
-                            title({'Vue de Z selon le temps', [axe3 '=' num2str(evntobj.volumes.coordonnee_axe3_selectionnee) '/' num2str(evntobj.volumes.taille_axes(3)) ', ' axe4 '=' num2str(evntobj.volumes.coordonnee_axe4_selectionnee) '/' num2str(evntobj.volumes.taille_axes(4))]});
+                            title({'Plan Z-Temps', [axe3 '=' num2str(evntobj.volumes.coordonnee_axe3_selectionnee) '/' num2str(evntobj.volumes.taille_axes(3)) ', ' axe4 '=' num2str(evntobj.volumes.coordonnee_axe4_selectionnee) '/' num2str(evntobj.volumes.taille_axes(4))]});
                     end;
                     if strcmp(axe1,'Temps')
                         xlabel([axe1,' (en pas de temps)']);
