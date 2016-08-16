@@ -18,7 +18,7 @@ classdef (Abstract) Volumes < handle
     end
     
     methods (Abstract)
-        charger(soi,handles)
+        charger(soi)
     end
     
     methods
@@ -112,7 +112,22 @@ classdef (Abstract) Volumes < handle
             end
          
             soi.donnees = im;
+            
+             %% Si après le changement de vue on dépasse la taille des
+            %%nouveaux axes avec les coordonnées sélectionnées, alors on
+            %%rédéfinit les coordonnées sélectionnées comme étant les
+            %%maximums de la taille des nouveaux axes
+            if soi.coordonnee_axe3_selectionnee>soi.taille_axes(3)
+                soi.coordonnee_axe3_selectionnee=soi.taille_axes(3);
+            end
+            
+            if soi.coordonnee_axe4_selectionnee>soi.taille_axes(4)
+                soi.coordonnee_axe4_selectionnee=soi.taille_axes(4);
+            end
+            
             soi.vue_choisie = mode_out;
+            
+            taille_image=size(im);
 
             soi.modele.image = im(:,:,soi.coordonnee_axe3_selectionnee,soi.coordonnee_axe4_selectionnee);
         end

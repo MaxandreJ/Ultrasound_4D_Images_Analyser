@@ -34,6 +34,10 @@ classdef Modele < handle
             soi.volumes = Volumes_RawData_bin(soi); %The child is now informed of his parent
         end
         
+        function creer_volumes_VoxelData_bin(soi)
+            soi.volumes = Volumes_VoxelData_bin(soi); %The child is now informed of his parent
+        end
+        
         function creer_region_interet_rectangle(soi)
             soi.region_interet = Region_interet_rectangle(soi); %The child is now informed of his parent
         end
