@@ -26,7 +26,7 @@ classdef Vue < handle
                 @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
             addlistener(soi.modele,'distance_pic_a_pic_choisie','PostSet', ...
                 @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
-            addlistener(soi.modele,'vecteur_t_sous_echantillonnage','PostSet', ...
+            addlistener(soi.modele,'vecteur_temps_sous_echantillonnage','PostSet', ...
                 @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
             addlistener(soi.modele,'chemin_enregistrement_export_graphique','PostSet', ...
                 @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
@@ -282,13 +282,13 @@ classdef Vue < handle
                 case 'distance_pic_a_pic_choisie'
                     set(handles.choix_de_deux_pics,'String',evntobj.graphique.pics.liste_combinaisons_de_deux_pics);
                     set(handles.dpap_affichage,'String',evntobj.distance_pic_a_pic_choisie);
-                case 'vecteur_t_sous_echantillonnage'
+                case 'vecteur_temps_sous_echantillonnage'
                     cla(handles.affichage_graphique);
                     axes(handles.affichage_graphique);
                     hold on
                     plot(evntobj.graphique.abscisses,evntobj.graphique.ordonnees,'displayname','Courbe originale','HitTest', 'off');
-                    vecteur_t_ech_normal = evntobj.vecteur_t_echantillonnage_normal;
-                    vecteur_t_ssech = evntobj.vecteur_t_sous_echantillonnage;
+                    vecteur_t_ech_normal = evntobj.vecteur_temps_echantillonnage_normal;
+                    vecteur_t_ssech = evntobj.vecteur_temps_sous_echantillonnage;
                     points_ech_normal = plot(vecteur_t_ech_normal,evntobj.graphique.ordonnees(vecteur_t_ech_normal),'black+','displayname','Echantillonnage normal','HitTest', 'off');
                     points_ssech_normal = plot(vecteur_t_ssech,evntobj.graphique.ordonnees(vecteur_t_ssech),'red+','displayname','Sous-échantillonnage','HitTest', 'off');
                     legend([points_ech_normal,points_ssech_normal]);

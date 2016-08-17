@@ -8,8 +8,8 @@ classdef Modele < handle
         ordonnees_graphique
         largeur_a_mi_hauteur_pic_choisi
         distance_pic_a_pic_choisie
-        vecteur_t_echantillonnage_normal
-        vecteur_t_sous_echantillonnage
+        vecteur_temps_echantillonnage_normal
+        vecteur_temps_sous_echantillonnage
         chemin_enregistrement_export_graphique
         chemin_enregistrement_export_image
     end

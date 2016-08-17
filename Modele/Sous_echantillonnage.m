@@ -64,8 +64,8 @@ classdef Sous_echantillonnage < handle
                  end
                  soi.vecteur_t_ech_normal(isnan(soi.vecteur_t_ech_normal)) = [];
                  soi.vecteur_t_ssech(isnan(soi.vecteur_t_ssech)) = [];
-                 soi.modele.vecteur_t_echantillonnage_normal = soi.vecteur_t_ech_normal;
-                 soi.modele.vecteur_t_sous_echantillonnage = soi.vecteur_t_ssech;
+                 soi.modele.vecteur_temps_echantillonnage_normal = soi.vecteur_t_ech_normal;
+                 soi.modele.vecteur_temps_sous_echantillonnage = soi.vecteur_t_ssech;
              catch erreurs
                 if (strcmp(erreurs.identifier,'sous_echantillonnage_Callback:trop_de_pics'))
                     warndlg('Merci de choisir de détecter un seul pic à l''étape précédente.');
