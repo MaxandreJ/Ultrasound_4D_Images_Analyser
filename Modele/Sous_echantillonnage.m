@@ -82,34 +82,65 @@ classdef Sous_echantillonnage < handle
                     causeException = MException(erreur_axe_abscisse_pas_temps.identifier,erreur_axe_abscisse_pas_temps.message);
                     erreurs = addCause(erreurs,causeException);
                     throw(causeException);
-                elseif (strcmp(erreurs.identifier, 'sous_echantillonnage_Callback:choix_annulation'))
-                    causeException = MException(erreur_choix_annulation.identifier,erreur_choix_annulation.message);
-                    erreurs = addCause(erreurs,causeException);
                 end   
                 rethrow(erreurs);
             end
         end
         
         function sauvegarder(soi)
-            [nom_du_fichier,chemin_sauvegarde] = uiputfile({'*.*'});
-            choix_annulation = isequal(nom_du_fichier,0) || isequal(chemin_sauvegarde,0);
-            if choix_annulation
-                erreur_choix_annulation.message = 'L''utilisateur a annulé son action de sauvegarde.';
-                erreur_choix_annulation.identifier = 'sous_echantillonnage_Callback:choix_annulation';
-                error(erreur_choix_annulation);
+            %Transformer l'avertissement de taille de fichier trop grand
+            %pour un fichier en .mat en erreur
+            etat_erreur_premodification=warning('error', 'MATLAB:save:sizeTooBigForMATFile');
+            
+            try
+                [nom_du_fichier,chemin_sauvegarde] = uiputfile({'*.*'});
+                choix_annulation = isequal(nom_du_fichier,0) || isequal(chemin_sauvegarde,0);
+                if choix_annulation
+                    erreur_choix_annulation.message = 'L''utilisateur a annulé son action de sauvegarde.';
+                    erreur_choix_annulation.identifier = 'sous_echantillonnage_Callback:choix_annulation';
+                    error(erreur_choix_annulation);
+                end
+                dossier_principal=pwd;
+                cd(chemin_sauvegarde);
+
+                volumes_ech_normal=soi.modele.volumes.donnees(:,:,:,soi.vecteur_t_ech_normal);
+                volumes_ech_normal=squeeze(volumes_ech_normal);
+
+                volumes_ssech=soi.modele.volumes.donnees(:,:,:,soi.vecteur_t_ssech);
+                volumes_ssech=squeeze(volumes_ssech);
+
+                volumes_a_enregistrer = cat(4,volumes_ech_normal,volumes_ssech);
+                %Argument -v6 pour enregistrer sans compression (cf
+                %Perroneau et al.)
+                save([nom_du_fichier,'.mat'],'volumes_a_enregistrer','-mat','-v6');
+                cd(dossier_principal);
+            catch erreurs
+                if (strcmp(erreurs.identifier, 'sous_echantillonnage_Callback:choix_annulation'))
+                    causeException = MException(erreur_choix_annulation.identifier,erreur_choix_annulation.message);
+                    erreurs = addCause(erreurs,causeException);
+                elseif (strcmp(erreurs.identifier, 'MATLAB:save:sizeTooBigForMATFile'))
+                    message_erreur = ['Les données sont trop grosses pour être enregistrées dans un seul fichier.',...
+                        'Les données seront enregistrées dans un dossier à la place.'];
+                    causeException = MException('MATLAB:save:sizeTooBigForMATFile',message_erreur);
+                    erreurs = addCause(erreurs,causeException);
+                    graphique = soi.modele.graphique;
+                    t_maximum= graphique.abscisses(end);
+                    %Si le répertoire existe déjà comme nom de fichier, on
+                    %l'écrase
+                    delete(nom_du_fichier);
+                    mkdir(nom_du_fichier);
+                    cd(nom_du_fichier);
+                    for t=1:t_maximum
+                        volume_a_enregistrer = volumes_a_enregistrer(t);
+                        save([nom_du_fichier,num2str(t),'.mat'],'volume_a_enregistrer',...
+                            '-mat','-v6');
+                    end
+                    cd(dossier_principal);
+                else
+                    rethrow(erreurs);
+                end
             end
-            dossier_principal=pwd;
-            cd(chemin_sauvegarde);
-            
-            volumes_ech_normal=soi.modele.volumes.donnees(:,:,:,soi.vecteur_t_ech_normal);
-            volumes_ech_normal=squeeze(volumes_ech_normal);
-            
-            volumes_ssech=soi.modele.volumes.donnees(:,:,:,soi.vecteur_t_ssech);
-            volumes_ssech=squeeze(volumes_ssech);
-            
-            volumes_a_enregistrer = cat(4,volumes_ech_normal,volumes_ssech);
-            save([nom_du_fichier,'.mat'],'volumes_a_enregistrer','-mat');
-            cd(dossier_principal);
+            warning(etat_erreur_premodification);
         end
     end
     
