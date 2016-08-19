@@ -69,13 +69,6 @@ for i = 1:2:length(varargin)
     end
 end
 
-% code = fullfile(pwd,'Code');
-% chemin_code = genpath(code);
-% addpath(chemin_code);
-
-% handles.ss_echantillonnage_effectue = false;
-% handles.sauvegarde_sous_echantillonnage = true;
-
 % Update handles structure
 guidata(hObject, handles);
 
@@ -98,24 +91,29 @@ function chargement_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 choix_chargement = get(handles.choix_chargement,'Value');
 
-format_VoxelData_bin = 1;
-format_RawData_bin = 2;
-format_mat = 3;
+switch choix_chargement
+    case 1
+        format='VoxelData_bin';
+    case 2
+        format='RawData_bin';
+    case 3
+        format='fichier_mat';
+    case 4
+        format='dossier_mat';
+end
 
-if choix_chargement==format_VoxelData_bin
-    handles.controleur.charger_volumes_VoxelData_bin;
-elseif choix_chargement==format_RawData_bin
-    handles.controleur.charger_volumes_RawData_bin;
-elseif choix_chargement==format_mat
-    handles.controleur.charger_volumes_mat;
+switch format
+    case 'VoxelData_bin'
+        handles.controleur.charger_volumes_VoxelData_bin;
+    case 'RawData_bin'
+        handles.controleur.charger_volumes_RawData_bin;
+    case 'fichier_mat'
+        handles.controleur.charger_volumes_mat;
+    case 'dossier_mat'
+        handles.controleur.charger_volumes_dossier_mat;
 end
 
 
-
-
-% charger_volumes(hObject, eventdata, handles);
-% handles=guidata(handles.figure1);
-% guidata(handles.figure1,handles);
 
 function figure1_KeyPressFcn(hObject, eventdata, handles)
 handles.controleur.mettre_a_jour_image_clavier(eventdata);
@@ -169,7 +167,7 @@ handles.controleur.definir_graphique(axe_abscisses_choisi,axe_moyenne_choisi);
 
 % --- Executes on button press in calculer_heterogeneite.
 function calculer_heterogeneite_Callback(hObject, eventdata, handles)
-handles.controleur.calculer_entropie;
+handles.controleur.calculer_entropie_region_interet;
 
 % --- Executes on button press in detecter_pics.
 function detecter_pics_Callback(hObject, eventdata, handles)
@@ -514,18 +512,7 @@ function Aide_Callback(hObject, eventdata, handles)
 % hObject    handle to Aide (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-msgbox({'Les plans sont définis par rapport à la sonde et non par rapport à l''objet étudié (voir schémas sur le README de mon répertoire Github)',... 
-    'Le passage entre les orientation de plans est permise par les touches du clavier suivantes :', ...
-'0 : plan axial (Y en ordonnées et X en abscisses) ;', ...
-'1 : plan latéral (Z en ordonnées et X en abscisses) ;', ...
-'2 : plan transverse (Z en ordonnées et Y en abscisses);', ...
-'3 : plan X-Temps (X en ordonnées et le temps en abscisses);', ...
-'4 : plan Y-Temps (Y en ordonnées et le temps en abscisses);', ...
-'5 : plan Z-Temps (Z en ordonnées et le temps en abscisses).', ...
-'',...
-'Pour une même orientation de plan, on peut glisser entre les plans par les flèches multidirectionnelles du clavier :',...
-'flèches gauche et droite pour glisser selon le premier axe mentionné dans le titre de l''image ;',...
-'flèches bas et haut pour glisser selon le deuxième axe mentionné dans le titre de l''image.'})
+handles.controleur.afficher_aide;
 
 
 % --------------------------------------------------------------------
@@ -533,7 +520,7 @@ function uitoggletool6_ClickedCallback(hObject, eventdata, handles)
 % hObject    handle to uitoggletool6 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-h = rotate3d(handles.image);
+rotate3d(handles.image);
 
 
 
@@ -878,8 +865,5 @@ function capture_fenetre_Callback(hObject, eventdata, handles)
 % hObject    handle to capture_fenetre (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-[nom_du_fichier,chemin] = uiputfile({'*.png';'*.jpeg';'*.bmp';'*.tiff';'*.pdf';'*.eps'});
-dossier_principal=pwd;
-cd(chemin);
-export_fig(handles.figure1, nom_du_fichier);
-cd(dossier_principal)
+handles.controleur.exporter_interface;
+

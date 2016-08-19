@@ -15,6 +15,11 @@ classdef Controleur < handle
             soi.modele.volumes.charger;
         end
         
+        function charger_volumes_dossier_mat(soi)
+            soi.modele.creer_volumes_dossier_mat;
+            soi.modele.volumes.charger;
+        end
+        
         function charger_volumes_RawData_bin(soi)
             soi.modele.creer_volumes_RawData_bin;
             soi.modele.volumes.charger;
@@ -52,7 +57,7 @@ classdef Controleur < handle
             soi.modele.region_interet.selectionner_visuellement;
         end
         
-        function calculer_entropie(soi)
+        function calculer_entropie_region_interet(soi)
             soi.modele.region_interet.calculer_entropie;
         end
         
@@ -95,21 +100,14 @@ classdef Controleur < handle
             soi.modele.exporter_image;
         end
         
-%         function setDensity(obj,density)
-%             obj.model.setDensity(density)
-%         end
-%         
-%         function setVolume(obj,volume)
-%             obj.model.setVolume(volume)
-%         end
-%         
-%         function setUnits(obj,units)
-%             obj.model.setUnits(units)
-%         end
-%         
-%         function calculate(obj)
-%             obj.model.calculate()
-%         end
+        function exporter_interface(soi)
+            soi.modele.exporter_interface;
+        end
+        
+        function afficher_aide(soi)
+            soi.vue.aide;
+        end
+        
 %         
 %         function reset(obj)
 %             obj.model.reset()

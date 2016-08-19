@@ -1,4 +1,4 @@
-function programme_a_lancer()
+function programme_a_lancer
 %Merci de lancer ce script pour lancer le programme.
 
 %% Ajout du répertoire Modèle au chemin de Matlab

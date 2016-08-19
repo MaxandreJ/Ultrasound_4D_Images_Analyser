@@ -9,35 +9,38 @@ classdef Vue < handle
         function soi = Vue(controleur)
             soi.controleur = controleur;
             soi.modele = controleur.modele;
-            soi.ihm = Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS('controleur',soi.controleur);
+            soi.ihm = Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS...
+                ('controleur',soi.controleur);
            
             
             addlistener(soi.modele,'image','PostSet', ...
-                @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
+                @(src,evnt)Vue.reagir_aux_observations(soi,src,evnt));
             addlistener(soi.modele,'chemin_donnees','PostSet', ...
-                @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
+                @(src,evnt)Vue.reagir_aux_observations(soi,src,evnt));
             addlistener(soi.modele,'donnees_region_interet','PostSet', ...
-                @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
+                @(src,evnt)Vue.reagir_aux_observations(soi,src,evnt));
             addlistener(soi.modele,'entropie_region_interet','PostSet', ...
-                @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
+                @(src,evnt)Vue.reagir_aux_observations(soi,src,evnt));
             addlistener(soi.modele,'ordonnees_graphique','PostSet', ...
-                @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
+                @(src,evnt)Vue.reagir_aux_observations(soi,src,evnt));
             addlistener(soi.modele,'largeur_a_mi_hauteur_pic_choisi','PostSet', ...
-                @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
+                @(src,evnt)Vue.reagir_aux_observations(soi,src,evnt));
             addlistener(soi.modele,'distance_pic_a_pic_choisie','PostSet', ...
-                @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
+                @(src,evnt)Vue.reagir_aux_observations(soi,src,evnt));
             addlistener(soi.modele,'vecteur_temps_sous_echantillonnage','PostSet', ...
-                @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
+                @(src,evnt)Vue.reagir_aux_observations(soi,src,evnt));
             addlistener(soi.modele,'chemin_enregistrement_export_graphique','PostSet', ...
-                @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
+                @(src,evnt)Vue.reagir_aux_observations(soi,src,evnt));
             addlistener(soi.modele,'chemin_enregistrement_export_image','PostSet', ...
-                @(src,evnt)Vue.handlePropEvents(soi,src,evnt));
+                @(src,evnt)Vue.reagir_aux_observations(soi,src,evnt));
+            addlistener(soi.modele,'chemin_enregistrement_export_interface','PostSet', ...
+                @(src,evnt)Vue.reagir_aux_observations(soi,src,evnt));
             
         end
     end
     
     methods (Static)
-        function handlePropEvents(obj,src,evnt)
+        function reagir_aux_observations(obj,src,evnt)
             evntobj = evnt.AffectedObject;
             handles = guidata(obj.ihm);
             switch src.Name
@@ -297,8 +300,26 @@ classdef Vue < handle
                     export_fig(handles.affichage_graphique, evntobj.chemin_enregistrement_export_graphique);
                 case 'chemin_enregistrement_export_image'
                     export_fig(handles.image, evntobj.chemin_enregistrement_export_image);
+                case 'chemin_enregistrement_export_interface'
+                    export_fig(handles.figure1, evntobj.chemin_enregistrement_export_interface);
+                    
             end
         guidata(handles.figure1,handles);
+        end
+        
+        function aide
+            msgbox({'Les plans sont définis par rapport à la sonde et non par rapport à l''objet étudié (voir schémas sur le README de mon répertoire Github)',... 
+                'Le passage entre les orientation de plans est permise par les touches du clavier suivantes :', ...
+            '0 : plan axial (Y en ordonnées et X en abscisses) ;', ...
+            '1 : plan latéral (Z en ordonnées et X en abscisses) ;', ...
+            '2 : plan transverse (Z en ordonnées et Y en abscisses);', ...
+            '3 : plan X-Temps (X en ordonnées et le temps en abscisses);', ...
+            '4 : plan Y-Temps (Y en ordonnées et le temps en abscisses);', ...
+            '5 : plan Z-Temps (Z en ordonnées et le temps en abscisses).', ...
+            '',...
+            'Pour une même orientation de plan, on peut glisser entre les plans par les flèches multidirectionnelles du clavier :',...
+            'flèches gauche et droite pour glisser selon le premier axe mentionné dans le titre de l''image ;',...
+            'flèches bas et haut pour glisser selon le deuxième axe mentionné dans le titre de l''image.'})
         end
         
     end
@@ -312,6 +333,7 @@ classdef Vue < handle
         function choisir_axe_affichage_graphique(soi)
             handles = guidata(soi.ihm);
             axes(handles.affichage_graphique);
-        end
+        end  
     end
+    
 end

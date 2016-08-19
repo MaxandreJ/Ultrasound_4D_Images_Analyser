@@ -21,35 +21,8 @@ classdef Pics < handle
     
     methods
         
-%         function provisoire(soi)
-%             graphique = handles.graphique;
-% 
-%             graphique.afficher(handles);
-% 
-%             handles=guidata(hObject);
-% 
-%             guidata(hObject, handles);
-% 
-%             graphique.creer_pics;
-% 
-%             pics = graphique.pics;
-
-%             pics.detecter(handles);
-
-%             pics.afficher_largeurs_a_mi_hauteur(handles);
-%             handles = guidata(handles.figure1);
-% 
-%             pics.afficher_distances_pic_a_pic(handles);
-%             handles = guidata(handles.figure1);
-% 
-%             pics.mettre_a_jour_IHM(handles);
-%             handles = guidata(handles.figure1);
-% 
-%         end
-        
         function detecter(soi,taille_fenetre_lissage,nombre_de_pics)
             try
-%                 taille_fenetre_lissage = str2double(get(handles.valeur_taille_fenetre_lissage,'String'));
                 if mod(taille_fenetre_lissage,2) == 0
                     erreurImpaire.message = 'Fenêtre de taille paire.';
                     erreurImpaire.identifier = 'detection_pics_Callback:taille_fenetre_paire';
@@ -62,7 +35,6 @@ classdef Pics < handle
                     error(erreurPlusieursCourbes);
                 end
                 
-                soi.nombre = nombre_de_pics;
 
                 courbe_ROI = double(soi.graphique.ordonnees);
                 abscisse_courbe_ROI=double(soi.graphique.abscisses);
@@ -76,27 +48,35 @@ classdef Pics < handle
                 hold on
                 switch soi.graphique.axe_abscisses_choisi
                     case 1
-                        [y_maxs,abscisses_intensites_maximales,soi.largeurs_a_mi_hauteur,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',soi.nombre);
-                        findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',soi.nombre);
+                        [y_maxs,abscisses_intensites_maximales,soi.largeurs_a_mi_hauteur,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',nombre_de_pics);
+                        findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',nombre_de_pics);
                         y_maxs=y_maxs';
                     case 2
-                        [y_maxs,abscisses_intensites_maximales,soi.largeurs_a_mi_hauteur,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',soi.nombre);
-                        findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',soi.nombre);
+                        [y_maxs,abscisses_intensites_maximales,soi.largeurs_a_mi_hauteur,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',nombre_de_pics);
+                        findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',nombre_de_pics);
                     case 3
-                        [y_maxs,abscisses_intensites_maximales,soi.largeurs_a_mi_hauteur,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',soi.nombre);
-                        findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',soi.nombre);
+                        [y_maxs,abscisses_intensites_maximales,soi.largeurs_a_mi_hauteur,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',nombre_de_pics);
+                        findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',nombre_de_pics);
                     case 4
-                        [y_maxs,abscisses_intensites_maximales,soi.largeurs_a_mi_hauteur,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',soi.nombre);
-                        findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',soi.nombre);
+                        [y_maxs,abscisses_intensites_maximales,soi.largeurs_a_mi_hauteur,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',nombre_de_pics);
+                        findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',nombre_de_pics);
                         y_maxs=y_maxs';
                 end
                 legend('off');
                 hold off
+                nombre_de_pics_trouves = size(abscisses_intensites_maximales,1);
+                
+                if nombre_de_pics~=nombre_de_pics_trouves
+                    erreur_nombre_de_pics_different.message = 'Il y a moins de pics dans le graphique que vous souhaitez en détecter.';
+                    erreur_nombre_de_pics_different.identifier = 'detection_pics_Callback:nombre_de_pics_different';
+                    error(erreur_nombre_de_pics_different);
+                end
                 
                 %Passage de graphique.abscisses_intensites_maximales en vecteur colonne pour affichage
                 soi.abscisses=abscisses_intensites_maximales';
                 soi.ordonnees=y_maxs;
                 
+                soi.nombre = nombre_de_pics;
                 
                 %% Calcul largeur(s) à mi-hauteur
                 
@@ -146,6 +126,11 @@ classdef Pics < handle
                 elseif (strcmp(erreurs.identifier,'detection_pics_Callback:plusieurs_courbes_affichees'))
                     warndlg('Merci de n''afficher qu''une seule courbe dans la partie ''affichage du graphique''.');
                     causeException = MException(erreurPlusieursCourbes.identifier,erreurPlusieursCourbes.message);
+                    erreurs = addCause(erreurs,causeException);
+                    throw(causeException);
+                elseif (strcmp(erreurs.identifier,'detection_pics_Callback:nombre_de_pics_different'))
+                    warndlg('Merci de demander de détecter moins de pics : le graphique en contient moins que vous en demandez.');
+                    causeException = MException(erreur_nombre_de_pics_different.identifier,erreur_nombre_de_pics_different.message);
                     erreurs = addCause(erreurs,causeException);
                     throw(causeException);
                 end

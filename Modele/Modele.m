@@ -12,6 +12,7 @@ classdef Modele < handle
         vecteur_temps_sous_echantillonnage
         chemin_enregistrement_export_graphique
         chemin_enregistrement_export_image
+        chemin_enregistrement_export_interface
     end
     
     properties
@@ -23,7 +24,7 @@ classdef Modele < handle
         
     methods
         function soi = Modele()
-%             obj.reset();
+            %obj.reset()
         end
         
         function creer_volumes_mat(soi)
@@ -36,6 +37,10 @@ classdef Modele < handle
         
         function creer_volumes_VoxelData_bin(soi)
             soi.volumes = Volumes_VoxelData_bin(soi); %The child is now informed of his parent
+        end
+        
+        function creer_volumes_dossier_mat(soi)
+            soi.volumes = Volumes_dossier_mat(soi); %The child is now informed of his parent
         end
         
         function creer_region_interet_rectangle(soi)
@@ -59,27 +64,9 @@ classdef Modele < handle
             soi.chemin_enregistrement_export_image = fullfile(chemin,nom_du_fichier);
         end
         
-%         function definir_volumes_donnees(soi,donnees)
-%             soi.volumes.donnees = donnees;
-%         end
-                
-%         function reset(obj)
-%         end
-        
-%         function setDensity(obj,density)
-%             obj.density = density;
-%         end
-%         
-%         function setVolume(obj,volume)
-%             obj.volume = volume;
-%         end
-%         
-%         function setUnits(obj,units)
-%             obj.units = units;
-%         end
-%         
-%         function calculate(obj)
-%             obj.mass = obj.density * obj.volume;
-%         end
+        function exporter_interface(soi)
+            [nom_du_fichier,chemin] = uiputfile({'*.png';'*.jpeg';'*.bmp';'*.tiff';'*.pdf';'*.eps'});
+            soi.chemin_enregistrement_export_interface = fullfile(chemin,nom_du_fichier);
+        end
     end
 end

@@ -31,7 +31,6 @@ classdef Region_interet_polygone < Region_interet
             %Comme l'image est en coordonnées "indices de matrice"
             masque_binaire_2D=masque_binaire_2D';
             soi.masque_binaire_4D = repmat(masque_binaire_2D,1,1,taille_axes(3),taille_axes(4));
-%             set(handles.figure1,'KeyPressFcn',{@volumes.mettre_a_jour_image,handles})
         catch erreur
          if (strcmp(erreurs.identifier,'polygone_Callback:ROI_pas_choisi'))
             causeException = MException(erreur_ROI_pas_choisi.identifier,erreur_ROI_pas_choisi.message);

@@ -19,13 +19,6 @@ classdef Volumes_VoxelData_bin < Volumes
             soi.chemin_a_afficher=chemin;
             soi.modele.chemin_donnees=soi.chemin_a_afficher;
             
-%             %Pour charger Patient_info.txt
-%             patient_info_id = fopen(fullfile(chemin,d(3).name));
-%             
-%             %Lecture de Patient_info.txt
-%             patient_info = textscan(patient_info_id,'%s',11);
-%             patient_info = patient_info{1,1};
-            
             nb_fichiers = size(d);
             nb_fichiers = nb_fichiers(1);
             identifiants_fichiers = cell((nb_fichiers-3),1);
@@ -41,9 +34,7 @@ classdef Volumes_VoxelData_bin < Volumes
                 fichiers{ifichier} = reshape(fichiers{ifichier},256,256,256);
                 waitbar(ifichier/(nb_fichiers-3));
             end
-            %assignin('base', 'fichiers', fichiers);
             donnees_4D = cat(4,fichiers{:});
-            %donnees_4D = permute(donnees_4D,[2,1,3,4]);
             soi.donnees = donnees_4D;
             soi.modele.image = soi.donnees(:,:,soi.coordonnee_axe3_selectionnee,soi.coordonnee_axe4_selectionnee);
             close(barre_attente);

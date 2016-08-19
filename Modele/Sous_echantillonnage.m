@@ -127,11 +127,15 @@ classdef Sous_echantillonnage < handle
                     t_maximum= graphique.abscisses(end);
                     %Si le répertoire existe déjà comme nom de fichier, on
                     %l'écrase
+                    %Le fichier à supprimer peut ne pas exister, on
+                    %supprime les avertissements à ce sujet
+                    warning('off','all');
                     delete(nom_du_fichier);
+                    warning('on','all');
                     mkdir(nom_du_fichier);
                     cd(nom_du_fichier);
                     for t=1:t_maximum
-                        volume_a_enregistrer = volumes_a_enregistrer(t);
+                        volume_a_enregistrer = volumes_a_enregistrer(:,:,:,t);
                         save([nom_du_fichier,num2str(t),'.mat'],'volume_a_enregistrer',...
                             '-mat','-v6');
                     end
