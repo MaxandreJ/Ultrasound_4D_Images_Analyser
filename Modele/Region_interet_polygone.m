@@ -5,10 +5,9 @@ classdef Region_interet_polygone < Region_interet
     properties
         masque_binaire_4D
         polygone
-        modele
     end
     
-    methods (Access = ?Modele)  %Only Modele is allowed to construct a child
+    methods %(Access = ?Modele)  %Only Modele is allowed to construct a child
         function soi = Region_interet_polygone(modele)
            soi.modele = modele;
         end
@@ -51,56 +50,6 @@ classdef Region_interet_polygone < Region_interet
             volumes.coordonnee_axe4_selectionnee);
          end
          
-%          function afficher_coordonnees(~,~)
-%          end
-         
-%          function afficher_region(soi,handles)
-%              try
-%                 axes(handles.image);
-%                 taille_axes = handles.volumes.taille_axes;
-%                 positions_polygone=getPosition(soi.polygone);
-%                 nb_positions_polygone = size(positions_polygone,1);
-%                 maximum_axe1=taille_axes(1);
-%                 maximum_axe2=taille_axes(2);
-%                 for i=1:nb_positions_polygone
-%                     X_pos_i=positions_polygone(i,1);
-%                     Y_pos_i=positions_polygone(i,2);
-%                     if X_pos_i<1 || X_pos_i>maximum_axe1 || Y_pos_i<1 || Y_pos_i>maximum_axe2
-%                         erreur_sortie_de_image.message = 'La région d''intérêt dépasse de l''image.';
-%                         erreur_sortie_de_image.identifier = 'polygone_Callback:sortie_de_image';
-%                         error(erreur_sortie_de_image);
-%                     end
-%                 end
-%                 ordre_des_points=1:nb_positions_polygone;
-%                 polygone_trace=patch('Faces',ordre_des_points,'Vertices',positions_polygone,'FaceColor','none','EdgeColor','red');
-%                 handles.polygone_trace=polygone_trace;
-%                 delete(soi.polygone);
-%                 guidata(handles.figure1,handles);
-%              catch erreurs
-%                 if (strcmp(erreurs.identifier,'polygone_Callback:sortie_de_image'))
-%                     warndlg('Merci d''entrer une région d''intérêt incluse dans l''image.');
-%                     causeException = MException(erreur_sortie_de_image.identifier,erreur_sortie_de_image.message);
-%                     erreurs = addCause(erreurs,causeException);
-%                     delete(soi.polygone);
-%                 end
-%                 rethrow(erreurs);
-%              end
-%          end
-         
-%          function mettre_a_jour_IHM(~,handles)
-%             set(handles.moyenne_axe1et2,'Value',1);
-%             set(handles.moyenne_axe1,'Visible','off');
-%             set(handles.moyenne_axe2,'Visible','off');
-%             set(handles.pas_de_moyenne,'Visible','off');
-% 
-%             set(handles.abscisses_axe4,'Value',1);
-%             set(handles.abscisses_axe1,'Visible','off');
-%             set(handles.abscisses_axe2,'Visible','off');
-% 
-%             set(handles.affichage_entropie,'BackgroundColor','white');
-%             
-%             guidata(handles.figure1,handles);
-%          end
     end
     
 end

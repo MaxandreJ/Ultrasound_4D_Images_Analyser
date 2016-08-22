@@ -152,46 +152,6 @@ classdef Pics < handle
             abscisse_plus_petit_des_deux_pics);
         end
         
-        
-%         function afficher_distances_pic_a_pic(soi,handles)
-%             if soi.nombre_de_pics>1
-%                 set(handles.choix_de_deux_pics,'Visible','on');
-%                 set(handles.texte_choix_de_deux_pics,'Visible','on');
-%                 set(handles.dpap_affichage,'Visible','on');
-%                 set(handles.texte_dpap,'Visible','on');
-%                 set(handles.unite_dpap,'Visible','on');
-%                 [~,nb_colonnes]=size(soi.liste_de_pics);
-%                 liste_de_pics_cellules=mat2cell(soi.liste_de_pics,ones(1,soi.nombre_de_pics),nb_colonnes);
-%                 soi.combinaisons_indices_de_deux_pics = combnk(1:soi.nombre_de_pics,2);
-%                 [nb_combinaisons,~] = size(soi.combinaisons_indices_de_deux_pics);
-%                 combinaisons_de_deux_pics=cell(nb_combinaisons,1);
-%                 for ligne=1:nb_combinaisons
-%                     combinaisons_de_deux_pics{ligne} = [liste_de_pics_cellules{soi.combinaisons_indices_de_deux_pics(ligne,1),1} ...
-%                         ' & ' liste_de_pics_cellules{soi.combinaisons_indices_de_deux_pics(ligne,2),1}];
-%                 end
-% 
-%                 set(handles.choix_de_deux_pics,'String',combinaisons_de_deux_pics);
-%                 numero_combinaison_de_deux_pics_choisie = get(handles.choix_de_deux_pics,'Value');
-%                 combinaison_pics_choisis = soi.combinaisons_indices_de_deux_pics(numero_combinaison_de_deux_pics_choisie,:);
-%                 x_plus_grand_des_deux_pics = soi.abscisses(combinaison_pics_choisis(2));
-%                 x_plus_petit_des_deux_pics = soi.abscisses(combinaison_pics_choisis(1));
-%                 set(handles.dpap_affichage,'String',num2str(abs(x_plus_grand_des_deux_pics-x_plus_petit_des_deux_pics)));
-%             else
-%                 set(handles.choix_de_deux_pics,'Visible','off');
-%                 set(handles.texte_choix_de_deux_pics,'Visible','off');
-%                 set(handles.dpap_affichage,'Visible','off');
-%                 set(handles.texte_dpap,'Visible','off');
-%                 set(handles.unite_dpap,'Visible','off');
-%             end
-%             
-%             guidata(handles.figure1,handles);
-%         end
-%         
-%         function mettre_a_jour_IHM(~,handles)
-%             set(handles.facteur_temps_I_max,'Enable','on','BackgroundColor','white');
-%             set(handles.facteur_sous_echantillonnage,'Enable','on','BackgroundColor','white');
-%             guidata(handles.figure1,handles);
-%         end
     end
     
 end

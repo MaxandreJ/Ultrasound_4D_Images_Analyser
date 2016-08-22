@@ -6,14 +6,12 @@ classdef (Abstract) Region_interet < handle
         donnees_4D
         donnees_2D
         entropie
+        modele
     end
     
     methods (Abstract)
-        tracer(soi,handles)
-        enregistrer(soi,handles)
-%         afficher_coordonnees(soi,handles)
-%         afficher_region(soi,handles)
-%         mettre_a_jour_IHM(~,handles)
+        tracer(soi)
+        enregistrer(soi)
     end
     
     methods

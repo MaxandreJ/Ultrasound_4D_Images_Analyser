@@ -9,7 +9,6 @@ classdef Region_interet_rectangle < Region_interet
         coordonnee_axe2_fin
         largeur_axe1
         hauteur_axe2
-        modele
     end
     
     properties (Dependent)
@@ -81,38 +80,6 @@ classdef Region_interet_rectangle < Region_interet
              end
          end
          
-%          function obtenir_coordonnees(soi,handles)
-%             soi.coordonnee_axe1_debut = str2double(get(handles.valeur_axe1Debut_graphique,'String'));
-%             soi.coordonnee_axe2_debut = str2double(get(handles.valeur_axe2Debut_graphique,'String'));
-%             soi.coordonnee_axe1_fin = str2double(get(handles.valeur_axe1Fin_graphique,'String'));
-%             soi.coordonnee_axe2_fin = str2double(get(handles.valeur_axe2Fin_graphique,'String'));
-%             soi.largeur_axe1 = soi.coordonnee_axe1_fin - soi.coordonnee_axe1_debut;
-%             soi.hauteur_axe2 = soi.coordonnee_axe2_fin - soi.coordonnee_axe1_fin;
-%          end
-         
-%          function afficher_coordonnees(soi,handles)
-%             set(handles.valeur_axe1Debut_graphique,'String',num2str(soi.coordonnee_axe1_debut));
-%             set(handles.valeur_axe2Debut_graphique,'String',num2str(soi.coordonnee_axe2_debut));
-%             set(handles.valeur_axe1Fin_graphique,'String',num2str(soi.coordonnee_axe1_fin));
-%             set(handles.valeur_axe2Fin_graphique,'String',num2str(soi.coordonnee_axe2_fin));
-%             guidata(handles.figure1,handles);
-%          end
-         
-%          function afficher_region(soi,handles)
-%              axes(handles.image);
-%              handles.rectangle_trace = rectangle('Position',[soi.coordonnee_axe1_debut soi.coordonnee_axe2_debut soi.largeur_axe1 soi.hauteur_axe2],'EdgeColor','r');
-%              guidata(handles.figure1,handles);
-%          end
-         
-%          function mettre_a_jour_IHM(~,handles)
-%             set(handles.moyenne_axe1,'Visible','on');
-%             set(handles.moyenne_axe2,'Visible','on');
-%             set(handles.pas_de_moyenne,'Visible','on');
-%             set(handles.abscisses_axe1,'Visible','on');
-%             set(handles.abscisses_axe2,'Visible','on');
-%             set(handles.affichage_entropie,'BackgroundColor','white');
-%             guidata(handles.figure1,handles);
-%          end
          
         function valeur = get.coordonnees_axe1_distinctes(soi)
             valeur = (soi.coordonnee_axe1_debut~=soi.coordonnee_axe1_fin);

@@ -18,7 +18,7 @@ classdef Volumes_RawData_bin < Volumes
             d = dir(chemin);
             soi.chemin_a_afficher=chemin;
             soi.modele.chemin_donnees=soi.chemin_a_afficher;
-            
+            charg
             %Pour charger Patient_info.txt
             patient_info_id = fopen(fullfile(chemin,d(3).name));
             

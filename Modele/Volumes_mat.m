@@ -5,7 +5,7 @@ classdef Volumes_mat < Volumes
     properties
     end
     
-    methods (Access = ?Modele)  %Only Modele is allowed to construct a child
+    methods %(Access = ?Modele)  %Only Modele is allowed to construct a child
         function soi = Volumes_mat(modele)
            soi.modele = modele;
         end

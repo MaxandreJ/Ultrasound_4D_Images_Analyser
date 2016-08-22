@@ -52,11 +52,6 @@ classdef Graphique < handle
         end
         
         function definir(soi)
-            
-            soi.charger_donnees;
-        end
-        
-        function charger_donnees(soi)
             %Chargement des valeurs d'ordonnées et d'abscisses du graphique
             
             %Importation des paramètres nécessaires
@@ -114,20 +109,6 @@ classdef Graphique < handle
             soi.modele.ordonnees_graphique = soi.ordonnees;
             soi.modele.abscisses_graphique = soi.abscisses;
         end
-        
-        
-%         function afficher_resultat_sous_echantillonnage(soi,handles)
-%             cla(handles.affichage_graphique);
-%             axes(handles.affichage_graphique);
-%             hold on
-%             plot(soi.abscisses,soi.ordonnees,'displayname','Courbe originale','HitTest', 'off');
-%             vecteur_t_ech_normal = handles.sous_echantillonnage.vecteur_t_ech_normal;
-%             vecteur_t_ssech = handles.sous_echantillonnage.vecteur_t_ssech;
-%             points_ech_normal = plot(vecteur_t_ech_normal,soi.ordonnees(vecteur_t_ech_normal),'black+','displayname','Echantillonnage normal','HitTest', 'off');
-%             points_ssech_normal = plot(vecteur_t_ssech,soi.ordonnees(vecteur_t_ssech),'red+','displayname','Sous-échantillonnage','HitTest', 'off');
-%             legend([points_ech_normal,points_ssech_normal]);
-%             hold off
-%         end
         
         function exporter(soi)
             [nom_du_fichier,chemin] = uiputfile({'*.png';'*.jpeg';'*.bmp';'*.tiff';'*.pdf';'*.eps'});
