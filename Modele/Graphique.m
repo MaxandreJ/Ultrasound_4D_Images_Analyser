@@ -94,7 +94,7 @@ classdef Graphique < handle
             switch soi.axe_abscisses_choisi
                 case 1
                     soi.abscisses = int16(coordonnee_axe1_debut_ROI):int16(coordonnee_axe1_fin_ROI);
-                    soi.ordonnees = image_ROI ;
+                    soi.ordonnees = image_ROI';
                 case 2
                     soi.abscisses = int16(coordonnee_axe2_debut_ROI):int16(coordonnee_axe2_fin_ROI);
                     soi.ordonnees = image_ROI';
@@ -102,7 +102,7 @@ classdef Graphique < handle
                     soi.ordonnees = donnees_ROI(:,coordonnee_axe4_selectionnee);
                     soi.abscisses = 1:int16(taille_axes(3));
                 case 4
-                    soi.ordonnees = donnees_ROI(coordonnee_axe3_selectionnee,:);
+                    soi.ordonnees = donnees_ROI(coordonnee_axe3_selectionnee,:)';
                     soi.abscisses = 1:int16(taille_axes(4));
             end
             

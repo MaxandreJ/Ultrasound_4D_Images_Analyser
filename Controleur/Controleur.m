@@ -70,6 +70,8 @@ classdef Controleur < handle
             soi.modele.graphique.definir;
             soi.modele.graphique.creer_pics;
             soi.vue.choisir_axe_affichage_graphique;
+            soi.vue.mise_a_un_liste_de_pics;
+            soi.vue.mise_a_un_liste_de_combinaisons_de_deux_pics;
             soi.modele.graphique.pics.detecter(taille_fenetre_lissage,nombre_de_pics);
         end
         

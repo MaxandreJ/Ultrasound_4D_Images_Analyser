@@ -7,7 +7,7 @@ classdef Region_interet_polygone < Region_interet
         polygone
     end
     
-    methods %(Access = ?Modele)  %Only Modele is allowed to construct a child
+    methods (Access = ?Modele)  %Only Modele is allowed to construct a child
         function soi = Region_interet_polygone(modele)
            soi.modele = modele;
         end

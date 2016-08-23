@@ -26,6 +26,11 @@ chemin = fullfile(pwd,'altmany-export_fig');
 chemin_matlab = genpath(chemin);
 addpath(chemin_matlab);
 
+%% Ajout du répertoire Tests au chemin de Matlab
+chemin = fullfile(pwd,'Tests');
+chemin_matlab = genpath(chemin);
+addpath(chemin_matlab);
+
 %% Lancement du programme
 modele = Modele;
 controleur = Controleur(modele);

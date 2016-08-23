@@ -333,7 +333,18 @@ classdef Vue < handle
         function choisir_axe_affichage_graphique(soi)
             handles = guidata(soi.ihm);
             axes(handles.affichage_graphique);
-        end  
+        end
+        
+        function mise_a_un_liste_de_pics(soi)
+            handles = guidata(soi.ihm);
+            set(handles.choix_du_pic,'Value',1);
+        end
+        
+        function mise_a_un_liste_de_combinaisons_de_deux_pics(soi)
+            handles = guidata(soi.ihm);
+            set(handles.choix_de_deux_pics,'Value',1);
+        end
+        
     end
     
 end

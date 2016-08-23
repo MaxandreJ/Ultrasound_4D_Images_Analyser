@@ -50,7 +50,6 @@ classdef Pics < handle
                     case 1
                         [y_maxs,abscisses_intensites_maximales,soi.largeurs_a_mi_hauteur,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',nombre_de_pics);
                         findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',nombre_de_pics);
-                        y_maxs=y_maxs';
                     case 2
                         [y_maxs,abscisses_intensites_maximales,soi.largeurs_a_mi_hauteur,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',nombre_de_pics);
                         findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',nombre_de_pics);
@@ -60,11 +59,10 @@ classdef Pics < handle
                     case 4
                         [y_maxs,abscisses_intensites_maximales,soi.largeurs_a_mi_hauteur,~] = findpeaks(courbe_ROI,abscisse_courbe_ROI,'SortStr','descend','NPeaks',nombre_de_pics);
                         findpeaks(courbe_ROI,abscisse_courbe_ROI,'Annotate','extents','SortStr','descend','NPeaks',nombre_de_pics);
-                        y_maxs=y_maxs';
                 end
                 legend('off');
                 hold off
-                nombre_de_pics_trouves = size(abscisses_intensites_maximales,1);
+                nombre_de_pics_trouves = size(abscisses_intensites_maximales,2);
                 
                 if nombre_de_pics~=nombre_de_pics_trouves
                     erreur_nombre_de_pics_different.message = 'Il y a moins de pics dans le graphique que vous souhaitez en détecter.';
