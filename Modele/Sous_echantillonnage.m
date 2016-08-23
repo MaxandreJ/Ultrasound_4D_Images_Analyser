@@ -16,15 +16,13 @@ classdef Sous_echantillonnage < handle
     end
     
     methods
-        function definir(soi,facteur_temps_I_max,facteur_sous_echantillonnage)
+        function definir(soi,facteur_temps_intensite_maximale,facteur_sous_echantillonnage)
             volumes = soi.modele.volumes;
             region_interet = soi.modele.region_interet;
             graphique = soi.modele.graphique;
             
-%             nombre_de_pics = str2double(get(handles.valeur_nombre_de_pics,'String'));
             nombre_de_pics = soi.modele.graphique.pics.nombre;
             
-%             graphique_selon_axe4_choisi = (soi.modele.graphique.axe_abscisses_choisi == 4);
             ordre_axes = volumes.ordre_axes;
             
             try
@@ -43,8 +41,6 @@ classdef Sous_echantillonnage < handle
                     erreur_axe_abscisse_pas_temps.identifier = 'sous_echantillonnage_Callback:axe_abscisse_pas_temps';
                     error(erreur_axe_abscisse_pas_temps);
                 end
-%                  facteur_temps_I_max=str2double(get(handles.facteur_temps_I_max,'string'));
-%                  facteur_sous_echantillonnage=str2double(get(handles.facteur_sous_echantillonnage,'string'));
 
                  t_maximum=graphique.abscisses(end);
                  t_du_maximum_global = graphique.pics.abscisses;
@@ -52,7 +48,7 @@ classdef Sous_echantillonnage < handle
                  soi.vecteur_t_ech_normal = NaN(1,t_maximum);
                  soi.vecteur_t_ssech=NaN(1,t_maximum);
                  for t=1:t_maximum
-                        condition_echantillonnage_normal = t<facteur_temps_I_max*t_du_maximum_global;
+                        condition_echantillonnage_normal = t<facteur_temps_intensite_maximale*t_du_maximum_global;
                         if condition_echantillonnage_normal
                             soi.vecteur_t_ech_normal(t)=t;
                         elseif mod(compteur_sous_echantillonnage,facteur_sous_echantillonnage)==0
@@ -134,12 +130,20 @@ classdef Sous_echantillonnage < handle
                     warning('on','all');
                     mkdir(nom_du_fichier);
                     cd(nom_du_fichier);
+                    barre_attente = waitbar(0,{'Le fichier à enregistrer fait plus de deux Go :', ...
+                        'fractionnement en fichiers individuels pour chacun des pas de temps',...
+                        'et enregistrement dans un dossier séparé.'});
                     for t=1:t_maximum
                         volume_a_enregistrer = volumes_a_enregistrer(:,:,:,t);
                         save([nom_du_fichier,num2str(t),'.mat'],'volume_a_enregistrer',...
                             '-mat','-v6');
+                        waitbar(t/t_maximum);
                     end
+                    cd('..');
+                    delete([nom_du_fichier,'.mat']);
                     cd(dossier_principal);
+
+                    close(barre_attente);
                 else
                     rethrow(erreurs);
                 end

@@ -83,15 +83,15 @@ classdef Controleur < handle
             soi.modele.graphique.pics.mettre_a_jour_distance_pic_a_pic_choisie(numero_combinaison_de_deux_pics_choisie);
         end
         
-        function definir_et_sauvegarder_sous_echantillonnage(soi,facteur_temps_I_max,facteur_sous_echantillonnage)
+        function definir_et_sauvegarder_sous_echantillonnage(soi,facteur_temps_intensite_maximale,facteur_sous_echantillonnage)
             soi.modele.creer_sous_echantillonnage;
-            soi.modele.sous_echantillonnage.definir(facteur_temps_I_max,facteur_sous_echantillonnage);
+            soi.modele.sous_echantillonnage.definir(facteur_temps_intensite_maximale,facteur_sous_echantillonnage);
             soi.modele.sous_echantillonnage.sauvegarder;
         end
         
-        function previsualiser_sous_echantillonnage(soi,facteur_temps_I_max,facteur_sous_echantillonnage)
+        function previsualiser_sous_echantillonnage(soi,facteur_temps_intensite_maximale,facteur_sous_echantillonnage)
             soi.modele.creer_sous_echantillonnage;
-            soi.modele.sous_echantillonnage.definir(facteur_temps_I_max,facteur_sous_echantillonnage);
+            soi.modele.sous_echantillonnage.definir(facteur_temps_intensite_maximale,facteur_sous_echantillonnage);
         end
         
         function exporter_graphique(soi)
@@ -110,10 +110,6 @@ classdef Controleur < handle
             soi.vue.aide;
         end
         
-%         
-%         function reset(obj)
-%             obj.model.reset()
-%         end
     end
 end
 

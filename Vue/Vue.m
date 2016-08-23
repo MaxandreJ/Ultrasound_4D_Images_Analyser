@@ -5,12 +5,20 @@ classdef Vue < handle
         controleur
     end
     
+    properties (Access = private)
+        gris = [0.83,0.82,0.78]
+    end
+    
     methods
         function soi = Vue(controleur)
             soi.controleur = controleur;
             soi.modele = controleur.modele;
             soi.ihm = Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS...
                 ('controleur',soi.controleur);
+            
+            tm = javax.swing.ToolTipManager.sharedInstance; %static method to get ToolTipManager object
+            long_temps_de_disparition = intmax('int32');
+            javaMethodEDT('setDismissDelay',tm,long_temps_de_disparition); %set the dismiss delay to 2 seconds
            
             
             addlistener(soi.modele,'image','PostSet', ...
@@ -40,9 +48,9 @@ classdef Vue < handle
     end
     
     methods (Static)
-        function reagir_aux_observations(obj,src,evnt)
+        function reagir_aux_observations(soi,src,evnt)
             evntobj = evnt.AffectedObject;
-            handles = guidata(obj.ihm);
+            handles = guidata(soi.ihm);
             switch src.Name
                 case 'image'
                     axes(handles.image);
@@ -98,10 +106,17 @@ classdef Vue < handle
                     end
                     ylabel([axe2, ' (en pixels)']);
                     
+                    %% Remise à zéro
+                    gris = soi.gris;
+                    set(handles.affichage_entropie,'String',[],'BackgroundColor',gris);
                     set(handles.choix_du_pic,'String',' ');
-                    set(handles.lmh_affichage,'String',[]);
+                    set(handles.valeur_taille_fenetre_lissage,'String','1','Enable','inactive','BackgroundColor',gris);
+                    set(handles.valeur_nombre_de_pics,'String','1','Enable','inactive','BackgroundColor',gris);
+                    set(handles.lmh_affichage,'String',[],'Enable','inactive','BackgroundColor',gris);
                     set(handles.choix_de_deux_pics,'String',' ');
-                    set(handles.dpap_affichage,'String',[]);
+                    set(handles.dpap_affichage,'String',[],'Enable','inactive','BackgroundColor',gris);
+                    set(handles.facteur_temps_I_max,'Enable','inactive','BackgroundColor',gris);
+                    set(handles.facteur_sous_echantillonnage,'Enable','inactive','BackgroundColor',gris);
                     set(handles.valeur_axe1Debut_graphique,'String',[],'enable','on','BackgroundColor','white');
                     set(handles.valeur_axe2Debut_graphique,'String',[],'enable','on','BackgroundColor','white');
                     set(handles.valeur_axe1Fin_graphique,'String',[],'enable','on','BackgroundColor','white');
@@ -205,8 +220,16 @@ classdef Vue < handle
                         set(handles.abscisses_axe1,'Visible','off');
                         set(handles.abscisses_axe2,'Visible','off');  
                     end
-                    
-                        set(handles.affichage_entropie,'BackgroundColor','white','String',[]);
+                    set(handles.affichage_entropie,'BackgroundColor','white','String',[]);
+                    gris = soi.gris;
+                    set(handles.facteur_temps_I_max,'Enable','inactive','BackgroundColor',gris);
+                    set(handles.facteur_sous_echantillonnage,'Enable','inactive','BackgroundColor',gris);
+                    set(handles.valeur_taille_fenetre_lissage,'String','1','Enable','inactive','BackgroundColor',gris);
+                    set(handles.valeur_nombre_de_pics,'String','1','Enable','inactive','BackgroundColor',gris);
+                    set(handles.choix_du_pic,'String',' ');
+                    set(handles.lmh_affichage,'String',[],'Enable','inactive','BackgroundColor',gris);
+                    set(handles.choix_de_deux_pics,'String',' ');
+                    set(handles.dpap_affichage,'String',[],'Enable','inactive','BackgroundColor',gris);
                 case 'entropie_region_interet'
                     set(handles.affichage_entropie,'String',num2str(evntobj.entropie_region_interet));
                 case 'ordonnees_graphique'
@@ -267,7 +290,7 @@ classdef Vue < handle
                      
                     ylabel(legende_ordonnees);
                     
-                    %%On indique les nouvelles fonctionnalités disponibles dans l'IHM
+                    %% On indique les nouvelles fonctionnalités disponibles dans l'IHM
                     
                     set(handles.choix_du_pic,'enable','on','BackgroundColor','white');
                     set(handles.choix_de_deux_pics,'enable','on','BackgroundColor','white');
@@ -275,6 +298,11 @@ classdef Vue < handle
                     set(handles.dpap_affichage,'BackgroundColor','white');
                     set(handles.valeur_taille_fenetre_lissage,'enable','on','BackgroundColor','white');
                     set(handles.valeur_nombre_de_pics,'enable','on','BackgroundColor','white');
+                    
+                    %% On enlève les fonctionnalités pas encore disponibles
+                    gris = soi.gris;
+                    set(handles.facteur_temps_I_max,'Enable','inactive','BackgroundColor',gris);
+                    set(handles.facteur_sous_echantillonnage,'Enable','inactive','BackgroundColor',gris);
                 case 'largeur_a_mi_hauteur_pic_choisi'
                     set(handles.choix_du_pic,'String',evntobj.graphique.pics.liste);
                     set(handles.lmh_affichage,'String', evntobj.largeur_a_mi_hauteur_pic_choisi);
@@ -308,8 +336,8 @@ classdef Vue < handle
         end
         
         function aide
-            msgbox({'Les plans sont définis par rapport à la sonde et non par rapport à l''objet étudié (voir schémas sur le README de mon répertoire Github)',... 
-                'Le passage entre les orientation de plans est permise par les touches du clavier suivantes :', ...
+            msgbox({'Les plans sont définis par rapport à la sonde et non par rapport à l''objet étudié (voir schémas sur le README de mon répertoire Github).',... 
+                'Le passage entre les orientations de plans est permise par les touches du clavier suivantes :', ...
             '0 : plan axial (Y en ordonnées et X en abscisses) ;', ...
             '1 : plan latéral (Z en ordonnées et X en abscisses) ;', ...
             '2 : plan transverse (Z en ordonnées et Y en abscisses);', ...

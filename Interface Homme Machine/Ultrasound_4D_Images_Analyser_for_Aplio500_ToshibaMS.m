@@ -179,15 +179,15 @@ handles.controleur.detecter_pics(taille_fenetre_lissage,nombre_de_pics);
 
 % --- Executes on button press in previsualiser_sous_echantillonnage.
 function previsualiser_sous_echantillonnage_Callback(hObject, eventdata, handles)
-facteur_temps_I_max=str2double(get(handles.facteur_temps_I_max,'string'));
+facteur_temps_intensite_maximale=str2double(get(handles.facteur_temps_I_max,'string'));
 facteur_sous_echantillonnage=str2double(get(handles.facteur_sous_echantillonnage,'string'));
-handles.controleur.previsualiser_sous_echantillonnage(facteur_temps_I_max,facteur_sous_echantillonnage);
+handles.controleur.previsualiser_sous_echantillonnage(facteur_temps_intensite_maximale,facteur_sous_echantillonnage);
 
 % --- Executes on button press in sous_echantillonner_volumes.
 function sous_echantillonner_volumes_Callback(hObject, eventdata, handles)
-facteur_temps_I_max=str2double(get(handles.facteur_temps_I_max,'string'));
+facteur_temps_intensite_maximale=str2double(get(handles.facteur_temps_I_max,'string'));
 facteur_sous_echantillonnage=str2double(get(handles.facteur_sous_echantillonnage,'string'));
-handles.controleur.definir_et_sauvegarder_sous_echantillonnage(facteur_temps_I_max,facteur_sous_echantillonnage);
+handles.controleur.definir_et_sauvegarder_sous_echantillonnage(facteur_temps_intensite_maximale,facteur_sous_echantillonnage);
 % sous_echantillonner_volumes(hObject, eventdata, handles)
 
 % --- Executes on selection change in choix_du_pic.

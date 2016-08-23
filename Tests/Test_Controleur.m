@@ -12,14 +12,6 @@ classdef Test_Controleur < matlab.unittest.TestCase
         axe_moyenne_choisi = struct('un','1','deux','2','un_et_deux','1 et 2','pas_de_moyenne','pas de moyenne');
     end
     
-    methods (TestClassSetup)
-        function ajouter_classe_controleur_au_chemin(cas_de_test)
-            p = path;
-            cas_de_test.addTeardown(@path,p);
-            addpath(fullfile('..','Controleur'));
-        end
-    end
-    
     methods (TestMethodTeardown)
         function tout_fermer(cas_de_test)
             delete(cas_de_test.modele);
