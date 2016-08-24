@@ -10,8 +10,8 @@ classdef Controleur < handle
             soi.vue = Vue(soi);
         end
         
-        function charger_volumes_mat(soi)
-            soi.modele.creer_volumes_mat;
+        function charger_volumes_fichier_mat(soi)
+            soi.modele.creer_volumes_fichier_mat;
             soi.modele.volumes.charger;
         end
         

@@ -1,56 +1,90 @@
 classdef Sous_echantillonnage < handle
-    %SOUS_ECHANTILLONNAGE Summary of this class goes here
-    %   Detailed explanation goes here
+    % Classe contenant les propriétés et méthodes d'un sous_echantillonnage
     
     properties
-        vecteur_t_ech_normal
-        vecteur_t_ssech
-        sauvegarde
+        vecteur_temps_echantillonnage_normal % Les pas de temps pour lesquels
+                                                % l'échantillonnage est normal
+                                                % c'est-à-dire pour lesquels 
+                                                % on les prend tous
+        vecteur_temps_sous_echantillonnage % Les pas de temps pour lesquels
+                                                % on sous-échantillonne
+                                                % c'est-à-dire pour lesquels 
+                                                % on ne les prend pas tous
         modele
     end
     
-    methods (Access = ?Modele)  %Only Modele is allowed to construct a child
+    methods (Access = ?Modele)  %% Seul un modèle (instance d'une classe parente) 
+                                    % peut construire une instance de Sous_echantillonnage
         function soi = Sous_echantillonnage(modele)
+            % Constructeur d'une instance de Sous_echantillonnage, il ne peut n'y en avoir
+            % qu'une
            soi.modele = modele;
         end
     end
     
     methods
         function definir(soi,facteur_temps_intensite_maximale,facteur_sous_echantillonnage)
+            % Calcul des vecteurs de temps normaux et sous-echantillonnes
+            % pour futur enregistrement
+            
+            %% On importe les données utiles
             volumes = soi.modele.volumes;
             region_interet = soi.modele.region_interet;
             graphique = soi.modele.graphique;
             
             nombre_de_pics = soi.modele.graphique.pics.nombre;
-            
             ordre_axes = volumes.ordre_axes;
             
+            % On gère les erreurs en utilisant un bloc try...catch
             try
+                % L'axe des abscisses du graphique n'est pas le temps si
+                % - soit le quatrième axe n'est pas choisi (le temps est
+                % toujours soit au 1er, soit au 2ème, soit au 4ème axe -- 
+                % mais dans le cas d'une région d'intérêt polygonale, les 1er
+                % et 2ème axes des abscisses ne sont pas sélectionnables) ;
+                % - soit le quatrième axe n'est pas le temps.
                 axe_abscisse_pas_temps = ~(soi.modele.graphique.axe_abscisses_choisi == 4)...
                     || ordre_axes(4)~=4;
+                %% On engendre des erreurs si...
+                % on a détecté plusieurs pics à l'étape de détection
                 if nombre_de_pics ~= 1
                     erreur_trop_de_pics.message = 'Le nombre de pics détectés est strictement supérieur à 1.';
                     erreur_trop_de_pics.identifier = 'sous_echantillonnage_Callback:trop_de_pics';
                     error(erreur_trop_de_pics);
+                % la région d'intérêt n'est pas de forme polygonale
                 elseif ~isa(region_interet,'Region_interet_polygone')
                     erreur_polygone_pas_choisi.message = 'La région d''intérêt n''a pas été choisie avec un polygone.';
                     erreur_polygone_pas_choisi.identifier = 'sous_echantillonnage_Callback:polygone_pas_choisi';
                     error(erreur_polygone_pas_choisi);
+                % l'axe des abscisses du graphique choisi n'est pas le
+                % temps
                 elseif axe_abscisse_pas_temps
                     erreur_axe_abscisse_pas_temps.message = 'L''axe des abscisses du graphique affiché n''est pas le Temps.';
                     erreur_axe_abscisse_pas_temps.identifier = 'sous_echantillonnage_Callback:axe_abscisse_pas_temps';
                     error(erreur_axe_abscisse_pas_temps);
                 end
-
+                %% On initialise des paramètres importants
+                % le t_maximum correspond au dernier pas de temps pris
                  t_maximum=graphique.abscisses(end);
+                 
                  t_du_maximum_global = graphique.pics.abscisses;
                  compteur_sous_echantillonnage = 0;
-                 soi.vecteur_t_ech_normal = NaN(1,t_maximum);
-                 soi.vecteur_t_ssech=NaN(1,t_maximum);
+                 % On préalloue les vecteurs pour optimiser les
+                 % performances de la boucle suivante
+                 soi.vecteur_temps_echantillonnage_normal = NaN(1,t_maximum);
+                 soi.vecteur_temps_sous_echantillonnage = NaN(1,t_maximum);
+                 
+                 %% Pour chacun des pas de temps, on procède à l'échantillonnage
                  for t=1:t_maximum
+                        % Si le pas de temps est inférieur au temps à l'intensité maximale
+                        % par le facteur choisi par l'utilisateur, alors
+                        % l'echantillonnage est normal (on prend tous les
+                        % pas de temps)
                         condition_echantillonnage_normal = t<facteur_temps_intensite_maximale*t_du_maximum_global;
                         if condition_echantillonnage_normal
-                            soi.vecteur_t_ech_normal(t)=t;
+                            soi.vecteur_temps_echantillonnage_normal(t)=t;
+                        % sinon, on enregistre un sur
+                        % $facteur_sous_echantillonnage images
                         elseif mod(compteur_sous_echantillonnage,facteur_sous_echantillonnage)==0
                             soi.vecteur_t_ssech(t) = t;
                             compteur_sous_echantillonnage = compteur_sous_echantillonnage + 1;
@@ -58,11 +92,21 @@ classdef Sous_echantillonnage < handle
                             compteur_sous_echantillonnage = compteur_sous_echantillonnage + 1;
                         end
                  end
-                 soi.vecteur_t_ech_normal(isnan(soi.vecteur_t_ech_normal)) = [];
-                 soi.vecteur_t_ssech(isnan(soi.vecteur_t_ssech)) = [];
-                 soi.modele.vecteur_temps_echantillonnage_normal = soi.vecteur_t_ech_normal;
-                 soi.modele.vecteur_temps_sous_echantillonnage = soi.vecteur_t_ssech;
+                 
+                 %% On enlève les valeurs NaN en effectuant un filtrage booléen
+                 soi.vecteur_temps_echantillonnage_normal(...
+                     isnan(soi.vecteur_temps_echantillonnage_normal)) = [];
+                 soi.vecteur_temps_sous_echantillonnage(...
+                     isnan(soi.vecteur_temps_sous_echantillonnage)) = [];
+                 
+                 %% On enregistre nos vecteurs d'échantillonnage dans les paramètres du modèle
+                 % pour déclencher l'action d'affichage sur le graphique
+                 soi.modele.vecteur_temps_echantillonnage_normal = ...
+                     soi.vecteur_temps_echantillonnage_normal;
+                 soi.modele.vecteur_temps_sous_echantillonnage = ...
+                     soi.vecteur_temps_sous_echantillonnage;
              catch erreurs
+                 %% On gère les erreurs levées
                 if (strcmp(erreurs.identifier,'sous_echantillonnage_Callback:trop_de_pics'))
                     warndlg('Merci de choisir de détecter un seul pic à l''étape précédente.');
                     causeException = MException(erreur_trop_de_pics.identifier,erreur_trop_de_pics.message);

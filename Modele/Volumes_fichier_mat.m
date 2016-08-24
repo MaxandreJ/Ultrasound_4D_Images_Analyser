@@ -1,4 +1,4 @@
-classdef Volumes_mat < Volumes
+classdef Volumes_fichier_mat < Volumes
     %VOLUMES_MAT Summary of this class goes here
     %   Detailed explanation goes here
     
@@ -6,7 +6,7 @@ classdef Volumes_mat < Volumes
     end
     
     methods (Access = ?Modele)  %Only Modele is allowed to construct a child
-        function soi = Volumes_mat(modele)
+        function soi = Volumes_fichier_mat(modele)
            soi.modele = modele;
         end
     end

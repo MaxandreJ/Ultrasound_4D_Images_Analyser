@@ -26,7 +26,7 @@ classdef Test_Controleur < matlab.unittest.TestCase
             %% Mise en place
             cas_de_test.modele = Modele;
             cas_de_test.modele.creer_region_interet_polygone;
-            cas_de_test.modele.creer_volumes_mat;
+            cas_de_test.modele.creer_volumes_fichier_mat;
             
             tenseur_ordre3_temps1 = cat(3, [0 0; 0 0], [0 0; 0 0]);
             tenseur_ordre3_temps2 = cat(3, [0 0; 0 0], [0 0; 0 0]);

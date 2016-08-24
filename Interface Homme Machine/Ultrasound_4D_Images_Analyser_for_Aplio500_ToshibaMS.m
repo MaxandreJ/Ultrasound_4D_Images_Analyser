@@ -108,7 +108,7 @@ switch format
     case 'RawData_bin'
         handles.controleur.charger_volumes_RawData_bin;
     case 'fichier_mat'
-        handles.controleur.charger_volumes_mat;
+        handles.controleur.charger_volumes_fichier_mat;
     case 'dossier_mat'
         handles.controleur.charger_volumes_dossier_mat;
 end
