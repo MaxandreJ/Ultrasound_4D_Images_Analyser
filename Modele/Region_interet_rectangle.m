@@ -95,6 +95,11 @@ classdef Region_interet_rectangle < Region_interet
                 %% On importe les données utiles
                 volumes = soi.modele.volumes;
                 
+                assert(~isnan(soi.coordonnee_axe1_debut) && ~isnan(soi.coordonnee_axe1_fin) ...
+                && ~isnan(soi.coordonnee_axe2_debut) && ~isnan(soi.coordonnee_axe2_fin),...
+                'Region_interet_rectangle_enregistrer:coordonnees_vides',...
+                'Aucune coordonnée n''a été entrée.');   
+                
                 %% On sélectionne les volumes à l'intérieur de la zone d'intérêt
                 volumes_ROI=volumes.donnees(int16(soi.coordonnee_axe1_debut):...
                     int16(soi.coordonnee_axe1_fin),...
@@ -115,6 +120,10 @@ classdef Region_interet_rectangle < Region_interet
                     messsage_erreur = 'La région d''intérêt dépasse de l''image.';
                     cause_erreur = MException('MATLAB:badsubscript',messsage_erreur);
                     erreurs = addCause(erreurs,cause_erreur);
+                elseif (strcmp(erreurs.identifier,'Region_interet_rectangle_enregistrer:coordonnees_vides'))
+                    warndlg(['Merci d''entrer des coordonnées de début et de fin ', ...
+                    'de la région d''intérêt pour chacun des deux axes.']);
+                    throw(erreurs);
                 end
                 % On affiche les erreurs qui n'auraient pas été gérées
                 rethrow(erreurs);

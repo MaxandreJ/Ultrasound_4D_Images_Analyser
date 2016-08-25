@@ -86,7 +86,7 @@ classdef Sous_echantillonnage < handle
                         % sinon, on enregistre un sur
                         % $facteur_sous_echantillonnage images
                         elseif mod(compteur_sous_echantillonnage,facteur_sous_echantillonnage)==0
-                            soi.vecteur_t_ssech(t) = t;
+                            soi.vecteur_temps_sous_echantillonnage(t) = t;
                             compteur_sous_echantillonnage = compteur_sous_echantillonnage + 1;
                         else
                             compteur_sous_echantillonnage = compteur_sous_echantillonnage + 1;
@@ -143,10 +143,10 @@ classdef Sous_echantillonnage < handle
                 dossier_principal=pwd;
                 cd(chemin_sauvegarde);
 
-                volumes_ech_normal=soi.modele.volumes.donnees(:,:,:,soi.vecteur_t_ech_normal);
+                volumes_ech_normal=soi.modele.volumes.donnees(:,:,:,soi.vecteur_temps_echantillonnage_normal);
                 volumes_ech_normal=squeeze(volumes_ech_normal);
 
-                volumes_ssech=soi.modele.volumes.donnees(:,:,:,soi.vecteur_t_ssech);
+                volumes_ssech=soi.modele.volumes.donnees(:,:,:,soi.vecteur_temps_sous_echantillonnage);
                 volumes_ssech=squeeze(volumes_ssech);
 
                 volumes_a_enregistrer = cat(4,volumes_ech_normal,volumes_ssech);
