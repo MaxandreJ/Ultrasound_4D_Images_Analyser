@@ -45,19 +45,28 @@ classdef Sous_echantillonnage < handle
                 % - soit le quatrième axe n'est pas le temps.
                 axe_abscisse_pas_temps = ~(soi.modele.graphique.axe_abscisses_choisi == 4)...
                     || ordre_axes(4)~=4;
+                
                 %% On engendre des erreurs si...
-                % on a détecté plusieurs pics à l'étape de détection
+                % on a détecté plusieurs pics à l'étape de détection :
+                    % Il est nécessaire d'avoir détecté un seul pic pour procéder au sous-echantillonnage
+                    % qui commence à partir d'un temps déterminé par une
+                    % relation avec le temps à l'intensité maximale
                 if nombre_de_pics ~= 1
                     erreur_trop_de_pics.message = 'Le nombre de pics détectés est strictement supérieur à 1.';
                     erreur_trop_de_pics.identifier = 'sous_echantillonnage_Callback:trop_de_pics';
                     error(erreur_trop_de_pics);
-                % la région d'intérêt n'est pas de forme polygonale
+                % la région d'intérêt n'est pas de forme polygonale :
+                    % Pour plus de précision, on demande que le sous-échantillonnage
+                    % soit effectué uniquement si la région d'intérêt a été
+                    % délimitée par un polygone et non par un rectangle
                 elseif ~isa(region_interet,'Region_interet_polygone')
                     erreur_polygone_pas_choisi.message = 'La région d''intérêt n''a pas été choisie avec un polygone.';
                     erreur_polygone_pas_choisi.identifier = 'sous_echantillonnage_Callback:polygone_pas_choisi';
                     error(erreur_polygone_pas_choisi);
-                % l'axe des abscisses du graphique choisi n'est pas le
-                % temps
+                % l'axe des abscisses du graphique choisi n'est pas le temps :
+                    % L'echantillonnage doit se fonder sur une échographie de constraste
+                    % dont on extrait une courbe de réhaussement du signal 
+                    % avec l'arrivée de l'agent de contraste qui est par définition fonction du temps
                 elseif axe_abscisse_pas_temps
                     erreur_axe_abscisse_pas_temps.message = 'L''axe des abscisses du graphique affiché n''est pas le Temps.';
                     erreur_axe_abscisse_pas_temps.identifier = 'sous_echantillonnage_Callback:axe_abscisse_pas_temps';
@@ -107,73 +116,115 @@ classdef Sous_echantillonnage < handle
                      soi.vecteur_temps_sous_echantillonnage;
              catch erreurs
                  %% On gère les erreurs levées
+                 
+                 %% Il est nécessaire d'avoir détecté un seul pic pour procéder au sous-echantillonnage
+                 % qui commence à partir d'un temps déterminé par une
+                 % relation avec le temps à l'intensité maximale
                 if (strcmp(erreurs.identifier,'sous_echantillonnage_Callback:trop_de_pics'))
                     warndlg('Merci de choisir de détecter un seul pic à l''étape précédente.');
                     causeException = MException(erreur_trop_de_pics.identifier,erreur_trop_de_pics.message);
                     erreurs = addCause(erreurs,causeException);
                     throw(causeException);
+                    
+                %% Pour plus de précision, on demande que le sous-échantillonnage
+                % soit effectué uniquement si la région d'intérêt a été
+                % délimitée par un polygone et non par un rectangle
                 elseif (strcmp(erreurs.identifier,'sous_echantillonnage_Callback:polygone_pas_choisi'))
                     warndlg('Merci de choisir une région d''intérêt de forme polygonale et de recommencer les étapes jusqu''ici.');
                     causeException = MException(erreur_polygone_pas_choisi.identifier,erreur_polygone_pas_choisi.message);
                     erreurs = addCause(erreurs,causeException);
                     throw(causeException);
+                    
+                %% L'echantillonnage doit se fonder sur une échographie de constraste
+                % dont on extrait une courbe de réhaussement du signal 
+                % avec l'arrivée de l'agent de contraste qui est par définition fonction du temps
                 elseif (strcmp(erreurs.identifier,'sous_echantillonnage_Callback:axe_abscisse_pas_temps'))
                     warndlg('Merci de choisir comme axe des abscisse le temps à l''étape ''affichage du graphique''.');
                     causeException = MException(erreur_axe_abscisse_pas_temps.identifier,erreur_axe_abscisse_pas_temps.message);
                     erreurs = addCause(erreurs,causeException);
                     throw(causeException);
-                end   
+                end
+                %% On affiche les erreurs qui n'auraient pas été gérées
                 rethrow(erreurs);
             end
         end
         
         function sauvegarder(soi)
-            %Transformer l'avertissement de taille de fichier trop grand
-            %pour un fichier en .mat en erreur
+            % Enregistre les images sous-echantillonnees
+            
+            
+            % On transforme l'avertissement de taille de fichier .mat trop grand
+            % en erreur
             etat_erreur_premodification=warning('error', 'MATLAB:save:sizeTooBigForMATFile');
             
+            % On gère les erreurs en utilisant un bloc try...catch
             try
+                %% On demande à l'utilisateur le chemin de sauvegarde
                 [nom_du_fichier,chemin_sauvegarde] = uiputfile({'*.*'});
+                %% Si l'utilisateur a annulé son action de sauvegarde, on renvoie une erreur
                 choix_annulation = isequal(nom_du_fichier,0) || isequal(chemin_sauvegarde,0);
                 if choix_annulation
                     erreur_choix_annulation.message = 'L''utilisateur a annulé son action de sauvegarde.';
                     erreur_choix_annulation.identifier = 'sous_echantillonnage_Callback:choix_annulation';
                     error(erreur_choix_annulation);
                 end
+                
+                %% On se place dans le bon dossier pour enregistrement
                 dossier_principal=pwd;
                 cd(chemin_sauvegarde);
-
+                
+                %% On sélectionne les volumes que l'on echantillonne normalement
                 volumes_ech_normal=soi.modele.volumes.donnees(:,:,:,soi.vecteur_temps_echantillonnage_normal);
                 volumes_ech_normal=squeeze(volumes_ech_normal);
-
+                
+                %% On sélectionne les volumes que l'on sous-echantillone
                 volumes_ssech=soi.modele.volumes.donnees(:,:,:,soi.vecteur_temps_sous_echantillonnage);
                 volumes_ssech=squeeze(volumes_ssech);
-
+                
+                %% On concatène les volumes echantillonnés normalement et sous-échantillonnés
                 volumes_a_enregistrer = cat(4,volumes_ech_normal,volumes_ssech);
-                %Argument -v6 pour enregistrer sans compression (cf
-                %Perroneau et al.)
+                
+                %% On enregistre le fichier sans compression grâce à l'argument -v6
+                % pour éviter ses problèmes (cf. Contrast ultrasonography: necessity
+                % of linear data processing for the quantification of tumor vascularization
+                % Peronneau et al. http://www.ncbi.nlm.nih.gov/pubmed/20577941)
                 save([nom_du_fichier,'.mat'],'volumes_a_enregistrer','-mat','-v6');
                 cd(dossier_principal);
             catch erreurs
+                %% On gère les erreurs levées
                 if (strcmp(erreurs.identifier, 'sous_echantillonnage_Callback:choix_annulation'))
                     causeException = MException(erreur_choix_annulation.identifier,erreur_choix_annulation.message);
                     erreurs = addCause(erreurs,causeException);
                 elseif (strcmp(erreurs.identifier, 'MATLAB:save:sizeTooBigForMATFile'))
+                    % Si la taille du fichier est trop grande etre enregistree sous un seul fichier.mat
+                    % on enregistre chacun des volumes correspondant à
+                    % chaque pas de temps séparément dans un dossier
+                    % portant le nom du fichier initial
+                    %% On gère l'erreur
                     message_erreur = ['Les données sont trop grosses pour être enregistrées dans un seul fichier.',...
                         'Les données seront enregistrées dans un dossier à la place.'];
                     causeException = MException('MATLAB:save:sizeTooBigForMATFile',message_erreur);
                     erreurs = addCause(erreurs,causeException);
+                    
+                    %% On importe les données utiles
                     graphique = soi.modele.graphique;
                     t_maximum= graphique.abscisses(end);
-                    %Si le répertoire existe déjà comme nom de fichier, on
-                    %l'écrase
-                    %Le fichier à supprimer peut ne pas exister, on
-                    %supprime les avertissements à ce sujet
+                    %% Si le répertoire existe déjà comme nom de fichier, on
+                    % l'écrase.
+                    % Le fichier à supprimer peut ne pas exister, on
+                    % supprime les avertissements à ce sujet.
                     warning('off','all');
+
                     delete(nom_du_fichier);
+                    
+                    %% On remet les avertissements
                     warning('on','all');
+                    
+                    %% On crée le dossier et on s'y met
                     mkdir(nom_du_fichier);
                     cd(nom_du_fichier);
+                    
+                    %% On enregistre les volumes dans le dossier créé
                     barre_attente = waitbar(0,{'Le fichier à enregistrer fait plus de deux Go :', ...
                         'fractionnement en fichiers individuels pour chacun des pas de temps',...
                         'et enregistrement dans un dossier séparé.'});
@@ -183,15 +234,22 @@ classdef Sous_echantillonnage < handle
                             '-mat','-v6');
                         waitbar(t/t_maximum);
                     end
+                    %% On revient dans le dossier parent et on supprime le fichier .mat
+                    % probablement créé dans la partie try...
                     cd('..');
                     delete([nom_du_fichier,'.mat']);
+                    
+                    %% On revient dans le dossier principal et on ferme la barre d'attente
                     cd(dossier_principal);
 
                     close(barre_attente);
                 else
+                    % On affiche les erreurs qui n'auraient pas été gérées
                     rethrow(erreurs);
                 end
             end
+            % On retransforme l'erreur de taille de fichier .mat trop grand
+            % en avertissement, comme par défaut
             warning(etat_erreur_premodification);
         end
     end
