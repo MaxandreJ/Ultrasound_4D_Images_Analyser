@@ -1,34 +1,37 @@
-function varargout = Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS(varargin)
-% ULTRASOUND_4D_IMAGES_ANALYSER_FOR_APLIO500_TOSHIBAMS M-file for Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS.fig
-%      ULTRASOUND_4D_IMAGES_ANALYSER_FOR_APLIO500_TOSHIBAMS, by itself, creates a new ULTRASOUND_4D_IMAGES_ANALYSER_FOR_APLIO500_TOSHIBAMS or raises the existing
+function varargout = Ultrasound_4D_Images_Analyser(varargin)
+% Pour les descriptions des fonctions, voir dans le contrôleur, la vue, et
+% le modèle, sauf pour les rares opérations que j'ai laissées ici.
+
+% ULTRASOUND_4D_IMAGES_ANALYSER M-file for Ultrasound_4D_Images_Analyser.fig
+%      ULTRASOUND_4D_IMAGES_ANALYSER, by itself, creates a new ULTRASOUND_4D_IMAGES_ANALYSER or raises the existing
 %      singleton*.
-%      H = ULTRASOUND_4D_IMAGES_ANALYSER_FOR_APLIO500_TOSHIBAMS returns the handle to a new ULTRASOUND_4D_IMAGES_ANALYSER_FOR_APLIO500_TOSHIBAMS or the handle to
+%      H = ULTRASOUND_4D_IMAGES_ANALYSER returns the handle to a new ULTRASOUND_4D_IMAGES_ANALYSER or the handle to
 %      the existing singleton*.
 %
-%      ULTRASOUND_4D_IMAGES_ANALYSER_FOR_APLIO500_TOSHIBAMS('CALLBACK',hObject,eventData,ch,...) calls the local
-%      function named CALLBACK in ULTRASOUND_4D_IMAGES_ANALYSER_FOR_APLIO500_TOSHIBAMS.M with the given input arguments.
+%      ULTRASOUND_4D_IMAGES_ANALYSER('CALLBACK',hObject,eventData,ch,...) calls the local
+%      function named CALLBACK in ULTRASOUND_4D_IMAGES_ANALYSER.M with the given input arguments.
 %
-%      ULTRASOUND_4D_IMAGES_ANALYSER_FOR_APLIO500_TOSHIBAMS('Property','Value',...) creates a new ULTRASOUND_4D_IMAGES_ANALYSER_FOR_APLIO500_TOSHIBAMS or raises the
+%      ULTRASOUND_4D_IMAGES_ANALYSER('Property','Value',...) creates a new ULTRASOUND_4D_IMAGES_ANALYSER or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS_OpeningFcn gets called.  An
+%      applied to the GUI before Ultrasound_4D_Images_Analyser_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS_OpeningFcn via varargin.
+%      stop.  All inputs are passed to Ultrasound_4D_Images_Analyser_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS
+% Edit the above text to modify the response to help Ultrasound_4D_Images_Analyser
 
-% Last Modified by GUIDE v2.5 08-Aug-2016 18:23:12
+% Last Modified by GUIDE v2.5 30-Aug-2016 14:22:09
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS_OpeningFcn, ...
-                   'gui_OutputFcn',  @Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS_OutputFcn, ...
+                   'gui_OpeningFcn', @Ultrasound_4D_Images_Analyser_OpeningFcn, ...
+                   'gui_OutputFcn',  @Ultrasound_4D_Images_Analyser_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 
@@ -44,22 +47,18 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS is made visible.
-function Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before Ultrasound_4D_Images_Analyser is made visible.
+function Ultrasound_4D_Images_Analyser_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS (see VARARGIN)
+% varargin   command line arguments to Ultrasound_4D_Images_Analyser (see VARARGIN)
 
-%Ancien aplio
-%DecodeDicomInfo('C:\Documents and Settings\Administrateur\Mes documents\Downloads\AplioXV\DICOM XV\DICOM XV\20160509\S0000004\US000001');
-%DecodeDicomInfo('DICOM XV\20160509\S0000004\US000001');
-%handles.donnees2 = GetRAWframes_B;
-%Choose default command line output for Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS
+%Choose default command line output for Ultrasound_4D_Images_Analyser
 handles.output = hObject;
 
-% get handle to the controller
+% On donne accès au contrôleur à l'interface homme-machine
 for i = 1:2:length(varargin)
     switch varargin{i}
         case 'controleur'
@@ -69,19 +68,12 @@ for i = 1:2:length(varargin)
     end
 end
 
-% code = fullfile(pwd,'Code');
-% chemin_code = genpath(code);
-% addpath(chemin_code);
-
-% handles.ss_echantillonnage_effectue = false;
-% handles.sauvegarde_sous_echantillonnage = true;
-
 % Update handles structure
 guidata(hObject, handles);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = Ultrasound_4D_Images_Analyser_for_Aplio500_ToshibaMS_OutputFcn(hObject, eventdata, handles) 
+function varargout = Ultrasound_4D_Images_Analyser_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -98,23 +90,34 @@ function chargement_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 choix_chargement = get(handles.choix_chargement,'Value');
 
-format_bin = 1;
-format_mat = 2;
+%% Selon le choix dans la liste déroualnte, on choisit de charger les volumes
+% au format correspondant
+switch choix_chargement
+    case 1
+        format='VoxelData_bin';
+    case 2
+        format='RawData_bin';
+    case 3
+        format='fichier_mat';
+    case 4
+        format='dossier_mat';
+end
 
-if choix_chargement==format_bin
-    handles.controleur.charger_volumes_RawData_bin;
-elseif choix_chargement==format_mat
-    handles.controleur.charger_volumes_mat;
+switch format
+    case 'VoxelData_bin'
+        handles.controleur.charger_volumes_VoxelData_bin;
+    case 'RawData_bin'
+        handles.controleur.charger_volumes_RawData_bin;
+    case 'fichier_mat'
+        handles.controleur.charger_volumes_fichier_mat;
+    case 'dossier_mat'
+        handles.controleur.charger_volumes_dossier_mat;
 end
 
 
 
-
-% charger_volumes(hObject, eventdata, handles);
-% handles=guidata(handles.figure1);
-% guidata(handles.figure1,handles);
-
 function figure1_KeyPressFcn(hObject, eventdata, handles)
+% Si on appuie sur une touche du clavier, on appelle cette fonction
 handles.controleur.mettre_a_jour_image_clavier(eventdata);
 
 % --- Executes on button press in afficher_image.
@@ -126,10 +129,11 @@ coordonnee_axe3_selectionnee = int16(str2double(get(handles.valeur_axe3_image,'S
 coordonnee_axe4_selectionnee = int16(str2double(get(handles.valeur_axe4_image,'String')));
 
 handles.controleur.mettre_a_jour_image_bouton(coordonnee_axe3_selectionnee,coordonnee_axe4_selectionnee);
-%afficher_image(hObject, eventdata, handles);
 
 % --- Executes on button press in selectionner_region_interet.
 function selectionner_region_interet_Callback(hObject, eventdata, handles)
+% On convertit les coordonnées entrées dans l'interface et on les passe à
+% la fonction appropriée du contrôleur
 coordonnee_axe1_debut = str2double(get(handles.valeur_axe1Debut_graphique,'String'));
 coordonnee_axe2_debut = str2double(get(handles.valeur_axe2Debut_graphique,'String'));
 coordonnee_axe1_fin = str2double(get(handles.valeur_axe1Fin_graphique,'String'));
@@ -161,12 +165,14 @@ elseif handles.moyenne_axe1et2.Value
 elseif handles.pas_de_moyenne.Value
     axe_moyenne_choisi='pas de moyenne';
 end
+
 handles.controleur.definir_graphique(axe_abscisses_choisi,axe_moyenne_choisi);
-% afficher_graphique(hObject, eventdata, handles)
 
 % --- Executes on button press in calculer_heterogeneite.
 function calculer_heterogeneite_Callback(hObject, eventdata, handles)
-handles.controleur.calculer_entropie;
+% Pour l'instant, le calcul d'hétérogénéité se résume à un calcul
+% d'entropie
+handles.controleur.calculer_entropie_region_interet;
 
 % --- Executes on button press in detecter_pics.
 function detecter_pics_Callback(hObject, eventdata, handles)
@@ -174,19 +180,18 @@ taille_fenetre_lissage = str2double(get(handles.valeur_taille_fenetre_lissage,'S
 nombre_de_pics = str2double(get(handles.valeur_nombre_de_pics,'String'));
 
 handles.controleur.detecter_pics(taille_fenetre_lissage,nombre_de_pics);
-% detecter_pics(hObject, eventdata, handles)
 
 % --- Executes on button press in previsualiser_sous_echantillonnage.
 function previsualiser_sous_echantillonnage_Callback(hObject, eventdata, handles)
-facteur_temps_I_max=str2double(get(handles.facteur_temps_I_max,'string'));
+facteur_temps_intensite_maximale=str2double(get(handles.facteur_temps_I_max,'string'));
 facteur_sous_echantillonnage=str2double(get(handles.facteur_sous_echantillonnage,'string'));
-handles.controleur.previsualiser_sous_echantillonnage(facteur_temps_I_max,facteur_sous_echantillonnage);
+handles.controleur.previsualiser_sous_echantillonnage(facteur_temps_intensite_maximale,facteur_sous_echantillonnage);
 
 % --- Executes on button press in sous_echantillonner_volumes.
 function sous_echantillonner_volumes_Callback(hObject, eventdata, handles)
-facteur_temps_I_max=str2double(get(handles.facteur_temps_I_max,'string'));
+facteur_temps_intensite_maximale=str2double(get(handles.facteur_temps_I_max,'string'));
 facteur_sous_echantillonnage=str2double(get(handles.facteur_sous_echantillonnage,'string'));
-handles.controleur.definir_et_sauvegarder_sous_echantillonnage(facteur_temps_I_max,facteur_sous_echantillonnage);
+handles.controleur.definir_et_sauvegarder_sous_echantillonnage(facteur_temps_intensite_maximale,facteur_sous_echantillonnage);
 % sous_echantillonner_volumes(hObject, eventdata, handles)
 
 % --- Executes on selection change in choix_du_pic.
@@ -226,12 +231,6 @@ function choix_de_deux_pics_Callback(hObject, eventdata, handles)
 numero_combinaison_de_deux_pics_choisie = get(handles.choix_de_deux_pics,'Value');
 
 handles.controleur.mettre_a_jour_distance_pic_a_pic_choisie(numero_combinaison_de_deux_pics_choisie);
-
-% combinaison_pics_choisis = handles.graphique.pics.combinaisons_indices_de_deux_pics(numero_combinaison_de_deux_pics_choisie,:);
-% x_plus_grand_des_deux_pics = handles.graphique.pics.abscisses(combinaison_pics_choisis(2));
-% x_plus_petit_des_deux_pics = handles.graphique.pics.abscisses(combinaison_pics_choisis(1));
-% set(handles.dpap_affichage,'String',num2str(abs(x_plus_grand_des_deux_pics-x_plus_petit_des_deux_pics)));
-% guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
 function affichage_graphique_CreateFcn(hObject, eventdata, handles)
@@ -297,8 +296,8 @@ function valeur_axe1Fin_graphique_Callback(hObject, eventdata, handles)
 % hObject    handle to valeur_axe1Fin_graphique (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-set(hObject,'Value',int16(str2double(get(hObject,'String'))));
-guidata(hObject,handles);
+set(hObject,'Value',int16(str2double(get(hObject,'String')))); %A supprimer ?
+guidata(hObject,handles); %A supprimer ?
 
 % Hints: get(hObject,'String') returns contents of valeur_axe1Fin_graphique as text
 %        str2double(get(hObject,'String')) returns contents of valeur_axe1Fin_graphique as a double
@@ -323,8 +322,8 @@ function valeur_axe2Fin_graphique_Callback(hObject, eventdata, handles)
 % hObject    handle to valeur_axe2Fin_graphique (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-set(hObject,'Value',int16(str2double(get(hObject,'String'))));
-guidata(hObject,handles);
+set(hObject,'Value',int16(str2double(get(hObject,'String')))); %A supprimer ?
+guidata(hObject,handles); %A supprimer ?
 
 % Hints: get(hObject,'String') returns contents of valeur_axe2Fin_graphique as text
 %        str2double(get(hObject,'String')) returns contents of valeur_axe2Fin_graphique as a double
@@ -511,17 +510,7 @@ function Aide_Callback(hObject, eventdata, handles)
 % hObject    handle to Aide (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-msgbox({'Le passage entre les types de coupes est permise par les touches du clavier suivantes :', ...
-'0 : coupe frontale (Y en fonction de X) ;', ...
-'1 : coupe transversale (Z en fonction de X) ;', ...
-'2 : coupe sagittale (Z en fonction de Y);', ...
-'3 : coupe de X en fonction du temps ;', ...
-'4 : coupe de Y en fonction du temps ;', ...
-'5 : coupe de Z en fonction du temps.', ...
-'',...
-'Pour une même coupe, on peut glisser entre les plans par les flèches multidirectionnelles du clavier :',...
-'flèches gauche et droite pour glisser selon le premier axe mentionné dans le titre de l''image ;',...
-'flèches bas et haut pour glisser selon le deuxième axe mentionné dans le titre de l''image.'})
+handles.controleur.afficher_aide;
 
 
 % --------------------------------------------------------------------
@@ -529,7 +518,8 @@ function uitoggletool6_ClickedCallback(hObject, eventdata, handles)
 % hObject    handle to uitoggletool6 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-h = rotate3d(handles.image);
+% Permet une rotation de l'image
+rotate3d(handles.image);
 
 
 
@@ -670,11 +660,7 @@ function sauvegarde_graphique_Callback(hObject, eventdata, handles)
 % hObject    handle to sauvegarde_graphique (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-[nom_du_fichier,chemin] = uiputfile({'*.png';'*.jpeg';'*.bmp';'*.tiff';'*.pdf';'*.eps'});
-dossier_principal=pwd;
-chemin_fichier_a_enregistrer = fullfile(chemin,nom_du_fichier);
-export_fig(handles.affichage_graphique, chemin_fichier_a_enregistrer);
-cd(dossier_principal)
+handles.controleur.exporter_graphique;
 
 % --------------------------------------------------------------------
 function ContexteGraphique_Callback(hObject, eventdata, handles)
@@ -689,7 +675,6 @@ function tracer_polygone_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 handles.controleur.selectionner_visuellement_region_interet_polygonale;
-%tracer_polygone(hObject, eventdata, handles)
 
 
 
@@ -699,8 +684,11 @@ function moyenne_axe1et2_Callback(hObject, eventdata, handles)
 % hObject    handle to moyenne_axe1et2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-graphique_selon_axe1ou2_choisi = logical(get(handles.abscisses_axe1,'value')) || logical(get(handles.abscisses_axe2,'value'));
-if graphique_selon_axe1ou2_choisi
+
+%% Système d'exclusions permettant de ne jamais avoir de couple de choix
+% d'axe de moyennage et d'axe d'abscisses qui sont incompatibles
+axe_abscisse_1ou2_choisi = logical(get(handles.abscisses_axe1,'value')) || logical(get(handles.abscisses_axe2,'value'));
+if axe_abscisse_1ou2_choisi
     set(handles.abscisses_axe4,'value',1);
 end
 
@@ -712,6 +700,9 @@ function abscisses_axe3_Callback(hObject, eventdata, handles)
 % hObject    handle to abscisses_axe3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+%% Système d'exclusions permettant de ne jamais avoir de couple de choix
+% d'axe de moyennage et d'axe d'abscisses qui sont incompatibles
 moyenne_axe1ou2oupas_choisie = logical(get(handles.moyenne_axe1,'value')) || logical(get(handles.moyenne_axe2,'value')) || ...
     logical(get(handles.pas_de_moyenne,'value'));
 if moyenne_axe1ou2oupas_choisie
@@ -726,6 +717,9 @@ function abscisses_axe4_Callback(hObject, eventdata, handles)
 % hObject    handle to abscisses_axe4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+%% Système d'exclusions permettant de ne jamais avoir de couple de choix
+% d'axe de moyennage et d'axe d'abscisses qui sont incompatibles
 moyenne_axe1ou2oupas_choisie = logical(get(handles.moyenne_axe1,'value')) || logical(get(handles.moyenne_axe2,'value')) || ...
     logical(get(handles.pas_de_moyenne,'value'));
 if moyenne_axe1ou2oupas_choisie
@@ -741,9 +735,11 @@ function pas_de_moyenne_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-graphique_selon_axe3ou4_choisi = logical(get(handles.abscisses_axe3,'value')) || ...
+%% Système d'exclusions permettant de ne jamais avoir de couple de choix
+% d'axe de moyennage et d'axe d'abscisses qui sont incompatibles
+axe_abscisses_3ou4_choisi = logical(get(handles.abscisses_axe3,'value')) || ...
     logical(get(handles.abscisses_axe4,'value'));
-if graphique_selon_axe3ou4_choisi
+if axe_abscisses_3ou4_choisi
     set(handles.abscisses_axe1,'value',1);
 end
 guidata(handles.figure1,handles);
@@ -854,11 +850,7 @@ function sauvegarde_image_Callback(hObject, eventdata, handles)
 % hObject    handle to sauvegarde_image (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-[nom_du_fichier,chemin] = uiputfile({'*.png';'*.jpeg';'*.bmp';'*.tiff';'*.pdf';'*.eps'});
-dossier_principal=pwd;
-%cd(chemin);
-export_fig(handles.image, nom_du_fichier);
-cd(dossier_principal)
+handles.controleur.exporter_image;
 
 
 % --- Executes on button press in points_de_donnees.
@@ -877,8 +869,5 @@ function capture_fenetre_Callback(hObject, eventdata, handles)
 % hObject    handle to capture_fenetre (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-[nom_du_fichier,chemin] = uiputfile({'*.png';'*.jpeg';'*.bmp';'*.tiff';'*.pdf';'*.eps'});
-dossier_principal=pwd;
-cd(chemin);
-export_fig(handles.figure1, nom_du_fichier);
-cd(dossier_principal)
+handles.controleur.exporter_interface;
+

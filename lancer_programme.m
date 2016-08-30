@@ -32,5 +32,7 @@ chemin_matlab = genpath(chemin);
 addpath(chemin_matlab);
 
 %% Lancement du programme
+% On instancie le modèle
 modele = Modele;
+% On instancie le contrôleur
 controleur = Controleur(modele);
