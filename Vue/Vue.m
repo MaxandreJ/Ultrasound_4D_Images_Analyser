@@ -52,6 +52,10 @@ classdef Vue < handle
                 @(information_propriete_modifiee,evenement)Vue.reagir_aux_observations(soi,information_propriete_modifiee,evenement));
             addlistener(soi.modele,'entropie_region_interet','PostSet', ...
                 @(information_propriete_modifiee,evenement)Vue.reagir_aux_observations(soi,information_propriete_modifiee,evenement));
+            addlistener(soi.modele,'coefficient_variation_region_interet','PostSet', ...
+                @(information_propriete_modifiee,evenement)Vue.reagir_aux_observations(soi,information_propriete_modifiee,evenement));
+            addlistener(soi.modele,'energie_matrice_cooccurrence_region_interet','PostSet', ...
+                @(information_propriete_modifiee,evenement)Vue.reagir_aux_observations(soi,information_propriete_modifiee,evenement));
             addlistener(soi.modele,'ordonnees_graphique','PostSet', ...
                 @(information_propriete_modifiee,evenement)Vue.reagir_aux_observations(soi,information_propriete_modifiee,evenement));
             addlistener(soi.modele,'largeur_a_mi_hauteur_pic_choisi','PostSet', ...
@@ -180,6 +184,13 @@ classdef Vue < handle
                     % temps maintenant pour tout changer.
                     gris = soi.gris;
                     set(handles.affichage_entropie,'String',[],'BackgroundColor',gris);
+                    set(handles.affichage_coefficient_variation,'String',[],'BackgroundColor',gris);
+                    set(handles.affichage_contraste,'String',[],'BackgroundColor',gris);
+                    set(handles.affichage_correlation,'String',[],'BackgroundColor',gris);
+                    set(handles.affichage_energie,'String',[],'BackgroundColor',gris);
+                    set(handles.affichage_homogeneite,'String',[],'BackgroundColor',gris);
+                    set(handles.decalage_ligne,'Enable','inactive','BackgroundColor',gris);
+                    set(handles.decalage_colonne,'Enable','inactive','BackgroundColor',gris);
                     set(handles.choix_du_pic,'String',' ');
                     set(handles.valeur_taille_fenetre_lissage,'String','1','Enable','inactive','BackgroundColor',gris);
                     set(handles.valeur_nombre_de_pics,'String','1','Enable','inactive','BackgroundColor',gris);
@@ -209,6 +220,8 @@ classdef Vue < handle
                     set(handles.moyenne_axe1et2,'String',[axe1, ' et ', axe2]);
                     set(handles.texte_axe3_image,'String',axe3);
                     set(handles.texte_axe4_image,'String',axe4);
+                    set(handles.texte_decalage_axe1,'String',['en ', axe1]);
+                    set(handles.texte_decalage_axe2,'String',['en ', axe2]);
                     set(handles.maximum_axe1_1,'String',['/',num2str(objet_concerne.volumes.taille_axes(1))]);
                     set(handles.maximum_axe1_2,'String',['/',num2str(objet_concerne.volumes.taille_axes(1))]);
                     set(handles.maximum_axe2_1,'String',['/',num2str(objet_concerne.volumes.taille_axes(2))]);
@@ -334,8 +347,15 @@ classdef Vue < handle
                         set(handles.abscisses_axe2,'Visible','off');  
                     end
                     
-                    %% Une fois la région d'intérêt choisie, on peut calculer l'entropie
+                    %% Une fois la région d'intérêt choisie, on peut calculer les indices de texture
                     set(handles.affichage_entropie,'BackgroundColor','white','String',[]);
+                    set(handles.affichage_coefficient_variation,'String',[],'BackgroundColor','white');
+                    set(handles.affichage_contraste,'String',[],'BackgroundColor','white');
+                    set(handles.affichage_correlation,'String',[],'BackgroundColor','white');
+                    set(handles.affichage_energie,'String',[],'BackgroundColor','white');
+                    set(handles.affichage_homogeneite,'String',[],'BackgroundColor','white');
+                    set(handles.decalage_ligne,'Enable','on','BackgroundColor','white');
+                    set(handles.decalage_colonne,'Enable','on','BackgroundColor','white');
                     
                     %% On remet à zéro l'affichage des paramètres futurs dans le cas
                     % où on n'est pas à la première image affichée
@@ -358,6 +378,16 @@ classdef Vue < handle
                 case 'entropie_region_interet'
                     % On affiche l'entropie calculée
                     set(handles.affichage_entropie,'String',num2str(objet_concerne.entropie_region_interet));
+                case 'coefficient_variation_region_interet'
+                    % On affiche le coefficient de variation dans la région
+                    % d'intérêt
+                    set(handles.affichage_coefficient_variation,'String',num2str(objet_concerne.coefficient_variation_region_interet));
+                case 'energie_matrice_cooccurrence_region_interet'
+                    % On affiche les indices calculés sur la matrice de cooccurrences
+                    set(handles.affichage_energie,'String',num2str(objet_concerne.energie_matrice_cooccurrence_region_interet));
+                    set(handles.affichage_contraste,'String',num2str(objet_concerne.contraste_matrice_cooccurrence_region_interet));
+                    set(handles.affichage_correlation,'String',num2str(objet_concerne.correlation_matrice_cooccurrence_region_interet));
+                    set(handles.affichage_homogeneite,'String',num2str(objet_concerne.homogeneite_matrice_cooccurrence_region_interet));
                 case 'ordonnees_graphique'
                     
                     

@@ -139,11 +139,25 @@ classdef Controleur < handle
             soi.modele.region_interet.selectionner_visuellement;
         end
         
-        function calculer_entropie_region_interet(soi)
-            % calcule l'entropie globale de la région d'intérêt (sur la
-            % matrice de l'image directement, et pas sur une matrice de cooccurrence)
+        function calcul_indices_texture_region_interet(soi,decalage_ligne_matrice_cooccurrence...
+                ,decalage_colonne_matrice_cooccurrence)
+            % calcule des indices de texture de la région d'intérêt
+            % (entropie, coefficient de variation, indices calculés à partir
+            % de la matrice de cooccurrence)
             
+            %% calcule l'entropie globale de la région d'intérêt (sur la
+            % matrice de l'image directement, et pas sur une matrice de cooccurrence)
             soi.modele.region_interet.calculer_entropie;
+            
+            %% calcule le coefficient de variation (écart-type/moyenne) des
+            % valeurs d'intensités de la région d'intérêt
+            soi.modele.region_interet.calculer_coefficient_variation;
+            
+            %% calcule l'énergie, le contraste, la corrélation et l'homogénéité
+            % de la matrice de cooccurrence des niveaux de gris de la
+            % région d'intérêt
+            soi.modele.region_interet.calculer_statistiques_matrice_cooccurrence(decalage_ligne_matrice_cooccurrence,...
+                decalage_colonne_matrice_cooccurrence);
         end
         
         function definir_graphique(soi,axe_abscisses_choisi,axe_moyenne_choisi)

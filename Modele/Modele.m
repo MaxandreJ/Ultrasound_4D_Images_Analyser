@@ -26,6 +26,11 @@ classdef Modele < handle
         chemin_enregistrement_export_graphique
         chemin_enregistrement_export_image
         chemin_enregistrement_export_interface
+        contraste_matrice_cooccurrence_region_interet
+        energie_matrice_cooccurrence_region_interet
+        homogeneite_matrice_cooccurrence_region_interet
+        correlation_matrice_cooccurrence_region_interet
+        coefficient_variation_region_interet
     end
     
     %% Propriétés qui sont les enfants du modèle
