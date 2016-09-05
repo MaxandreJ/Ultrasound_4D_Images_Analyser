@@ -83,19 +83,11 @@ classdef (Abstract) Volumes < handle
                             soi.coordonnee_axe4_selectionnee=soi.taille_axes(4);
                         end
                     %% Naviguer entre les orientation de plans à l'aide des chiffres du clavier
-                    % J'ai pris cette fonction quelque part, et j'ai eu
-                    % beau renommer tous les noms de variables en des
-                    % choses compréhensibles, la logique du type qui l'a
-                    % écrit m'échappe. Recodez la fonction si vous en avez
-                    % l'envie...
                     case {'0','numpad0'}
                         %% Si l'orientation du plan d'affichage n'est pas 0 (plan axial)
                         if orientation_plan_affichage_actuel ~= 0;
-                            %% Ligne incompréhensible due à un codage catastrophique de celui qui a
-                            % originalement écrit la fonction de changement
-                            % d'image... j'ai abandonné la compréhension et
-                            % n'ai pas eu le courage de réécrire le code
-                            donnees_4D = Volumes.permuter(donnees_4D,orientation_plan_affichage_actuel);
+                            %% On revient à l'orientation 0
+                            donnees_4D = Volumes.revenir_ordre_axes_original(donnees_4D,orientation_plan_affichage_actuel);
                         end;
                         %% après modification, le plan d'affichage est 0
                         % (plan axial)
