@@ -17,6 +17,8 @@ Or you can also use a dictionary and learn 50 words of French.
 
 The application was developped by Maxandre Jacqueline, student at Ecole Centrale Paris, for his final internship. It uses object oriented programming (OOP) and the model-view-controller design pattern.
 
+If you want to collaborate on this programme, don't hesitate to fork me or to send me an email on the address written below so I can add you as a collaborator on this repository.
+
 ### Français
 
 Application permettant d'analyser des séquences 4D d'images ultrasonores, réalisée pendant mon stage à l'hôpital Gustave Roussy à Villejuif
@@ -31,6 +33,8 @@ L'ensemble du programme est écrit en français.
 
 L'application a été développé par Maxandre Jacqueline, étudiant à l'Ecole Centrale Paris, pour son stage de fin d'études. Elle utilise
 la programmation orientée objet et le patron de conception modèle-vue-contrôleur.
+
+Si vous voulez collaborer sur ce programme, n'hésitez pas à créer une nouvelle branche ou à m'envoyer un courriel à l'adresse écrite ci-dessous, pour que je puisse vous ajouter en tant que collaborateur sur ce dépôt.
 
 ## How to launch the application - Comment lancer l'application
 
