@@ -112,6 +112,20 @@ Ouvrir le répertoire Tests et lancer lancer_tests.m sur Matlab R2014b ou plus r
 Si la ligne de commande dit "Tests are done", cela veut dire que tous les tests ont réussis.
 J'ai seulement codé un test par manque de temps.
 
+## Warning note on data consistency - Avertissemment sur la cohérence des données
+
+### English
+
+Although what's shown in the user interface is always consistent with what the user wants to do, the state of properties of objects is not always consistent. This is due to programming errors on my behalf: I sometimes reset the display, when I should have instead reset the properties of objects themselves.
+
+As a consequence, don't analyse first an image, then another one, and try to extract the data from objects which properties are updated at later analysis steps than the one you are currently at with the new image. For example, don't create a chart with a first image, then load a second image and immediately try to extract data from the "graphique" object (before you have created the chart on the new image) : you would get the data from the previous image.
+
+### Français
+
+Bien que ce qui est affiché sur l'interface utilisateur est toujours cohérent avec l'intuition de l'utilisateur, les valeurs des propriétés des objets ne sont pas toujours cohérentes. Cela est dûe à des erreurs de programmation de ma part : parfois je remet à zéro l'affichage, quand j'aurais plutôt dû remettre à zéro les propriétés des objets.
+
+Par conséquent, n'analysez pas une image, puis une autre, en voulant extraire les données d'objets dont les propriétés sont mises à jours à des étapes plus tardives d'analyse que celle à laquelle vous vous trouver avec la nouvelle image. Par exemple, ne créez pas un graphique avec une première image, puis chargez une seconde image en voulant extraire immédiatement des données de l'objet "graphique" (avant d'avoir créé le graphique sur la nouvelle image): vous obtiendriez les données de l'ancienne image analysée.
+
 ## Contacting the developer behind the software - Comment contacter le développeur qui a écrit le logiciel
 
 ### English
