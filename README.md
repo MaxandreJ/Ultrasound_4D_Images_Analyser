@@ -111,7 +111,7 @@ Ouvrir le répertoire Tests et lancer lancer_tests.m sur Matlab R2014b ou plus r
 Si la ligne de commande dit "Tests are done", cela veut dire que tous les tests ont réussis.
 J'ai seulement codé un test par manque de temps.
 
-## Contacting the developper behind the software
+## Contacting the developer behind the software - Comment contacter le développeur qui a écrit le logiciel
 
 ### English
 
