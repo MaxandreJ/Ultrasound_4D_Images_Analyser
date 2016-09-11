@@ -1,0 +1,4480 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+
+\usepackage{caption}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language french
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language french
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Rapport de stage de fin d'étude 
+\begin_inset Newline newline
+\end_inset
+
+à l'École centrale des arts et manufactures
+\end_layout
+
+\begin_layout Author
+Maxandre Jacqueline, 
+\begin_inset Newline newline
+\end_inset
+
+sous la supervision de Stéphanie Pitre-Champagnat, 
+\begin_inset Newline newline
+\end_inset
+
+docteur en physique nucléaire, 
+\begin_inset Newline newline
+\end_inset
+
+chargée de recherche en imagerie médicale
+\begin_inset Newline newline
+\end_inset
+
+ au Centre national de la recherche scientifique (CNRS)
+\end_layout
+
+\begin_layout Date
+Septembre 2016
+\end_layout
+
+\begin_layout Abstract
+Un des nouveaux enjeux de l’imagerie fonctionnelle en cancérologie est d’accéder
+ à la description et l'évaluation de la perfusion tumorale et de son hétérogénéi
+té.
+ L'échographie de contraste 4D permet d'accéder à cette hétérogénéité mais
+ demeure une technologie d'apparition récente et encore peu utilisée, et
+ les logiciels permettant l’analyse des images produites font défaut.
+ J'ai développé un logiciel permettant d'analyser les données 4D ; de caractéris
+er les performances de l’échographe Aplio 500 (Toshiba Medical Systems)
+ ; de déterminer une méthode de réduction de la taille des données 4D sauvegardé
+es tout en optimisant l'information ; de calculer des indicateurs de l'hétérogén
+éité du signal dans une région d'intérêt.
+ Une attention particulière a été portée à la facilité d'utilisation du
+ logiciel (interface graphique intuitive) ; à la facilité de compréhension
+ de son fonctionnement (code source compréhensible) ; de modification de
+ son code source (programmation orientée objet).
+ Dans ce rapport, je propose le calcul de la résolution spatiale de l'Aplio
+ 500 suivant l'axe 
+\begin_inset Formula $x$
+\end_inset
+
+au moyen du logiciel que j'ai développé.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FloatList figure
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Remerciements
+\end_layout
+
+\begin_layout Description
+À Stéphanie Pitre-Champagnat, chargée de recherche CNRS, pour m'avoir accepté
+ dans son équipe, et pour son guidage, sa bienveillance, sa bonne humeur
+ et ses retours sur mon programme,
+\end_layout
+
+\begin_layout Description
+À Virginie Grand-Perret, doctorante en imagerie médicale, pour son soutien,
+ sa sympathie, ses retours sur mon programme et la création du dispositif
+ expérimental,
+\end_layout
+
+\begin_layout Description
+À Léa Chateauneuf, stagiaire en master 1, pour sa bonne humeur,
+\end_layout
+
+\begin_layout Description
+À Bénédicte Coiffier, ingénieure biomédicale, pour son aide sur l'utilisation
+ de l'Aplio 500 et sa sincérité,
+\end_layout
+
+\begin_layout Description
+À Nathalie Lassau, chef de l'équipe Imagerie multimodale en cancérologie
+ à Gustave Roussy, pour m'avoir recruté, pour son énergie et ses retours
+ sur mon programme,
+\end_layout
+
+\begin_layout Description
+À Baya Benatsou, technicienne d'analyse d'images, pour sa bienveillance,
+\end_layout
+
+\begin_layout Description
+À Jean Denoyel, stagiaire en master 2, pour son partage de l'actualité vidéoludi
+que,
+\end_layout
+
+\begin_layout Description
+À Hongchen Wang, postdoctorant en Imagerie Médicale, pour son style vestimentair
+e.
+\end_layout
+
+\begin_layout Part
+Contexte du stage
+\end_layout
+
+\begin_layout Section
+Imagerie médicale fonctionnelle en cancérologie
+\end_layout
+
+\begin_layout Standard
+L'imagerie médicale permet d'évaluer l'état de santé d'un patient au moyen
+ d'examens faiblement invasifs.
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Un examen faiblement invasif est défini par une effraction de la peau limitée
+ aux besoins de prise de sang et de l'injection de produits.
+ J'ai traduit l'anglais 
+\begin_inset Quotes fld
+\end_inset
+
+
+\emph on
+minimally invasive
+\emph default
+
+\begin_inset Quotes frd
+\end_inset
+
+ à mon sens plus juste que le terme français 
+\begin_inset Quotes fld
+\end_inset
+
+non-invasif
+\begin_inset Quotes frd
+\end_inset
+
+ qui désigne des examens durant lesquels il y a pourtant effraction de la
+ peau 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Wikipedia-1"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ Son utilisation en cancérologie permet notamment de décrire les caractéristique
+s des tumeurs, qui sont le résultat d'un 
+\begin_inset Quotes fld
+\end_inset
+
+processus pathologique où la prolifération exagérée des cellules aboutit
+ à une surproduction tissulaire qui persiste et a tendance à s'accroître
+\begin_inset Quotes frd
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Larousse"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+L'imagerie 
+\emph on
+fonctionnelle 
+\emph default
+utilisée en cancérologie permet de d'étudier la fonction des tumeurs 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "petscan.info:2007"
+
+\end_inset
+
+.
+ La fonction est définie comme 
+\begin_inset Quotes fld
+\end_inset
+
+l'ensemble des actes accomplis par une structure organique définie en vue
+ d'un résultat déterminé
+\begin_inset Quotes frd
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "TLFI-1"
+
+\end_inset
+
+ et diffère du métabolisme qui se déroule à de plus petites échelles de
+ grandeur.
+ Son imagerie est permise par l'utilisation d'agents de contraste qui permettent
+ d'augmenter l'écart entre la valeur d'intensité des pixels décrivant la
+ fonction que l'on souhaite observer, autrement dit notre 
+\emph on
+signal
+\emph default
+, et les autres pixels décrivant le reste de la tumeur et son tissu environnant,
+ autrement dit notre 
+\emph on
+bruit
+\emph default
+.
+ Dans le cadre de l'imagerie fonctionnelle de la vascularisation, l'utilisation
+ d'agents de contraste permet de réhausser le signal vasculaire.
+\end_layout
+
+\begin_layout Section
+Échographie de contraste
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Échographie-de-contraste"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+En échographie, des solutions de microbulles sont utilisées commes agents
+ de contraste.
+ En France, la seule solution ayant reçu l'autorisation de mise sur le marché
+ a le nom commercial SonoVue et est produite par la société italienne Bracco.
+ Les microbulles ont été conçues dans l'idée de réhausser le signal ultrasonore
+ dans le compartiment intravasculaire.
+\end_layout
+
+\begin_layout Standard
+L'onde ultrasonore, engendrée par la sonde de l'échographe, est une onde
+ de pression mécanique qui 
+\begin_inset Quotes fld
+\end_inset
+
+va créer des surpressions et des dépressions par rapport à la pression d’équilib
+re du milieu
+\begin_inset Quotes frd
+\end_inset
+
+ dans lequel elle évolue 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Boyer:2016"
+
+\end_inset
+
+.
+ On mesure les variations maximales de pression locale lors du passage des
+ ultrasons dans les tissus par un indice mécanique 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Arbeille:2003"
+
+\end_inset
+
+.
+ Pour des valeurs d'indice mécanique comprises entre 0,1 et 0,7, les microbulles
+ entrent en résonance avec l'onde ultrasonore et réémettent des ondes aux
+ fréquences variées 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Boyer:2016"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+L'échographie qui utilise des agents de contraste, appelée échographie de
+ contraste, se sert le plus communément de l'une des ondes réémises, ou
+ échos, pour augmenter le contraste de l'image obtenue.
+ Si l'on considère l'ensemble des échos des microbulles comme le signal
+ qu'elles renvoient, alors on appelle 
+\emph on
+deuxième harmonique du signal 
+\emph default
+sa composante ayant une fréquence double de la fréquence fondamentale du
+ signal, qui correspond à la fréquence d'émission par la sonde ultrasonore
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Boyer:2016"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+C'est le deuxième harmonique du signal qui est détecté par l'échographe
+ Aplio 500, utilisé par l'équipe dont je fais partie, quand il fonctionne
+ en mode d'échographie de contraste harmonique (ou 
+\emph on
+CHI
+\emph default
+, pour 
+\emph on
+Contrast-enhanced Harmonic Imagery
+\emph default
+).
+ L'échographe Aplio 500 est un produit de l'entreprise japonaise Toshiba
+ Medical Systems.
+\end_layout
+
+\begin_layout Section
+Un enjeu de l'échographie de contraste : création d'un nouveau biomarqueur
+ du cancer
+\end_layout
+
+\begin_layout Standard
+L'équipe à laquelle j'appartiens travaille à établir une nouvelle caractéristiqu
+e de l'état d'une tumeur, autrement dit un nouveau 
+\emph on
+biomarqueur
+\emph default
+ des tumeurs, grâce aux possibilités offertes par l'échographie de contraste,
+ qui permet de distinguer les microbulles du tissu environnant.
+ Quand la longueur d'une tumeur cancéreuse dépasse environ un millimètre
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Boyer:2016"
+
+\end_inset
+
+, elle fait croitre des vaisseaux, appelés néo-vaisseaux, pour l'alimenter
+ en nutriments et en oxygène et évacuer ses déchets.
+ Ce processus est appelé 
+\emph on
+néo-angiogénèse
+\emph default
+ et est caractéristique des tumeurs cancéreuses 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "kumar2012robbins,carmeliet2011molecular,kiessling2010anatomical,bergers2003tumorigenesis"
+
+\end_inset
+
+.
+ Les microbulles ont un diamètre (2,5 μm dans le SonoVue) suffisamment petit
+ pour rentrer dans les néo-vaisseaux, dont le diamètre est entre 10 et 20
+ μm, mais suffisamment grand pour ne pas diffuser en dehors des vaisseaux
+ vers les tissus environnants.
+\end_layout
+
+\begin_layout Standard
+Les images d'échographie de contraste distinguent ainsi clairement les vaisseaux
+ dans lesquels sont les microbulles, du reste du tissu.
+ En particulier, elles permettent de distinguer les néo-vaisseaux alimentant
+ la tumeur du reste du tissu tumoral.
+ Elles promettent de pouvoir décrire la néo-vascularisation tumorale avec
+ des paramètres quantitatifs.
+ Mon équipe souhaite faire de son degré de désorganisation, appelée 
+\emph on
+hétérogénéité
+\emph default
+, un nouveau biomarqueur d'une tumeur.
+ Les tumeurs cancéreuses sont connues pour le développement anarchique des
+ néo-vaisseaux, caractérisés par des vaisseaux qui fuient, sont dilatés
+ et sont connectés entre eux de manière désorganisée 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "kumar2012robbins,less1991microvascular"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Le développement récent de l'immunothérapie comme traitement anti-cancer
+ appelle au développement urgent de nouveaux biomarqueurs du cancer
+\begin_inset CommandInset citation
+LatexCommand cite
+key "yuan2016novel"
+
+\end_inset
+
+.
+ En effet, les médecins sont parfois dans l'incapacité de déterminer s'il
+ faut poursuivre ou non le traitement immunothérapeutique, en l'absence
+ d'indicateurs fiables du sens de l'évolution du cancer du patient.
+\end_layout
+
+\begin_layout Section
+Échographie de contraste quadridimensionnelle
+\end_layout
+
+\begin_layout Subsection
+Définition et historique
+\end_layout
+
+\begin_layout Standard
+L'échographie quadridimensionnelle, ou 
+\begin_inset Quotes fld
+\end_inset
+
+4D
+\begin_inset Quotes frd
+\end_inset
+
+, qui rajoute aux deux dimensions de l'espace et à la dimension du temps
+ de l'échographie tridimensionnelle, ou 
+\begin_inset Quotes fld
+\end_inset
+
+2D+Temps
+\begin_inset Quotes frd
+\end_inset
+
+, une troisième dimension spatiale, est apparue sur les premiers échographes
+ à la fin des années 1990 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "stephenson20053d"
+
+\end_inset
+
+.
+ L'échographie de contraste a commencé à être utilisée en 
+\emph on
+clinique
+\emph default
+, c'est-à-dire sur les patients, à partir de 2004 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "tranquart2007echographie"
+
+\end_inset
+
+.
+ L'échographie de contraste quadridimensionnelle est déjà possible sur l'échogra
+phe Aplio 500.
+ C'est l'échographe que l'équipe à laquelle j'appartiens utilise.
+ La technique n'est cependant pas encore utilisé en clinique à l'institut
+ Gustave Roussy, où j'effectue mon stage.
+\end_layout
+
+\begin_layout Subsection
+Intérêt des quatre dimensions
+\end_layout
+
+\begin_layout Standard
+Par rapport à l'échographie 
+\begin_inset Quotes fld
+\end_inset
+
+2D+Temps
+\begin_inset Quotes frd
+\end_inset
+
+, l'échographie 4D permet d'une part des analyses plus riches des tumeurs,
+ dans leur volume et non suivant un seul plan de coupe, et d'autre part
+ de réduire l'influence du positionnement de la sonde par l'opérateur sur
+ les résultats obtenus après analyse des images, source de variabilité dans
+ les résultats appelée 
+\emph on
+variabilité inter-opérateur.
+\end_layout
+
+\begin_layout Subsection
+Défis à relever
+\end_layout
+
+\begin_layout Standard
+La relative jeunesse de l'échographie de contraste quadridimensionnelle
+ pose des défis à relever avant son utilisation en clinique.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Résolution spatiale
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Résolution-spatiale"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Sa résolution spatiale est par exemple inconnue.
+ La résolution spatiale est la distance minimale, en unité de longueur,
+ à laquelle on arrive à distinguer, sur une image produite par un système
+ d'imagerie, deux objets ponctuels imagés
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Wikipedia-2"
+
+\end_inset
+
+.
+ Si le système d'imagerie n'est pas parfaitement précis, les deux objets
+ ponctuels n'apparaitront pas comme deux points, mais seront plus étalés.
+ Ils apparaitront comme le résultat de la convolution — du filtre — de la
+ 
+\begin_inset Quotes fld
+\end_inset
+
+vraie
+\begin_inset Quotes frd
+\end_inset
+
+ image des objets ponctuels par la réponse impulsionnelle optique du système
+ d'imagerie, ou fonction d'étalement du point, qui caractérise l'imprécision
+ du système d'imagerie (par exemple la réponse impulsionnelle optique peut
+ être une gaussienne bidimensionnelle).
+\end_layout
+
+\begin_layout Standard
+La résolution spatiale des images ultrasonores est anisotrope 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "brusseau2005modele"
+
+\end_inset
+
+, autrement dit elle n'est pas la même dans toute les directions.
+ On doit caractériser la résolution spatiale de notre échographe selon chacun
+ de ses axes pour la déterminer entièrement.
+ Le problème devient alors de déterminer la résolution spatiale d'autant
+ de détecteurs produisant chacun un signal unidimensionnel que l'échographe
+ a d'axes, soit quatre.
+ Pour déterminer la résolution spatiale suivant un axe fixé, on la définit
+ comme la largeur à mi-hauteur de l'un de deux pics d'intensité identiques
+ extraits de deux courbes d'intensités identiques produites par l'imagerie
+ de deux sources ponctuelles identiques.
+ On considère que la largeur à mi-hauteur de l'un des deux pics est la distance
+ minimale à la laquelle on arrive à les considérer comme provenant de deux
+ sources ponctuelles distinctes (voir figure 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "fig:Résolution-spatiale"
+
+\end_inset
+
+ pour l'illustration de ce choix).
+ Cette distance doit être définie en unité de longueur (en mètre dans le
+ système international) pour être une résolution spatiale.
+ Il est donc nécessaire de convertir en mètre la largeur à mi-hauteur trouvée
+ en pixel pour déterminer la résolution spatiale.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /Users/maxandrejacqueline/Documents/Centrale/Stage Gustave Roussy/Ultrasound_4D_Images_Analyser/Documentation/illustration_résolution_spatiale.eps
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Illustration de la notion de résolution spatiale sur une dimension
+\end_layout
+
+\end_inset
+
+Illustration de la notion de résolution spatiale sur une dimension.
+\begin_inset Newline newline
+\end_inset
+
+Pour illustrer la notion de résolution spatiale, on imagine que l'on a deux
+ sources ponctuelles dont on a fait une image.
+ On a pris l'évolution de l'intensité de l'image sur 10 pixels sur un certain
+ axe et on en a fait le graphique ci-dessus.
+ Les pics d'intensité correspondant aux deux sources ponctuelles sont situées
+ à une distance égale à la largeur à mi-hauteur de leurs courbes d'intensité
+ respectives.
+ C'est cette distance, égale à la largeur à mi-hauteur de l'une des deux
+ courbes, que l'on définit comme la résolution spatiale.
+ Cette distance doit être donnée en mètre.
+ Il est nécessaire de convertir en mètre la largeur à mi-hauteur trouvée
+ en pixel pour déterminer la résolution spatiale.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Résolution-spatiale"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Courbes d'intensité avec choix de l'axe des abscisses
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Courbes-d'intensité"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Le logiciel d'analyse des données quadridimensionnelles ultrasonores UltraExtend
+FX fourni par Toshiba Medical Systems ne permet pas de créer de graphique
+ de l'intensité des pixels en fonction de l'axe des 
+\begin_inset Formula $x$
+\end_inset
+
+, 
+\begin_inset Formula $y$
+\end_inset
+
+ ou 
+\begin_inset Formula $z$
+\end_inset
+
+, mais seulement en fonction de l'axe du temps (pour la définition des axes,
+ voir la figure 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "fig:axes_sonde"
+
+\end_inset
+
+).
+ Ce logiciel ne permet donc pas d'établir la résolution spatiale de l'échographe
+ suivant 
+\begin_inset Formula $x$
+\end_inset
+
+, 
+\begin_inset Formula $y$
+\end_inset
+
+ ou 
+\begin_inset Formula $z$
+\end_inset
+
+ en suivant la méthode décrite en 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "subsec:Résolution-spatiale"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /Users/maxandrejacqueline/Documents/Centrale/Stage Gustave Roussy/Ultrasound_4D_Images_Analyser/Documentation/Programme/explication_axes.png
+	lyxscale 5
+	scale 10
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Définition des axes
+\end_layout
+
+\end_inset
+
+Définition des axes.
+\begin_inset Newline newline
+\end_inset
+
+Les axes que l'on a défini par rapport à la sonde quadridimensionnelle ultrasono
+re PLT-1204MV 12MHz.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:axes_sonde"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Taille des données 
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Taille-des-données"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Les données d'images quadridimensionnelles sont volumineuses.
+ Prenons un exemple.
+ On imagine qu'on choisit d'enregistrer l'entièreté d'une image quadridimensionn
+elle, autrement dit on a sélectionné une région d'intérêt qui englobe toute
+ l'image.
+ On considère qu'on fait un enregistreement sur 45 pas de temps.
+ Les données que l'on obtient après conversion (pour les rendre lisibles)
+ font 720 mégaoctets.
+ Et pourtant, elles sont apparemment compressées sur 8 bits, selon une méthode
+ que nous n'avons pas pu déterminer, peut-être au moyen d'une fonction logarithm
+ique.
+ 
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Les données dont nous avons mesuré la taille sont encodées en VoxelData,
+ encodage dont Toshiba Medical Systems a la propriété.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Hétérogénéité de la vascularisation tumorale
+\end_layout
+
+\begin_layout Standard
+L'équipe à laquelle j'appartiens cherche à caractériser l'hétérogénéité
+ de la vascularisation tumorale pour en faire un biomarqueur du cancer.
+ On définit une région d'intérêt comme la partie de l'image que l'on souhaite
+ analyser.
+ Pour caractériser l'hétérogénéité de la vascularisation tumorale, il est
+ nécessaire d'arriver à trouver un indicateur permettant de la mesurer.
+ 
+\end_layout
+
+\begin_layout Standard
+Il n'y a pas de consensus sur l'indicateur à utiliser, et des études sont
+ menées au sein de mon équipe en parallèle de mon stage pour déterminer
+ les indicateurs les plus pertinents.
+ Certains sont néanmoins plus courants que d'autres, comme l'entropie de
+ l'image (dont la définition correspond au sens strict à l'hétérogénéité),
+ le coefficient de variation, ou encore divers indicateurs tirés de la matrice
+ de co-occurrence des niveaux de gris de la région d'intérêt sélectionnée
+ (voir le paragraphe 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "par:Indicateur-hétérogénéité"
+
+\end_inset
+
+ pour le détail des indicateurs inclus dans le logiciel développé).
+ 
+\end_layout
+
+\begin_layout Part
+Objectifs du stage
+\end_layout
+
+\begin_layout Standard
+L’objectif de mon stage est de développer un outil informatique permettant
+ de : 
+\end_layout
+
+\begin_layout Enumerate
+analyser les données ultrasonores 4D ; 
+\end_layout
+
+\begin_layout Enumerate
+caractériser les performances de l’échographe Aplio 500 (Toshiba Medical
+ Systems), dont sa résolution spatiale ; 
+\end_layout
+
+\begin_layout Enumerate
+déterminer une méthode de réduction de la taille des données 4D sauvegardées
+ tout en optimisant l'information.
+ 
+\end_layout
+
+\begin_layout Part
+Matériel et méthode
+\end_layout
+
+\begin_layout Section
+Dispositif expérimental 
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Dispositif-expérimental"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Présentation
+\end_layout
+
+\begin_layout Standard
+Un dispositif expérimental permettant entre autres de caractériser les performan
+ces de l'échographe Aplio 500 a été réalisé par Virginie Grand-Perret qui
+ réalise son doctorat dans l'équipe à laquelle j'appartiens.
+ Le dispositif utilise des techniques issues de l'imagerie ultrasonore et
+ de la physique microfluidique.
+\end_layout
+
+\begin_layout Standard
+Une pompe met en mouvement l'eau contenue dans un tuyau de taille micrométrique
+ (d'environ 250 μm de diamètre) qui traverse un 
+\emph on
+fantôme expérimental
+\emph default
+.
+ Le fantôme est un morceau d'un matériau dont les propriétés acoustiques
+ sont sensées être proches de celles des tissus du corps humain 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "culjat2010review"
+
+\end_inset
+
+.
+ De nombreux matériaux ont été utilisés comme l'EcoFlex, le VytaFlex, le
+ DragonSkin...
+ (voir la figure 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "fig:fantômes"
+
+\end_inset
+
+).
+ La pression au sein du tuyau est contrôlée au moyen d'appareils de la société
+ française d'outillage microfluidique Fluigent.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Fantomes_experimentaux.png
+	lyxscale 60
+	scale 80
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Fantômes expérimentaux utilisés
+\end_layout
+
+\end_inset
+
+Fantômes expérimentaux utilisés.
+ 
+\begin_inset Newline newline
+\end_inset
+
+De gauche à droite, les matériaux utilisés sont : Ecoflex Gel, Ecoflex 00-20,
+ Ecoflex 00-30, Vytaflex 10, Moldstar 15 slow (Smooth-On)
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:fantômes"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Dans le tuyau, on injecte la solution de microbulles SonoVue au moyen d'une
+ seringue.
+ On image le fantôme en détectant le second harmonique du signal renvoyé
+ par les microbulles au moyen de la sonde ultrasonore quadridimensionnelle
+ PLT-1204MV qui émet un signal à une fréquence de 12MHz.
+ Une photo du dispositif expérimental est présentée à la figure 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "fig:photo_dispositif_expérimental"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /Users/maxandrejacqueline/Documents/Centrale/Stage Gustave Roussy/Ultrasound_4D_Images_Analyser/Documentation/General/dispositif_microfluidique2_poster.JPG
+	lyxscale 10
+	scale 10
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Photo du dispositif expérimental d'imagerie ultrasonore microfluidique
+\end_layout
+
+\end_inset
+
+Photo du dispositif expérimental d'imagerie ultrasonore microfluidique.
+ 
+\begin_inset Newline newline
+\end_inset
+
+À droite sur la table, on peut voir la sonde échographique 4D PLT-1204MV
+ 12MHz de Toshiba Medical Systems, reliée par un cable (à l'échographe,
+ invisible sur cette photo), immergée dans de l'eau pour une bonne conduction
+ des ondes ultrasonores, qui surplombe le fantôme expérimental (caché),
+ dans lequel arrive et duquel repart un tuyau d'environ 250 μm de diamètre,
+ à l'intérieur duquel circule de l'eau et à certains moments des microbulles.
+\begin_inset Newline newline
+\end_inset
+
+Sur le sol à droite, on peut voir la pompe qui fournit la pression nécessaire
+ pour déplacer le fluide contenu dans le tuyau.
+ À gauche sur la table, on trouve un flacon de microbulles en solution de
+ la marque SonoVue et une seringue d'injection, par laquelle on injecte
+ les microbulles dans le tube micrométrique.
+ En haut à gauche sur la table, on trouve le dispositif de la marque d'outillage
+ microfluidique Fluigent qui permet de précisément contrôler la pression
+ dans le tube au moyen d'un ordinateur, dont on aperçoit le coin à l'extrêmité
+ gauche de la photo, sur la table.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:photo_dispositif_expérimental"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Intérêt de l'imagerie sur fantôme expérimental
+\end_layout
+
+\begin_layout Standard
+Le fantôme expérimental permet de réduire les sources de variabilité de
+ l'image acquise par rapport à de l'imagerie 
+\emph on
+in vivo
+\emph default
+ (sur souris par exemple) ou à de l'imagerie 
+\emph on
+clinique
+\emph default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+On peut avoir à imager différents patients ou souris au fil du temps, ce
+ qui ajoute aux mesures une variabilité inter-individuelle, et même si on
+ image la même souris ou le même patient, leur constitution évolue au fil
+ du temps, source de variabilité intra-individuelle.
+ L'imagerie sur fantôme permet de s'affranchir de ces sources de variabilité.
+\end_layout
+
+\begin_layout Standard
+Pour caractériser les performances de l'Aplio 500 il faut que les images
+ obtenues en soient une bonne représentation, et toutes les sources de variabili
+té externes à l'Aplio 500 doivent être élminées.
+ L'imagerie sur fantôme est donc adaptée à notre objectif.
+\end_layout
+
+\begin_layout Section
+Logiciel
+\end_layout
+
+\begin_layout Subsection
+La réponse à un besoin
+\end_layout
+
+\begin_layout Standard
+Le logiciel d'analyse des images produites par l'Aplio 500 appelé UltraExtendFX,
+ conçu par Toshiba Medical Systems, ne permet pas de réaliser toutes les
+ fonctionnalités souhaitées par mon équipe.
+ 
+\end_layout
+
+\begin_layout Standard
+Il ne permet pas d'afficher de graphique selon 
+\begin_inset Formula $x$
+\end_inset
+
+, 
+\begin_inset Formula $y$
+\end_inset
+
+ ou 
+\begin_inset Formula $z$
+\end_inset
+
+ (voir la sous-section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "subsec:Courbes-d'intensité"
+
+\end_inset
+
+) , ni de calculer d'indicateurs de l'hétérogénéité de la région d'intérêt,
+ ni d'analyser automatiquement un graphique pour trouver ses pics et ses
+ distances pic à pic, ni de sous-échantillonner les fichiers d'images pour
+ réduire leur taille mémoire.
+\end_layout
+
+\begin_layout Standard
+De plus, UltraExtendFX ne nomme pas chacun des plans et des axes, ce qui
+ rend la compréhension du positionnement dans l'espace difficile.
+\end_layout
+
+\begin_layout Standard
+Le logiciel que j'ai développé propose une alternative à UltraExtendFX pour
+ l'analyse des images quadridimensionnelle, et répond à ces manquements.
+\end_layout
+
+\begin_layout Subsection
+Un logiciel
+\end_layout
+
+\begin_layout Subsubsection
+Accessible
+\end_layout
+
+\begin_layout Standard
+Une personne qui voudrait se servir de mon logiciel doit simplement aller
+ sur 
+\begin_inset CommandInset href
+LatexCommand href
+target "https://github.com/MaxandreJ/Ultrasound_4D_Images_Analyser"
+
+\end_inset
+
+ et cliquer sur 
+\begin_inset Quotes fld
+\end_inset
+
+Clone or download
+\begin_inset Quotes frd
+\end_inset
+
+ puis 
+\begin_inset Quotes fld
+\end_inset
+
+Download Zip
+\begin_inset Quotes frd
+\end_inset
+
+ pour télécharger mon logiciel dans sa dernière version.
+\end_layout
+
+\begin_layout Standard
+Après avoir décompressé l'archive .zip, elle doit lancer la fonction lancer_progr
+amme.m dans Matlab (version 2014a ou plus récent) pour commencer à utiliser
+ le programme.
+\end_layout
+
+\begin_layout Subsubsection
+Fonctionnel
+\end_layout
+
+\begin_layout Paragraph
+Chargement d'images
+\end_layout
+
+\begin_layout Subparagraph
+Capacités
+\end_layout
+
+\begin_layout Standard
+Le logiciel peut charger des fichiers au format DICOM encodés en RawData
+ ou en VoxelData (formats propres à Toshiba Medical Systems), ou au format
+ .mat (format de matrice Matlab).
+\end_layout
+
+\begin_layout Standard
+Les fichiers au format DICOM doivent préalablement avoir été enregistrés
+ depuis l'échographe Aplio 500, puis convertis par le logiciel RawDataExport
+ v1.11 version août 2016 (ou plus récent) avant d'être ouverts.
+ La conversion vers un encodage en VoxelData est le seul qui permet de ne
+ pas avoir de distorsions dans les images converties mais nécessite d'être
+ effectuée sur un ordinateur doté d'une carte graphique particulière (probableme
+nt conçue avec une architecture de calcul parallèle, par exemple CUDA pour
+ les cartes graphiques de la marque Nvidia).
+ 
+\end_layout
+
+\begin_layout Standard
+Sur mon logiciel, pour charger des images enregistrées au format DICOM,
+ il faut sélectionner le dossier qui contient l'ensemble des fichiers convertis
+ et le fichier texte PatientInfo qui contient l'ensemble des indications
+ de lecture de ces fichiers.
+\end_layout
+
+\begin_layout Standard
+Les fichiers au format .mat peuvent être soit chargés individuellement, soit
+ chargés par dossier contenant un fichier par pas de temps enregistré.
+\end_layout
+
+\begin_layout Subparagraph
+Manquements
+\end_layout
+
+\begin_layout Standard
+Il est pour l'instant impossible de charger des images 
+\begin_inset Quotes fld
+\end_inset
+
+2D+Temps
+\begin_inset Quotes frd
+\end_inset
+
+ capturées sur l'Aplio 500, à cause de l'impossibilité de convertir de tels
+ fichiers sur le logiciel RawDataExport pour les rendre lisibles par Matlab.
+\end_layout
+
+\begin_layout Standard
+De plus, quel que soit l'encodage choisi, les images semblent compressées
+ en intensité par une compression logarithmique.
+ L'intervalle des valeurs d'intensité semble correspondre aux valeurs d'un
+ entier non-signé codé sur 8 bits, soit de 0 à 256.
+ La compression semble être effectuée par le logiciel RawDataExport puisque
+ le logiciel UltraExtendFX, qui ne requiert pas l'utilisation du logiciel
+ RawDataExport, affiche des valeurs d'intensité sur une gamme plus large
+ (d'ordre de grandeur 
+\begin_inset Formula $10^{-4}$
+\end_inset
+
+).
+ La compression logarithmique des valeurs d'intensité peut être source d'erreur
+ de diagnostic 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "peronneau2010contrast"
+
+\end_inset
+
+et il est impératif de pouvoir accéder à des données non-compressées.
+\end_layout
+
+\begin_layout Standard
+Des discussions avec Toshiba Medical Systems sont en cours pour résoudre
+ ces problèmes.
+\end_layout
+
+\begin_layout Standard
+Le chargement d'images quadridimensionnelle encodées en VoxelData et contenant
+ plus de 45 pas de temps est très long et ralentit considérablement Matlab.
+ Plusieurs solutions peuvent être trouvées à ce problème mais par manque
+ de temps je n'ai pas pu les implémenter.
+ On pourrait :
+\end_layout
+
+\begin_layout Enumerate
+Ne plus charger l'entièreté des images dans une variable de l'espace de
+ travail, mais seulement charger l'image que l'on souhaite afficher au moment
+ où on souhaite l'afficher.
+ C'est ce concept qui est utilisé dans les bases de données 
+\begin_inset Quotes fld
+\end_inset
+
+NoSQL
+\begin_inset Quotes frd
+\end_inset
+
+ comme MongoDB qui sont conçues pour gérer de vastes quantités de données.
+ Si l'on fait ce choix, le passage entre les images d'un examen sera néanmoins
+ ralenti.
+\end_layout
+
+\begin_layout Enumerate
+Augmenter l'allocation de mémoire virtuelle sur le système d'exploitation
+ utilisé (c'est le plus simple mais cela ne marchera peut-être pas).
+\end_layout
+
+\begin_layout Enumerate
+Réécrire le programme dans un langage plus robuste, comme C# ou C++, mais
+ je ne suis pas sûr que cela fonctionne.
+ Réécrire le programme en Python ne changera probablement rien à ce problème.
+\end_layout
+
+\begin_layout Standard
+Dans l'immédiat, je recommande simplement de ne pas charger d'examen contenant
+ plus de 45 pas de temps.
+\end_layout
+
+\begin_layout Paragraph
+Choix d'une image
+\end_layout
+
+\begin_layout Standard
+Le choix d'une image peut se faire en entrant ses coordonnées sur les deux
+ axes non-inclus dans les axes de l'image affichée ou en naviguant entre
+ les images par commande au clavier (voir 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "par:Commandes-au-clavier"
+
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Standard
+L'orientation du plan de l'image affichée est également choisie par commande
+ au clavier (voir 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "par:Commandes-au-clavier"
+
+\end_inset
+
+).
+ On distingue quatre orientations principales de plans décrites à la figure
+ 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "fig:plans_sonde"
+
+\end_inset
+
+, et trois orientations supplémentaires, respectivement définies par les
+ axes X et Temps, Y et Temps, et Z et Temps.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /Users/maxandrejacqueline/Documents/Centrale/Stage Gustave Roussy/Ultrasound_4D_Images_Analyser/Documentation/Programme/explication_plans.png
+	lyxscale 5
+	scale 10
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Définition des orientations de plans
+\end_layout
+
+\end_inset
+
+Les orientations de plans que l'on a défini à partir des axes de la sonde.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:plans_sonde"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Sélection de région d'intérêt
+\end_layout
+
+\begin_layout Standard
+Il est possible de sélectionner une région d'intérêt rectangulaire en entrant
+ les coordonnées des coins opposés du rectangle dans l'interface, ou en
+ la sélectionnant sur l'image avec la souris (voir 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "par:Sélection-souris"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+Il est également possible de sélectionner une région d'intérêt polygonale
+ en la sélectionant sur l'image avec la souris (voir 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "par:Sélection-souris"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Paragraph
+Calcul d'indicateurs de l'hétérogénéité de la région d'intérêt
+\begin_inset CommandInset label
+LatexCommand label
+name "par:Indicateur-hétérogénéité"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+On permet de calculer les indicateurs suivants de l'hétérogénéité de la
+ région d'intérêt :
+\end_layout
+
+\begin_layout Itemize
+l'entropie globale de la région d'intérêt est une mesure de la quantité
+ d'information contenue dans la région d'intérêt (on doit à Claude Shannon
+ cette définition de l'entropie 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "shannon2001mathematical"
+
+\end_inset
+
+).
+ Elle vaut 0 lorsque la région d'intérêt a une seule intensité de gris et
+ augmente avec le nombre d'intensités de gris présentes dans l'image.
+ Elle donne une information sur la texture de la région d'intérêt : plus
+ l'image est hétérogène, plus l'entropie est forte.
+ Mon programme utilise la définition suivante de l'entropie adaptée à une
+ image en niveau de gris 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "gonzalez2004eddins"
+
+\end_inset
+
+ :
+\begin_inset Formula 
+\begin{align*}
+-\underset{I\in IntervalleIntensitésRégionIntérêt}{\sum}\frac{NombreDePixels_{I}}{NombreTotalPixels}*\log_{2}(\frac{NombreDePixels_{I}}{NombreTotalPixels})
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+où :
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+
+\emph on
+\begin_inset Formula $IntervalleIntensitésRégionIntérêt$
+\end_inset
+
+
+\emph default
+ correspond à l'intervalle des intensités de la région d'intérêt (si l'image
+ est la codée avec des entiers non-signés sur 8 bits, cet intervalle est
+ 
+\begin_inset Formula $\left[0;256\right]$
+\end_inset
+
+) ;
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\begin_inset Formula $NombreDePixels_{I}$
+\end_inset
+
+ correspond au nombre de pixels dans la région d'intérêt dont la valeur
+ d'intensité est I (valeur que l'on retrouve dans l'histogramme non-pondéré
+ de la région d'intérêt) ;
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\begin_inset Formula $NombreTotalPixels$
+\end_inset
+
+ correspond au nombre de pixels dans la région d'intérêt.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+le coefficient de variation défini par :
+\begin_inset Formula 
+\[
+\frac{EcartTypeIntensitésPixelsRégionIntérêt}{MoyenneIntensitésPixelsRégionIntérêt}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+où : 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $EcartTypeIntensitésPixelsRégionIntérêt$
+\end_inset
+
+ correspond à l'écart type des valeurs d'intensités des pixels dans la région
+ d'intérêt ;
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $MoyenneIntensitésPixelsRégionIntérêt$
+\end_inset
+
+ correspond à la moyenne des valeurs d'intensités des pixels dans la région
+ d'intérêt.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+quatre statistiques sur la matrice de co-occurrence des niveaux de gris
+ de la région d'intérêt, nommées 
+\emph on
+corrélation
+\emph default
+, 
+\emph on
+énergie
+\emph default
+, 
+\emph on
+homogénéité
+\emph default
+ et 
+\emph on
+contraste
+\emph default
+ dont on peut trouver la définition au bas de la page de documentation de
+ Matlab accessible par le lien suivant : 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://fr.mathworks.com/help/images/ref/graycoprops.html"
+
+\end_inset
+
+.
+ Ces statistiques donnent des informations sur la périodicité des niveaux
+ d'intensité de gris dans la région d'intérêt.
+\end_layout
+
+\begin_layout Paragraph
+Affichage de graphique
+\end_layout
+
+\begin_layout Standard
+On peut afficher un graphique à partir des valeurs dans la région d'intérêt
+ sélectionnée.
+ Si on a choisi une région d'intérêt rectangulaire, on peut choisir l'axe
+ des abscisses du graphique comme l'un des deux axes de l'image affichée.
+ Pour toutes les formes de région d'intérêt, on peut aussi choisir l'axe
+ des abscisses comme l'un des deux axes non présent dans l'image affichée.
+ Si on a choisi une région d'intérêt rectangulaire, on peut moyenner les
+ valeurs de la région d'intérêt selon un des deux axes de l'image affichée,
+ qui ne doit pas être l'axe choisi comme axe des abscisses.
+ Par exemple, si on a choisi la région d'intérêt rectangulaire suivante
+ sur une image orientée axialement (soit une orientation suivant les axes
+ 
+\begin_inset Formula $x$
+\end_inset
+
+ et 
+\begin_inset Formula $y$
+\end_inset
+
+) :
+\begin_inset Formula 
+\[
+\begin{array}{cccc}
+15 & 30 & 15 & 30\\
+10 & 20 & 10 & 20\\
+5 & 10 & 5 & 10
+\end{array}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+et que l'on choisit d'afficher le graphique avec comme axe des abscisses
+ 
+\begin_inset Formula $x$
+\end_inset
+
+ et comme axe de moyennage 
+\begin_inset Formula $y$
+\end_inset
+
+ alors le graphique nous permettra de visualiser la fonction suivante :
+\begin_inset Formula 
+\begin{align*}
+xDébutRégionIntérêt & \rightarrow\frac{5+10+15}{3}=10\\
+xDébutRégionIntérêt+1 & \rightarrow20\\
+xDébutRégionIntérêt+2 & \rightarrow10\\
+xDébutRégionIntérêt+3 & \rightarrow20
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+avec 
+\begin_inset Formula $xDébutRégionIntérêt$
+\end_inset
+
+ la coordonnée en 
+\begin_inset Formula $x$
+\end_inset
+
+ du premier pixel (par rapport à 
+\begin_inset Formula $x$
+\end_inset
+
+) de la région d'intérêt.
+\end_layout
+
+\begin_layout Standard
+Si on a choisi une région d'intérêt rectangulaire, on peut également choisir
+ de ne pas faire de moyennage.
+ On affichera alors toutes les courbes que l'on peut engendrer dans la région
+ d'intérêt avec un axe des abscisses fixé.
+ En reprenant le même exemple, en choisissant l'axe 
+\begin_inset Formula $x$
+\end_inset
+
+ comme abscisse, on affichera alors trois courbes d'ordonnées suivantes
+ : 
+\begin_inset Formula $\left[5;10;5;10\right],$
+\end_inset
+
+ 
+\begin_inset Formula $\left[10;20;10;20\right]$
+\end_inset
+
+ et 
+\begin_inset Formula $\left[15;30;15;30\right]$
+\end_inset
+
+, et d'abscisses identiques : 
+\begin_inset Formula $\left[xDébut;xDébut+1;xDébut+2;xDébut+3\right]$
+\end_inset
+
+ avec 
+\begin_inset Formula $xDébut$
+\end_inset
+
+ qui correspond au 
+\begin_inset Formula $xDébutRégionIntérêt$
+\end_inset
+
+ précédemment défini.
+\end_layout
+
+\begin_layout Standard
+Quelle que soit la forme de la région d'intérêt, on peut aussi moyenner
+ les valeurs d'intensité sur les deux axes de l'image affichée.
+ Cela est nécessaire quand on a choisi un axe des abscisses (par exemple
+ le temps) qui n'est pas l'un des deux axes de l'image affichée (par exemple
+ 
+\begin_inset Formula $x$
+\end_inset
+
+ et 
+\begin_inset Formula $y$
+\end_inset
+
+).
+ Par exemple, si la région d'intérêt vaut les valeurs précédemment définies
+ au temps 1, et les valeurs suivantes au temps 2 (toujours sur une image
+ orientée axialement):
+\begin_inset Formula 
+\[
+\begin{array}{cccc}
+30 & 60 & 30 & 60\\
+20 & 40 & 20 & 40\\
+10 & 20 & 10 & 20
+\end{array}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+et qu'on veut afficher le graphique avec comme axe des abscisses le temps
+ et comme axe de moyennage 
+\begin_inset Formula $x$
+\end_inset
+
+ et 
+\begin_inset Formula $y$
+\end_inset
+
+, alors le graphique nous permettra de visualiser la fonction suivante :
+\begin_inset Formula 
+\begin{align*}
+1 & \rightarrow\frac{5+10+15+10+20+30+5+10+15+10+20+30}{12}=15\\
+2 & \rightarrow30
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Si la région d'intérêt est de forme polygonale, la matrice de la région
+ d'intérêt sera toujours de forme rectangulaire, mais les valeurs qui ne
+ sont pas incluses dans le polygone vaudront la valeur nulle (
+\emph on
+NaN
+\emph default
+ sur Matlab).
+\end_layout
+
+\begin_layout Paragraph
+Analyse du graphique
+\end_layout
+
+\begin_layout Standard
+Le logiciel permet une détection automatique des pics, autrement dit des
+ maximums locaux, du graphique.
+ L'utilisateur choisit le nombre de pics que le logiciel doit détecter,
+ et peut aussi décider de lisser le graphique par la méthode des moyenne
+ mobiles avant de les détecter.
+ 
+\end_layout
+
+\begin_layout Standard
+La méthode des moyennes mobiles consiste à lisser la courbe originale en
+ remplaçant chaque point de la courbe par la moyenne des ordonnées de la
+ courbe dans un certain voisinage du point.
+ Par exemple, si on définit la taille de voisinage à trois, l'ordonnée d'un
+ point de la courbe lissée sera égale à la moyenne de l'ordonnée du point
+ à gauche de ce point, du point lui-même, et du point à droite de ce point
+ (soit trois points).
+\end_layout
+
+\begin_layout Paragraph
+Sous-échantillonnage des fichiers
+\end_layout
+
+\begin_layout Standard
+Le logiciel permet de sous-échantillonner les fichiers chargés, et de les
+ enregistrer dans leur version sous-échantillonnée.
+ 
+\end_layout
+
+\begin_layout Standard
+Les courbes classiques obtenues en imagerie ultrasonore de contraste sont
+ appelées 
+\emph on
+courbes de réhaussement
+\emph default
+ en fonction du temps.
+ Une région d'intérêt est définie dans une tumeur où les microbulles arriveront
+ une fois qu'elles seront injectées, puis qu'elles quitteront progressivement.
+ Le graphique engendré par le choix du temps comme axe des abscisses et
+ le moyennage sur les deux axes de l'image dans laquelle on a choisi la
+ région d'intérêt produira une courbe avec un fort pic de signal au moment
+ de l'arrivée des microbulles, puis une décroissance pendant qu'elles quittent
+ la région.
+\end_layout
+
+\begin_layout Standard
+On permet à l'utilisateur de choisir un certain pas de temps en fonction
+ du temps où le pic de signal est atteint (par exemple 1,5x le temps où
+ le pic est atteint) à partir duquel on sous-échantillonera les volumes
+ capturés par l'échographe (on en enregistrera par exemple plus qu'un sur
+ dix).
+ Ce procédé permet de réduire la taille des données quadridimensionnelles,
+ dont la grandeur pose problème (voir 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "subsec:Taille-des-données"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Paragraph
+Enregistrement des images, du graphique ou de l'interface
+\end_layout
+
+\begin_layout Standard
+On laisse la possibilité à l'utilisateur d'enregistrer l'image échographique
+ affichée, le graphique affiché, ou l'interface graphique entière dans différent
+s format d'image, dont des formats d'image matricielles (.png, .bmp, .jpg)
+ et un format d'image vectoriel (.eps).
+ Nous avons pu offrir cette possibilité à l'utilisateur en utilisant la
+ bibliothèque 
+\emph on
+export_fig
+\emph default
+ développé par altmany (
+\begin_inset CommandInset href
+LatexCommand href
+target "https://fr.mathworks.com/matlabcentral/fileexchange/23629-export-fig"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Subsubsection
+Utilisable
+\end_layout
+
+\begin_layout Paragraph
+Interface graphique
+\end_layout
+
+\begin_layout Standard
+On a développé une interface graphique pour le programme grâce à l'interface
+ graphique de création d'interface graphique appelée GUIDE sous Matlab.
+\end_layout
+
+\begin_layout Paragraph
+Textes d'aide
+\end_layout
+
+\begin_layout Standard
+Chaque fonctionnalité du programme est expliquée par des bulles d'aide qui
+ se trouvent près de l'endroit sur l'interface graphique où la fonctionnalité
+ va être utilisée.
+ La bulle d'aide s'affiche dès que la souris survole une petite icône en
+ forme de point d'interrogation blanc entouré d'un carré bleu layette.
+\end_layout
+
+\begin_layout Standard
+Une aide générale est également accessible en cliquant sur le menu 
+\begin_inset Quotes fld
+\end_inset
+
+Aide
+\begin_inset Quotes frd
+\end_inset
+
+ du programme.
+\end_layout
+
+\begin_layout Paragraph
+Commandes au clavier 
+\begin_inset CommandInset label
+LatexCommand label
+name "par:Commandes-au-clavier"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Les flèches multidirectionnelles permettent de glisser entre les plans de
+ l'image, ce qui permet de rapidement passer d'un plan à l'autre.
+ Les flèches gauche et droite permettent de glisser selon le premier axe
+ mentionné dans le titre de l''image, tandis que les flèches bas et haut
+ permettent de glisser selon le deuxième axe mentionné.
+\end_layout
+
+\begin_layout Standard
+Les chiffres du clavier ou du pavé numérique permettent d'alterner entre
+ les différents plans de l'image.
+ On a les associations suivantes (voir figure 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "fig:plans_sonde"
+
+\end_inset
+
+ pour la définition des plans dans l'espace) :
+\end_layout
+
+\begin_layout Description
+0 : plan axial (Y en ordonnées et X en abscisses) ;
+\end_layout
+
+\begin_layout Description
+1 : plan latéral (Z en ordonnées et X en abscisses) ;
+\end_layout
+
+\begin_layout Description
+2 : plan transverse (Z en ordonnées et Y en abscisses) ;
+\end_layout
+
+\begin_layout Description
+3 : plan x-temps (X en ordonnées et le temps en abscisses) ;
+\end_layout
+
+\begin_layout Description
+4 : plan y-temps (Y en ordonnées et le temps en abscisses);
+\end_layout
+
+\begin_layout Description
+5 : plan z-temps (Z en ordonnées et le temps en abscisses).
+\end_layout
+
+\begin_layout Paragraph
+Commandes à la souris 
+\begin_inset CommandInset label
+LatexCommand label
+name "par:Sélection-souris"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Des menus contextuels peuvent apparaitre en effectuant un clic droit sur
+ l'image (pour l'enregistrer ou sélectionner une région d'intérêt) ou en
+ effectuant un clic droit sur le graphique (pour l'enregistrer).
+\end_layout
+
+\begin_layout Standard
+Une région d'intérêt rectangulaire est sélectionnable par un cliquer-glisser.
+ Une région d'intérêt polygonale est sélectionnable par autant de clics
+ que de points du polygone, le dernier clic devant être double et sur un
+ point déjà défini.
+\end_layout
+
+\begin_layout Subsubsection
+Robuste
+\end_layout
+
+\begin_layout Standard
+Des messages d'erreur sont affichés sous la forme de boites d'avertissement
+ en cas d'action illégale.
+ Un message décrit ce que l'utilisateur doit faire pour éviter l'erreur.
+\end_layout
+
+\begin_layout Subsection
+Un code source
+\end_layout
+
+\begin_layout Subsubsection
+Accessible
+\end_layout
+
+\begin_layout Standard
+Une personne qui voudrait poursuivre le développement du logiciel doit :
+\end_layout
+
+\begin_layout Enumerate
+créer un compte sur Github 
+\begin_inset CommandInset href
+LatexCommand href
+target "https://github.com/"
+
+\end_inset
+
+ ;
+\end_layout
+
+\begin_layout Enumerate
+m'envoyer un courrier électronique sur l'adresse maxandre.jacqueline@gmail.com
+ pour que j'ajoute son compte à la liste des collaborateurs de mon dépôt
+ Git ; 
+\end_layout
+
+\begin_layout Enumerate
+télécharger GitHub Desktop sur le lien suivant : 
+\begin_inset CommandInset href
+LatexCommand href
+target "https://desktop.github.com/ "
+
+\end_inset
+
+;
+\end_layout
+
+\begin_layout Enumerate
+aller sur 
+\begin_inset CommandInset href
+LatexCommand href
+target "https://github.com/MaxandreJ/Ultrasound_4D_Images_Analyser"
+
+\end_inset
+
+ et cliquer sur 
+\begin_inset Quotes fld
+\end_inset
+
+Clone or download
+\begin_inset Quotes frd
+\end_inset
+
+ puis 
+\begin_inset Quotes fld
+\end_inset
+
+Open in Desktop
+\begin_inset Quotes frd
+\end_inset
+
+;
+\end_layout
+
+\begin_layout Enumerate
+choisir le dossier où elle veut enregistrer le code source de mon logiciel.
+\end_layout
+
+\begin_layout Standard
+Un nouveau répertoire sera créé sur son ordinateur, il contiendra toutes
+ les données de mon programme.
+ Une fois que des modifications seront faites, il faudra écrire un message
+ décrivant ces modifications puis cliquer sur 
+\begin_inset Quotes fld
+\end_inset
+
+Commit
+\begin_inset Quotes frd
+\end_inset
+
+ dans GitHub Desktop, puis cliquer sur 
+\begin_inset Quotes fld
+\end_inset
+
+Sync
+\begin_inset Quotes frd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Structuré
+\end_layout
+
+\begin_layout Paragraph
+En objets
+\begin_inset CommandInset label
+LatexCommand label
+name "par:En-objets"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subparagraph
+Définition des concepts de la programmation orientée objet 
+\begin_inset CommandInset label
+LatexCommand label
+name "par:Concepts"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Mon code est constitué d'objets logiciels en interaction, à la manière du
+ monde réel où des objets physiques sont en interaction.
+ Voici la liste des concepts de programmation orientée objet nécessaire
+ à la compréhension de mon programme :
+\end_layout
+
+\begin_layout Itemize
+un 
+\emph on
+objet
+\emph default
+ est un élément du logiciel (par exemple la voiture de Virginie) ;
+\end_layout
+
+\begin_layout Itemize
+une 
+\emph on
+classe
+\emph default
+ est un type d'objet (par exemple les voitures) ;
+\end_layout
+
+\begin_layout Itemize
+une 
+\emph on
+propriété
+\emph default
+ d'une classe ou d'un objet est une caractéristique qui permet de le définir
+ (par exemple, la couleur) — cette caractéristique peut-être sous la forme
+ d'un autre objet ;
+\end_layout
+
+\begin_layout Itemize
+une 
+\emph on
+méthode
+\emph default
+ est une action que peut faire un objet (par exemple, rouler) ;
+\end_layout
+
+\begin_layout Itemize
+une 
+\emph on
+instance
+\emph default
+ d'une classe est un objet appartenant à une classe (par exemple, la voiture
+ de Virginie appartient à la classe des voitures), souvent instance et objet
+ sont synonymes.
+\end_layout
+
+\begin_layout Itemize
+l'
+\emph on
+instanciation
+\emph default
+ correspond à la définition de l'appartenance d'un objet à une classe ;
+\end_layout
+
+\begin_layout Itemize
+un 
+\emph on
+constructeur
+\emph default
+ est la méthode d'une classe dont le résultat retourné est une instance
+ de cette classe ;
+\end_layout
+
+\begin_layout Itemize
+une 
+\emph on
+classe concrète
+\emph default
+ est une classe qui peut avoir des instances (par exemple, les voitures)
+ ;
+\end_layout
+
+\begin_layout Itemize
+une 
+\emph on
+classe abstraite
+\emph default
+ est une classe qui ne peut pas avoir d'instance (par exemple, les véhicules)
+ ;
+\end_layout
+
+\begin_layout Itemize
+une 
+\emph on
+implémentation 
+\emph default
+correspond à du code qui effectue une certaine fonction ;
+\end_layout
+
+\begin_layout Itemize
+une 
+\emph on
+méthode abstraite
+\emph default
+ est une méthode non-implémentée (dont le code n'est pas écrit) d'une classe
+ abstraite qui doit être redéfinie dans une classe concrète par une méthode
+ concrète de même nom pour être utilisable ;
+\end_layout
+
+\begin_layout Itemize
+une 
+\emph on
+méthode concrète 
+\emph default
+est une méthode implémentée (dont le code est écrit) ;
+\end_layout
+
+\begin_layout Itemize
+une 
+\emph on
+méthode statique
+\emph default
+ est une méthode qui est liée à une classe elle-même et non à ses instances
+ ;
+\end_layout
+
+\begin_layout Itemize
+l'
+\emph on
+héritage 
+\emph default
+est l'appartenance d'une classe concrète à une classe abstraite (par exemple
+ les voitures héritent des véhicules) — si une classe concrète hérite d'une
+ classe abstraite, elle inclut dans sa définition toutes les propriétés
+ et méthodes de la classe abstraite de laquelle elle hérite (par exemple,
+ si les véhicules ont la méthode 
+\begin_inset Quotes fld
+\end_inset
+
+rouler
+\begin_inset Quotes frd
+\end_inset
+
+, les voitures aussi) ;
+\end_layout
+
+\begin_layout Itemize
+le 
+\emph on
+polymorphisme
+\emph default
+ est la capacité d'une méthode abstraite à être redéfinie en fonction de
+ la classe concrète à laquelle appartient l'instance depuis laquelle elle
+ est appelée.
+\end_layout
+
+\begin_layout Subparagraph
+Exemples
+\end_layout
+
+\begin_layout Standard
+Prenons un exemple : 
+\emph on
+une personne rentre dans une voiture rouge qui fait 4 mètres de long
+\emph default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+En utilisant le lexique de la programmation orientée objet, on dira que
+ l'objet personne, qui est une instance de la classe Personne, utilise sa
+ méthode 
+\begin_inset Quotes fld
+\end_inset
+
+rentrer
+\begin_inset Quotes frd
+\end_inset
+
+ en prenant pour argument une voiture, qui est une instance de la classe
+ Voiture.
+ Les objets de la classe Voiture ont tous une propriété 
+\begin_inset Quotes fld
+\end_inset
+
+couleur
+\begin_inset Quotes frd
+\end_inset
+
+, et cette voiture, autrement dit cette instance, a cette propriété qui
+ vaut 'rouge'.
+ La classe Voiture est une classe concrète, c'est-à-dire qu'elle peut avoir
+ des instances, qui hérite d'une classe abstraite, c'est-à-dire qui ne peut
+ pas avoir d'instance, Véhicule.
+ La classe Véhicule a une propriété longueur_en_mètre que par conséquent
+ toutes les instances des classes concrètes qui héritent de la classe abstraite
+ Véhicule ont également.
+ En particulier, notre voiture a une propriété longueur_en_mètre qui vaut
+ 4.
+\end_layout
+
+\begin_layout Standard
+On remarque que quand on dit 
+\begin_inset Quotes fld
+\end_inset
+
+une personne
+\begin_inset Quotes frd
+\end_inset
+
+ (ou 
+\begin_inset Quotes fld
+\end_inset
+
+une voiture
+\begin_inset Quotes frd
+\end_inset
+
+), on définit implicitement l'appartenance de l'objet personne à la classe
+ d'objet, autrement dit le type d'objet, Personne.
+ Cette relation d'appartenance, implicite dans la langue, permet à la personne
+ d'être décrite par les caractéristiques (i.e.
+ propriétés) et la rend capable d'effectuer les actions (i.e.
+ méthodes) que tous les membres (i.e.
+ objets ou instances) de la catégorie (i.e.
+ classe) des personnes, qu'on a appelé Personne.
+ Mathématiquement, on crée cette relation d'appartenance de la manière suivante
+ : soit personne appartenant à Personne, ou soit 
+\begin_inset Formula $personne\in Personne$
+\end_inset
+
+.
+ Cette opération de création d'un objet ou instance appartenant à une classe
+ s'appelle en informatique une 
+\emph on
+instanciation
+\emph default
+.
+ On instancie une instance d'une classe en utilisant le constructeur de
+ la classe, qui a généralement le même nom que celle-ci.
+ L'instanciation de l'objet personne comme instance de la classe Personne
+ s'écrit sur Matlab au moyen du constructeur de personne appelé Personne.
+ Cela donne le code suivant : 
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+personne = Personne;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Et la phrase entière s'écrit :
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+personne = Personne;
+\end_layout
+
+\begin_layout Plain Layout
+
+voiture = Voiture('rouge', 4);
+\end_layout
+
+\begin_layout Plain Layout
+
+personne.rentrer(voiture);
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+en ayant défini les classes suivantes dans le chemin courant de Matlab :
+\end_layout
+
+\begin_layout Itemize
+la classe Personne :
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+classdef Personne
+\end_layout
+
+\begin_layout Plain Layout
+
+	methods
+\end_layout
+
+\begin_layout Plain Layout
+
+		function rentrer(voiture)
+\end_layout
+
+\begin_layout Plain Layout
+
+			%code ici
+\end_layout
+
+\begin_layout Plain Layout
+
+		end
+\end_layout
+
+\begin_layout Plain Layout
+
+	end
+\end_layout
+
+\begin_layout Plain Layout
+
+end
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+la classe Véhicule :
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+classdef (Abstract) Vehicule
+\end_layout
+
+\begin_layout Plain Layout
+
+	properties
+\end_layout
+
+\begin_layout Plain Layout
+
+		longueur_en_metre
+\end_layout
+
+\begin_layout Plain Layout
+
+	end
+\end_layout
+
+\begin_layout Plain Layout
+
+end
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+la classe Voiture :
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+classdef Voiture < Vehicule
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	properties
+\end_layout
+
+\begin_layout Plain Layout
+
+		couleur
+\end_layout
+
+\begin_layout Plain Layout
+
+	end
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	methods
+\end_layout
+
+\begin_layout Plain Layout
+
+		function Voiture(couleur,longueur)
+\end_layout
+
+\begin_layout Plain Layout
+
+			% le constructeur
+\end_layout
+
+\begin_layout Plain Layout
+
+			soi.couleur = couleur;
+\end_layout
+
+\begin_layout Plain Layout
+
+			soi.longueur = longueur;
+\end_layout
+
+\begin_layout Plain Layout
+
+		end
+\end_layout
+
+\begin_layout Plain Layout
+
+	end
+\end_layout
+
+\begin_layout Plain Layout
+
+end
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Prenons un second exemple pour introduire une autre notion.
+ Imaginons qu'on veuille programmer la phrase : 
+\emph on
+on change la couleur de la voiture
+\emph default
+ 
+\emph on
+en bleu
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+Dans cette phrase, on remarque que l'agent qui change la couleur de la voiture
+ n'est pas identifié.
+ Ce qui compte, c'est que les objets 
+\begin_inset Quotes fld
+\end_inset
+
+voiture
+\begin_inset Quotes frd
+\end_inset
+
+ peuvent voir leur couleur changer.
+ Dans cette phrase, l'action de changement de voiture est davantage liée
+ au type d'objet concerné (Voiture) qu'à l'agent qui les effectue.
+ On modélise cette possibilité de changement de couleur de voiture par la
+ création d'une 
+\emph on
+méthode statique
+\emph default
+ au sein de la classe Voiture, que l'on va appeler quand on voudra changer
+ la couleur d'une instance 
+\begin_inset Quotes fld
+\end_inset
+
+voiture
+\begin_inset Quotes frd
+\end_inset
+
+.
+ Le changement de couleur de la voiture s'effectue sur Matlab en exécutant
+ le code suivant :
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+Voiture.changer_couleur(voiture,'bleu');
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+après avoir ajouté à la classe Voiture la méthode statique changer_couleur
+ de cette manière :
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+classdef Voiture
+\end_layout
+
+\begin_layout Plain Layout
+
+	%code non-recopié ici
+\end_layout
+
+\begin_layout Plain Layout
+
+	methods (static)
+\end_layout
+
+\begin_layout Plain Layout
+
+		function changer_couleur(voiture, 'bleu')
+\end_layout
+
+\begin_layout Plain Layout
+
+			voiture.couleur = 'bleu'
+\end_layout
+
+\begin_layout Plain Layout
+
+		end
+\end_layout
+
+\begin_layout Plain Layout
+
+	end
+\end_layout
+
+\begin_layout Plain Layout
+
+end
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Prenons un troisième exemple pour introduire une autre notion.
+ Programmons la phrase : 
+\emph on
+la porte de la voiture est jaune.
+ 
+\emph default
+Pour cela, il faut ajouter aux propriétés de la voiture la propriété porte,
+ qu'on va elle même définir comme une instance d'une classe Porte qui a
+ une propriété couleur.
+ On programme la phrase en instanciant une porte dans les propriétés de
+ la voiture, et en mettant la bonne couleur voulue à la porte.
+ On doit exécuter le code suivant :
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+voiture.porte = Porte;
+\end_layout
+
+\begin_layout Plain Layout
+
+voiture.porte.couleur = 'jaune';
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+après avoir ajouté la classe voiture la propriété porte :
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+classdef Voiture
+\end_layout
+
+\begin_layout Plain Layout
+
+	properties
+\end_layout
+
+\begin_layout Plain Layout
+
+		porte
+\end_layout
+
+\begin_layout Plain Layout
+
+		%code non-recopié ici
+\end_layout
+
+\begin_layout Plain Layout
+
+	end
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	% code non-recopié ici
+\end_layout
+
+\begin_layout Plain Layout
+
+end
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+et après avoir défini une classe Porte ainsi :
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+classdef Porte
+\end_layout
+
+\begin_layout Plain Layout
+
+	properties
+\end_layout
+
+\begin_layout Plain Layout
+
+		couleur
+\end_layout
+
+\begin_layout Plain Layout
+
+	end
+\end_layout
+
+\begin_layout Plain Layout
+
+end
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Enfin, prenons un quatrème exemple pour présenter nos dernières notions.
+ Programmons la phrase : 
+\emph on
+notre voiture et un camion roulent
+\emph default
+.
+ On observe que notre voiture et le camion sont tous deux des véhicules
+ et font une action qui est désigné par le même concept 
+\begin_inset Quotes fld
+\end_inset
+
+rouler
+\begin_inset Quotes frd
+\end_inset
+
+.
+ Cependant, la manière dont la voiture et le camion roulent est différente
+ (la voiture a probablement besoin d'un moteur moins puissant que le camion,
+ et des pneus moins résistants...).
+ 
+\end_layout
+
+\begin_layout Standard
+On modélise cette situation dans nos classes en introduisant les concepts
+ de 
+\emph on
+méthode abstraite
+\emph default
+ et de 
+\emph on
+polymorphisme
+\emph default
+.
+ On va redéfinir la classe Véhicule en lui ajoutant une méthode abstraite
+ 
+\begin_inset Quotes fld
+\end_inset
+
+rouler
+\begin_inset Quotes frd
+\end_inset
+
+, dont on ne donnera que le nom dans la classe Véhicule, et qui sera implémentée
+, autrement dit son code sera écrit, seulement dans les classes concrètes
+ qui héritent de Véhicule, soient Voiture et Camion.
+ On dit que la méthode abstraite 
+\begin_inset Quotes fld
+\end_inset
+
+rouler
+\begin_inset Quotes frd
+\end_inset
+
+ est polymorphe car sa forme finale, autrement dit le code qu'elle exécute,
+ dépend de la classe concrète auquel appartient l'objet à partir duquelle
+ elle est appelée.
+ 
+\end_layout
+
+\begin_layout Standard
+Le polymorphisme permet de réduire le nombre de structures de contrôle 
+\begin_inset Quotes fld
+\end_inset
+
+if...then...else
+\begin_inset Quotes frd
+\end_inset
+
+ dans le programme.
+ Il n'est pas nécessaire de savoir si le véhicule que l'on manipule est
+ une voiture ou un camion pour le faire rouler : il suffit d'appeler sa
+ méthode rouler, qui appellera automatiquement la bonne implémentation (celle
+ de la voiture ou du camion).
+\end_layout
+
+\begin_layout Standard
+La phrase 
+\begin_inset Quotes fld
+\end_inset
+
+
+\emph on
+notre voiture et un camion roulent
+\emph default
+
+\begin_inset Quotes frd
+\end_inset
+
+ est programmée par le code suivant qui utilise la méthode abstraite polymorphe
+ 
+\begin_inset Quotes fld
+\end_inset
+
+rouler
+\begin_inset Quotes frd
+\end_inset
+
+ :
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+camion = Camion;
+\end_layout
+
+\begin_layout Plain Layout
+
+voiture.rouler();
+\end_layout
+
+\begin_layout Plain Layout
+
+camion.rouler();
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Au préalable, on a ajouté à la classe Véhicule la méthode abstraite 
+\begin_inset Quotes fld
+\end_inset
+
+rouler
+\begin_inset Quotes frd
+\end_inset
+
+ :
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+classdef (Abstract) Vehicule
+\end_layout
+
+\begin_layout Plain Layout
+
+	% code non-recopié ici
+\end_layout
+
+\begin_layout Plain Layout
+
+	methods (Abstract)
+\end_layout
+
+\begin_layout Plain Layout
+
+		rouler()
+\end_layout
+
+\begin_layout Plain Layout
+
+	end
+\end_layout
+
+\begin_layout Plain Layout
+
+end
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+et on l'a implémenté dans les classes concrètes qui héritent de Véhicule,
+ 
+\begin_inset Quotes fld
+\end_inset
+
+Voiture
+\begin_inset Quotes frd
+\end_inset
+
+ :
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+classdef Voiture < Vehicule
+\end_layout
+
+\begin_layout Plain Layout
+
+	%code non-recopié ici
+\end_layout
+
+\begin_layout Plain Layout
+
+	methods
+\end_layout
+
+\begin_layout Plain Layout
+
+		function rouler(soi)
+\end_layout
+
+\begin_layout Plain Layout
+
+			%implémentation de la méthode rouler
+\end_layout
+
+\begin_layout Plain Layout
+
+			%pour une voiture ici
+\end_layout
+
+\begin_layout Plain Layout
+
+		end
+\end_layout
+
+\begin_layout Plain Layout
+
+end
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+et 
+\begin_inset Quotes fld
+\end_inset
+
+Camion
+\begin_inset Quotes frd
+\end_inset
+
+ :
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+classdef Camion < Vehicule
+\end_layout
+
+\begin_layout Plain Layout
+
+	methods
+\end_layout
+
+\begin_layout Plain Layout
+
+		function rouler(soi)
+\end_layout
+
+\begin_layout Plain Layout
+
+			%implémentation de la méthode rouler
+\end_layout
+
+\begin_layout Plain Layout
+
+			%pour un camion ici
+\end_layout
+
+\begin_layout Plain Layout
+
+		end
+\end_layout
+
+\begin_layout Plain Layout
+
+end
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subparagraph
+Exempe d'illustration schématique inspirée du formalisme UML 
+\begin_inset CommandInset label
+LatexCommand label
+name "par:Exempe-d'illustration-schématique"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+L'Unified Modelling Language (UML) donne des règles pour illustrer un programme
+ écrit suivant le paradigme orienté objet.
+ Chaque classe est illustrée par une boite, qui contient au sommet le nom
+ de la classe, puis ses propriétés, puis ses méthodes.
+ Une classe abstraite est dénotée par un nom écrit en italique, une méthode
+ statique par un nom souligné, et une méthode abstraite par un nom en italique.
+ 
+\end_layout
+
+\begin_layout Standard
+Si un objet A contient dans ses propriétés un objet B (dans notre exemple
+ une voiture contient dans ses propriétés une porte), alors la boite de
+ la classe de l'objet A aura un trait commençant par un losange au niveau
+ de l'objet A pour finir par une flèche simple (un V) au niveau de la boite
+ de la classe de l'objet B.
+ Si les objets A et B se contiennent l'un l'autre dans leurs propriétés,
+ alors le trait qui les relie est terminé par deux flèches.
+ Le nombre d'instances de l'objet B que peut contenir en propriété un objet
+ A sera dénoté par un nombre, appelé 
+\emph on
+cardinalité
+\emph default
+, écrit à côté de la flèche.
+ 
+\end_layout
+
+\begin_layout Standard
+Si une classe A hérite d'une classe B (dans notre exemple la classe Voiture
+ hérite de la classe Véhicule) alors la boite de la classe de l'objet A
+ aura un trait qui fini par une flèche fermée (en V fermé) au niveau de
+ la boite de la classe de l'objet B.
+ On a fait un diagramme correspondant aux phrases données au paragraphe
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "par:Concepts"
+
+\end_inset
+
+ pour expliciter les notations inspirées du formalisme UML que je vais utiliser
+ pour décrire les classes de mon logiciel, sur la figure 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "fig:Exemple_Objet"
+
+\end_inset
+
+ .
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename exemple_programmation_objet.png
+	lyxscale 20
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Illustration de l'exemple de programmation orientée objet donné au paragraphe
+ 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "par:En-objets"
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Exemple_Objet"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Selon le patron de conception Modèle-Vue-Contrôleur
+\end_layout
+
+\begin_layout Standard
+Un patron de conception correspond à une certaine organisation d'objets
+ au rôle prédéterminé, dans un programme.
+ Le patron de conception utilisé dans mon programme s'appelle 
+\begin_inset Quotes fld
+\end_inset
+
+Modèle-Vue-Contrôleur
+\begin_inset Quotes frd
+\end_inset
+
+.
+ Ce patron de conception permet de séparer les traitement des données qui
+ se font dans l'instance de la classe Modèle (et les instances des classes
+ qu'elle contient dans ses propriétés), tandis que la gestion de l'interface
+ se fait dans l'instance de la classe Vue, et que l'instance la classe Contrôleu
+r appelle tantôt les méthodes du modèle, tantôt les méthodes de la vue,
+ et se pose en chef d'orchestre du programme.
+ 
+\end_layout
+
+\begin_layout Standard
+Le modèle a la particularité d'être observé par la vue, ce qui veut dire
+ qu'en cas de changement des propriétés observables du modèle, la vue pourra
+ effectuer des actions (par exemple changer l'affichage).
+ Il est important de noter que la vue est ici appelée implicitement : jamais
+ le modèle n'appelle directement la vue.
+ Cela permet de désolidariser le traitement des données de l'affichage,
+ ce qui sépare le code en différents morceaux (ce qui le simplifie et permet
+ une collaboration plus simple entre deux développeurs dont l'un peut s'occuper
+ de l'affichage et l'autre des traitements) et permet si on le souhaite
+ de changer l'affichage du programme sans toucher à ses traitements.
+ La relation qui lie le modèle à la vue est elle-même un 
+\begin_inset Quotes fld
+\end_inset
+
+sous
+\begin_inset Quotes frd
+\end_inset
+
+ patron de conception, appelé patron de conception observateur.
+\end_layout
+
+\begin_layout Paragraph
+Schéma de la structure de mon programme
+\end_layout
+
+\begin_layout Standard
+Selon le même formalisme que celui présenté au paragraphe 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "par:Exempe-d'illustration-schématique"
+
+\end_inset
+
+, j'ai illustré l'organisation des classes de mon programme par le schéma
+ donné à la figure 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "fig:Schéma-de-fonctionnement"
+
+\end_inset
+
+.
+ Par rapport à ce que l'on a déjà présenté, on a ajouté deux dessins de
+ bonhommes que l'on trouve dans les diagrammes UML de scénarios d'utilisation.
+ Le bonhomme situé tout en haut du schéma est l'utilisateur, tandis que
+ le bonhomme situé un peu plus bas est le testeur.
+ Ces deux bonhommes correspondent aux deux scénarios d'utilisation envisagés
+ qui sont l'utilisation simple du programme, et le test.
+ Les boites simples correspondent à des fonctions.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centerline{ 
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename schéma_fonctionnement_page 1.png
+	lyxscale 20
+	scale 22
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Première page
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Schéma de fonctionnement du programme, 1/3
+\end_layout
+
+\end_inset
+
+Schéma de fonctionnement du programme, 1/3
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ContinuedFloat
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centerline{ 
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename schéma_fonctionnement_page2.png
+	lyxscale 20
+	scale 22
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Deuxième page
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Schéma de fonctionnement du programme, 2/3
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+ContinuedFloat
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centerline{ 
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename schéma_fonctionnement_page3.png
+	lyxscale 20
+	scale 22
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Troisième page
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Schéma de fonctionnement du programme, 3/3
+\end_layout
+
+\end_inset
+
+Schéma de fonctionnement du programme (3/3) d'analyse d'images ultrasonore
+ quadridimensionnelles "Ultrasound_4D_Image_Analyser" que j'ai développé,
+ inspiré du formalisme des diagrammes de classes et des scénarios d'utilisations
+ de l'Unified Modeling Language (UML)
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Schéma-de-fonctionnement"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Compréhensible
+\end_layout
+
+\begin_layout Paragraph
+Lisible
+\end_layout
+
+\begin_layout Standard
+Les variables ont des noms explicites qui permettent de comprendre facilement
+ ce qu'elles contiennent.
+ Les différents mots constituant les variables sont séparées par des tirets
+ bas.
+ Par exemple, la variable 
+\emph on
+pic_choisi
+\emph default
+ contient le numéro du pic choisi (la numérotation des pics se fait de gauche
+ à droite sur le graphique).
+\end_layout
+
+\begin_layout Standard
+Les noms des classes commencent par des majuscules.
+\end_layout
+
+\begin_layout Paragraph
+Commenté
+\end_layout
+
+\begin_layout Standard
+Le code est commenté à toutes les échelles.
+ Les classes ont un commentaire qui explique leur raison d'être, les méthodes
+ l'action qu'elles effectuent, et les propriétés la caractéristique qu'elles
+ définissent, quand celle-ci n'est pas évidente d'après leur nom.
+ L'intérieur des méthodes est elle-aussi commentée.
+ 
+\end_layout
+
+\begin_layout Standard
+Ces commentaires permettent de comprendre l'utilité des différents composants
+ du programme, et permet une modification facilitée par une compréhension
+ claire de son fonctionnement.
+\end_layout
+
+\begin_layout Paragraph
+Documenté
+\end_layout
+
+\begin_layout Standard
+Ce document et ses nombreux schémas permettront d'aider celui qui voudrait
+ comprendre ou modifier le code source.
+\end_layout
+
+\begin_layout Subsubsection
+Évolutif
+\end_layout
+
+\begin_layout Standard
+L'écriture du code qui suit un paradigme de programmation orientée objet
+ et le patron de conception modèle-vue-contrôleur permet un important découpage
+ du code en différents modules, ce qui permet d'ajouter de nouvelles fonctionnal
+ités au programme sans risquer d'entrainer des bogues sur d'autres parties
+ du programme (dites erreurs de regression).
+\end_layout
+
+\begin_layout Standard
+Le patron de conception modèle-vue-contrôleur permet de changer l'interface
+ graphique sans avoir à toucher au modèle qui s'occupe du traitement de
+ données, et vice versa.
+\end_layout
+
+\begin_layout Standard
+Le polymorphisme de certaines méthodes permet de limiter la nécessité d'utiliser
+ des structures de contrôles 
+\begin_inset Quotes fld
+\end_inset
+
+if...then...else
+\begin_inset Quotes frd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+On détaille ci-dessous un exemple d'un ajout de fonctionnalité pour mieux
+ comprendre comment l'évolution du code est possible.
+ 
+\end_layout
+
+\begin_layout Paragraph
+Exemple d'ajout de fonctionnalité : chargement d'un autre format de fichier
+\end_layout
+
+\begin_layout Standard
+Pour permettre de charger un nouveau format de fichier, par exemple le format
+ correspondant aux données 
+\begin_inset Quotes fld
+\end_inset
+
+2D+Temps
+\begin_inset Quotes frd
+\end_inset
+
+ ou un format correspondant aux données provenant d'un autre échographe,
+ il faudrait suivre les étapes suivantes :
+\end_layout
+
+\begin_layout Enumerate
+créer une classe appelée Volumes_$format, où $format doit être remplacé
+ par le nom relatif au format du type de fichier que l'on veut pouvoir charger
+ ;
+\end_layout
+
+\begin_layout Enumerate
+faire hériter cette classe de la classe Volumes en mettant devant son nom
+ (sur la première ligne de la classe) le code : 
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+< Volumes
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+créer un constructeur de cette classe qui lui permet de connaitre le modèle,
+ en ajoutant les lignes de code suivantes dans la classe : 
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+methods (Access = ?Modele) 
+\end_layout
+
+\begin_layout Plain Layout
+
+% Seul le modèle peut appeler cette méthode
+\end_layout
+
+\begin_layout Plain Layout
+
+   function soi = Volumes_$format(modele)
+\end_layout
+
+\begin_layout Plain Layout
+
+		soi.modele = modele;         
+\end_layout
+
+\begin_layout Plain Layout
+
+	end   
+\end_layout
+
+\begin_layout Plain Layout
+
+end
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+définir une méthode 
+\begin_inset Quotes fld
+\end_inset
+
+charger
+\begin_inset Quotes frd
+\end_inset
+
+ (implémentation de la méthode abstraite 
+\begin_inset Quotes fld
+\end_inset
+
+charger
+\begin_inset Quotes frd
+\end_inset
+
+ de la classe abstraite Volumes) dans cette classe et écrire son code permettant
+ de charger le type fichier voulu.
+ Cette méthode doit se finir par la ligne suivante :
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+soi.donnees = variable_contenant_les_donnees_a_charger;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+ajouter une méthode créer_volumes_$format dans la classe Modèle, qui appelle
+ le constructeur de la classe Volumes_$format pour charger une instance
+ de cette classe dans la propriété volumes du modèle.
+ Son code doit être :
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+methods        
+\end_layout
+
+\begin_layout Plain Layout
+
+	function creer_volumes_$format(soi)             
+\end_layout
+
+\begin_layout Plain Layout
+
+		soi.volumes = Volumes_dossier_mat(soi);
+\end_layout
+
+\begin_layout Plain Layout
+
+	end
+\end_layout
+
+\begin_layout Plain Layout
+
+end
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+ajouter une méthode dans la classe Contrôleur qui va appeler la fonction
+ précédente du modèle et qui va lancer le chargement.
+ Son code doit être :
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+methods	
+\end_layout
+
+\begin_layout Plain Layout
+
+	function charger_volumes_$format(soi)            
+\end_layout
+
+\begin_layout Plain Layout
+
+    	soi.modele.creer_volumes_$format;                          
+\end_layout
+
+\begin_layout Plain Layout
+
+    	soi.modele.volumes.charger;         
+\end_layout
+
+\begin_layout Plain Layout
+
+	end
+\end_layout
+
+\begin_layout Plain Layout
+
+end
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+ajouter le nom du nouveau format chargeable dans la liste des formats de
+ l'interface grâce à l'outil GUIDE (ouvrir le dossier InterfaceHommeMachine
+ puis faire un clic droit sur Ultrasound_4D_Images_Analyser.fig puis cliquer
+ sur GUIDE) ;
+\end_layout
+
+\begin_layout Enumerate
+ajouter les lignes suivantes dans la fonction 
+\emph on
+chargement_callback
+\emph default
+ du fichier InterfaceHommeMachine/ Ultrasound_4D_Images_Analyser.m :
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+switch choix_chargement     
+\end_layout
+
+\begin_layout Plain Layout
+
+%code non-recopié ici
+\end_layout
+
+\begin_layout Plain Layout
+
+	case 5
+\end_layout
+
+\begin_layout Plain Layout
+
+		format = '$format';
+\end_layout
+
+\begin_layout Plain Layout
+
+end
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+switch format 
+\end_layout
+
+\begin_layout Plain Layout
+
+%code non-recopié ici 
+\end_layout
+
+\begin_layout Plain Layout
+
+	case '$format'
+\end_layout
+
+\begin_layout Plain Layout
+
+		handles.controleur.charger_volumes_$format;
+\end_layout
+
+\begin_layout Plain Layout
+
+end
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Robuste
+\end_layout
+
+\begin_layout Paragraph
+Gestion des erreurs
+\end_layout
+
+\begin_layout Standard
+Les erreurs, parfois appelées 
+\begin_inset Quotes fld
+\end_inset
+
+exceptions
+\begin_inset Quotes frd
+\end_inset
+
+, sont gérées au moyen de blocs 
+\emph on
+try...catch.
+
+\emph default
+ Le code est exécuté dans la partie 
+\emph on
+try
+\emph default
+, puis si une erreur est levée (soit par une fonction appelée, soit par
+ le code lui-même), alors l'exécution passe au bloc 
+\emph on
+catch
+\emph default
+.
+ Si le nom de l'erreur est reconnu dans le bloc 
+\emph on
+catch
+\emph default
+, alors un code spécifique dit de gestion d'erreur s'exécute.
+ Par exemple, on affiche un message d'erreur pour que l'utilisateur puisse
+ corriger son erreur.
+\end_layout
+
+\begin_layout Paragraph
+Exemple de test unitaire
+\end_layout
+
+\begin_layout Standard
+Un test unitaire permet de tester si une fonction ou une méthode donne pour
+ une entrée donnée le résultat auquel on s'attend.
+ J'ai écrit un test unitaire partiel pour la méthode définir_graphique de
+ la classe graphique, qui s'occupe du calcul des ordonnées et des abscisses
+ du graphique.
+ Mon test vérifie que pour une région d'intérêt polygonale ne contenant
+ que des valeur d'intensité 0, le graphique doit avoir pour ordonnées un
+ vecteur de 0.
+ Le test peut être lancé en exécutant la fonction Tests/lancer_tests.m.
+ 
+\end_layout
+
+\begin_layout Standard
+Si j'avais été plus rigoureux, il aurait fallu faire beaucoup plus de tests,
+ de sorte à au moins tester 60% des méthodes que j'ai écrites.
+ Malheureusement, j'ai manqué de temps pour faire cela, et j'ai privilégié
+ les autres aspects du logiciel présentés dans cette partie.
+ Le test que j'ai écrit dans le dossier Tests permet néanmoins à un développeur
+ qui reprendrait mon code de pouvoir prendre modèle sur celui-ci pour en
+ écrire d'autres.
+\end_layout
+
+\begin_layout Part
+Résultats
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+Comme on l'a présenté à la sous-section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "subsec:Résolution-spatiale"
+
+\end_inset
+
+, on souhaite calculer la résolution spatiale de l'Aplio 500 suivant chacun
+ des axes selon lesquels il fait des images, décrits à la figure 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "fig:axes_sonde"
+
+\end_inset
+
+.
+ Stéphanie, Virginie et moi avons réalisé une expérience dont nous avons
+ analysé les résultats pour déterminer la résolution spatiale selon l'axe
+ 
+\begin_inset Formula $x$
+\end_inset
+
+ de l'échographe.
+ Malheureusement, les sources de signal étaient encore un peu trop grandes
+ pour que l'on puisse les considérer comme ponctuelles dans la définition
+ de la résolution spatiale.
+ Néanmoins, on suppose que notre résultat est une bonne approximation de
+ la résolution spatiale selon l'axe 
+\begin_inset Formula $x$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Expérience
+\end_layout
+
+\begin_layout Standard
+Un fantôme en matériau DragonSkin traversé par deux tubes d'environ 275
+ μm de diamètre a été réalisé par Virginie Grand-Perret.
+ Les deux tubes sont espacés d'environ 5500 μm.
+ Elle a injecté des microbulles dans les deux tubes tout en imageant le
+ fantôme en échographie de contraste avec l'Aplio 500, selon le dispositif
+ présenté à la section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:Dispositif-expérimental"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Analyse des images
+\end_layout
+
+\begin_layout Standard
+Après avoir enregistré les images capturées par l'Aplio 500, on les convertit
+ en VoxelData, puis on les charge dans le logicel Ultrasound_4D_Images_Analyser
+ que j'ai développé.
+ On sélectionne une région d'intérêt dans une image orientée axialement
+ (plan 
+\emph on
+x
+\emph default
+-
+\emph on
+y
+\emph default
+).
+ L'image correspond à l'intensité du deuxième harmonique du signal ultrasonore
+ renvoyé, comme on a l'expliqué à la section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "sec:Échographie-de-contraste"
+
+\end_inset
+
+.
+ La région d'intérêt définit la partie de l'image où se trouve le signal
+ provenant des microbulles contenues dans les deux tuyaux L'image et la
+ région d'intérêt qu'on a définie sont montrées à la figure 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "fig:Région-d'intérêt-sélectionnée"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /Users/maxandrejacqueline/Documents/Centrale/Stage Gustave Roussy/Ultrasound_4D_Images_Analyser/Documentation/Resultat_analyse_dragonskin1_nouvelle_interface/image.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Région d'intérêt sélectionnée sur l'image échographique
+\end_layout
+
+\end_inset
+
+Région d'intérêt sélectionnée sur l'image échographique.
+\begin_inset Newline newline
+\end_inset
+
+La région d'intérêt est en rouge, et à l'intérieur les deux points blancs
+ correspondent au deuxième harmonique du signal envoyé par les microbulles
+ situées à l'intérieur des tuyaux.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Région-d'intérêt-sélectionnée"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+On décide ensuite d'afficher le graphique de la courbe d'intensité de la
+ région d'intérêt dont l'axe des abscisses est 
+\begin_inset Formula $x$
+\end_inset
+
+ et l'axe de moyennage 
+\begin_inset Formula $y$
+\end_inset
+
+.
+ On détecte les deux pics du graphique, comme on le voit à la figure 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "fig:Courbe-d'intensité-pics"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /Users/maxandrejacqueline/Documents/Centrale/Stage Gustave Roussy/Ultrasound_4D_Images_Analyser/Documentation/Resultat_analyse_dragonskin1_nouvelle_interface/graphique_pics_detectes.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Courbe d'intensité de la région d'intérêt de la figure 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "fig:Région-d'intérêt-sélectionnée"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+Courbe d'intensité de la région d'intérêt de la figure dont l'axe des abscisses
+ est 
+\begin_inset Formula $x$
+\end_inset
+
+ et l'axe de moyennage 
+\begin_inset Formula $y$
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+Les pics (maximums locaux) sont marqués par des triangles oranges et la
+ largeur à mi-hauteur de chacun des pics correspond à la ligne horizontale
+ jaune qui se trouve en dessous.
+ Le trait vertical orange qui prend son origine au pic correspond à la hauteur
+ du pic par rapport au signal de base.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Courbe-d'intensité-pics"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+On calcule ensuite la largeur à mi-hauteur de chacun des pics en pixels,
+ et la distance qui les sépare en pixels, comme on le voit à la figure 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "fig:Interface-graphique-résultats"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /Users/maxandrejacqueline/Documents/Centrale/Stage Gustave Roussy/Ultrasound_4D_Images_Analyser/Documentation/Resultat_analyse_dragonskin1_nouvelle_interface/capture_écran_pic118.png
+	lyxscale 50
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Interface graphique du programme qui présente les résultats de l'analyse
+ du graphique
+\end_layout
+
+\end_inset
+
+Interface graphique du programme qui présente les résultats de l'analyse
+ du graphique, dont la largeur à mi-hauteur du pic situé à l'abscisse 118,
+ et la distance à mi-hauteur entre les deux pics.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Interface-graphique-résultats"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+On a que la largeur à mi-hauteur du premier pic (à l'abscisse 118) est de
+ 
+\begin_inset Formula $8,74583$
+\end_inset
+
+ pixels et que la largeur à mi-hauteur du deuxième pic (à l'abscisse 150)
+ est de 
+\begin_inset Formula $9,58443$
+\end_inset
+
+ pixels.
+ En moyenne, la largeur à mi-hauteur des deux pics est donc de 
+\begin_inset Formula $\frac{8,74583+9,58443}{2}=9,15$
+\end_inset
+
+ pixels.
+ 
+\end_layout
+
+\begin_layout Standard
+La distance entre les deux pics est de 
+\begin_inset Formula $32$
+\end_inset
+
+ pixels.
+ Comme on sait que les deux tubes sont espacés de 5500 μm, on en déduit
+ que chaque pixel fait 
+\begin_inset Formula $\frac{5500}{32}=172$
+\end_inset
+
+ μm.
+ Ainsi, d'après la définition donnée dans la section 
+\begin_inset CommandInset ref
+LatexCommand vref
+reference "subsec:Résolution-spatiale"
+
+\end_inset
+
+, la résolution spatiale de l'Aplio 500 suivant l'axe 
+\begin_inset Formula $x$
+\end_inset
+
+ est de 
+\begin_inset Formula $9,15*172=1570$
+\end_inset
+
+ μm, soit 
+\begin_inset Formula $1,57$
+\end_inset
+
+ millimètre.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "Bibliographie"
+options "is-plain"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

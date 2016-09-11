@@ -1,0 +1,180 @@
+% Encoding: ISO-8859-1
+
+@Online{Larousse,
+  editor  = {Larousse},
+  title   = {Tumeur, Dictionnaire en ligne Larousse},
+  url     = {http://www.larousse.fr/dictionnaires/francais/tumeur/80202},
+  urldate = {2016-09-04},
+}
+
+@Online{petscan.info:2007,
+  editor = {petscan.info},
+  title  = {Quelle est la différence entre Imagerie Fonctionnelle et Imagerie Anatomique ?},
+  year   = {2007},
+  date   = {2007-12-08},
+  url    = {http://www.petscan.info/index.php%3Foption%3Dcom_content%26view%3Darticle%26id%3D45:foncionnelleVsAnatomique%26catid%3D31:general%26Itemid%3D46},
+}
+
+@Online{Wikipedia-1,
+  editor  = {Wikipédia},
+  title   = {Examen non-invasif, Wikipédia},
+  url     = {https://fr.wikipedia.org/wiki/Examen_non_invasif},
+  urldate = {2016-09-04},
+}
+
+@PhdThesis{Boyer:2016,
+  author      = {Laure Boyer},
+  title       = {Imagerie multiparamétrique en échographie de contraste (DCE US) pour caractériser la vascularisation tumorale et son hétérogénéité : de la modelisation numérique à l'expérimentation préclinique.},
+  institution = {Université Paris-Sud et CNRS},
+  year        = {2016},
+}
+
+@Conference{Arbeille:2003,
+  author    = {Philippe ARBEILLE},
+  title     = {RISQUES D'EFFETS BIOLOGIQUES par ECHOGRAPHIE, DOPPLER PULSE et COULEUR},
+  booktitle = {Société Francophone pour l'Application des Ultrasons à la Médecine et à la Biologie (SFAUMB)},
+  year      = {2003},
+}
+
+@Book{kumar2012robbins,
+  author    = {Kumar, Vinay and Abbas, Abul K and Aster, Jon C},
+  title     = {Robbins basic pathology},
+  year      = {2012},
+  publisher = {Elsevier Health Sciences},
+}
+
+@Article{stephenson20053d,
+  author    = {Stephenson, Susan Raatz},
+  title     = {3D and 4D sonography history and theory},
+  year      = {2005},
+  volume    = {21},
+  number    = {5},
+  pages     = {392--399},
+  journal   = {Journal of Diagnostic Medical Sonography},
+  publisher = {SAGE Publications},
+}
+
+@Book{tranquart2007echographie,
+  author    = {Tranquart, Fran{\c{c}}ois and Correas, Jean-Michel and Bouakaz, Ayache},
+  title     = {Echographie de contraste: m{\'e}thodologie et applications cliniques},
+  year      = {2007},
+  publisher = {Springer Science \& Business Media},
+}
+
+@Online{Wikipedia-2,
+  editor  = {Wikipedia},
+  title   = {Image Resolution, Chapitre Spatial Resolution},
+  url     = {https://en.wikipedia.org/wiki/Image_resolution#Spatial_resolution},
+  urldate = {2016-09-04},
+}
+
+@InProceedings{brusseau2005modele,
+  author       = {BRUSSEAU, Elisabeth and SAID, Ghada and CLARYSSE, Patrick},
+  title        = {Mod{\`e}le num{\'e}rique d'estimation 2D de la d{\'e}formation des tissus mous biologiques {\`a} partir d'images {\'e}chographiques radiofr{\'e}quence: R{\'e}sultats sur simulations num{\'e}riques et donn{\'e}es exp{\'e}rimentales},
+  booktitle    = {20° Colloque sur le traitement du signal et des images, FRA, 2005},
+  year         = {2005},
+  organization = {GRETSI, Groupe d'Etudes du Traitement du Signal et des Images},
+}
+
+@Article{yuan2016novel,
+  author    = {Yuan, Jianda and Hegde, Priti S and Clynes, Raphael and Foukas, Periklis G and Harari, Alexandre and Kleen, Thomas O and Kvistborg, Pia and Maccalli, Cristina and Maecker, Holden T and Page, David B and others},
+  title     = {Novel technologies and emerging biomarkers for personalized cancer immunotherapy},
+  year      = {2016},
+  volume    = {4},
+  number    = {1},
+  pages     = {1},
+  journal   = {Journal for immunotherapy of cancer},
+  publisher = {BioMed Central},
+}
+
+@Online{TLFI-1,
+  editor = {Trésor de la langue française informatisé},
+  title  = {Fonction, Trésor de la langue française informatisé},
+  url    = {http://www.cnrtl.fr/definition/fonction},
+}
+
+@Article{peronneau2010contrast,
+  author    = {Peronneau, P and Lassau, N and Leguerney, I and Roche, A and Cosgrove, D},
+  title     = {Contrast ultrasonography: necessity of linear data processing for the quantification of tumor vascularization},
+  year      = {2010},
+  volume    = {31},
+  number    = {04},
+  pages     = {370--378},
+  journal   = {Ultraschall in der Medizin-European Journal of Ultrasound},
+  publisher = {{\copyright} Georg Thieme Verlag KG Stuttgart{\textperiodcentered} New York},
+}
+
+@Article{gonzalez2004eddins,
+  author  = {Gonzalez, Woods and Woods, Richard E},
+  title   = {Eddins, Digital Image Processing Using MATLAB},
+  year    = {2004},
+  journal = {Third New Jersey: Prentice Hall},
+}
+
+@Article{shannon2001mathematical,
+  author    = {Shannon, Claude Elwood},
+  title     = {A mathematical theory of communication},
+  year      = {2001},
+  volume    = {5},
+  number    = {1},
+  pages     = {3--55},
+  journal   = {ACM SIGMOBILE Mobile Computing and Communications Review},
+  publisher = {ACM},
+}
+
+@Article{bergers2003tumorigenesis,
+  author    = {Bergers, Gabriele and Benjamin, Laura E},
+  title     = {Tumorigenesis and the angiogenic switch},
+  year      = {2003},
+  volume    = {3},
+  number    = {6},
+  pages     = {401--410},
+  journal   = {Nature reviews cancer},
+  publisher = {Nature Publishing Group},
+}
+
+@Article{kiessling2010anatomical,
+  author    = {Kiessling, Fabian and Razansky, Daniel and Alves, Frauke},
+  title     = {Anatomical and microstructural imaging of angiogenesis},
+  year      = {2010},
+  volume    = {37},
+  number    = {1},
+  pages     = {4--19},
+  journal   = {European journal of nuclear medicine and molecular imaging},
+  publisher = {Springer},
+}
+
+@Article{carmeliet2011molecular,
+  author    = {Carmeliet, Peter and Jain, Rakesh K},
+  title     = {Molecular mechanisms and clinical applications of angiogenesis},
+  year      = {2011},
+  volume    = {473},
+  number    = {7347},
+  pages     = {298--307},
+  journal   = {Nature},
+  publisher = {Nature Publishing Group},
+}
+
+@Article{less1991microvascular,
+  author    = {Less, Joanne R and Skalak, Thomas C and Sevick, Eva M and Jain, Rakesh K},
+  title     = {Microvascular architecture in a mammary carcinoma: branching patterns and vessel dimensions},
+  year      = {1991},
+  volume    = {51},
+  number    = {1},
+  pages     = {265--273},
+  journal   = {Cancer research},
+  publisher = {AACR},
+}
+
+@Article{culjat2010review,
+  author    = {Culjat, Martin O and Goldenberg, David and Tewari, Priyamvada and Singh, Rahul S},
+  title     = {A review of tissue substitutes for ultrasound imaging},
+  year      = {2010},
+  volume    = {36},
+  number    = {6},
+  pages     = {861--873},
+  journal   = {Ultrasound in medicine \& biology},
+  publisher = {Elsevier},
+}
+
+@Comment{jabref-meta: databaseType:biblatex;}

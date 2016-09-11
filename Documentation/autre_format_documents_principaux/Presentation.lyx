@@ -1,0 +1,1299 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Warsaw}
+% or ...
+
+\setbeamercovered{transparent}
+% or whatever (possibly just delete it)
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language french
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "times" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 0
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 0
+\use_package mhchem 1
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language french
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+ Ce fichier est un exemple d'exposé:
+\end_layout
+
+\begin_layout Itemize
+pour des conférences, 
+\end_layout
+
+\begin_layout Itemize
+d'une durée approximative de 20 minutes, 
+\end_layout
+
+\begin_layout Itemize
+avec un style ornemental.
+\end_layout
+
+\begin_layout Plain Layout
+Pour afficher les explications, ouvrir les notes.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+Copyright 2004 by Till Tantau <tantau@users.sourceforge.net>.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+Traduction de Philippe De Sousa <philippejjg@free.fr>.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+Adaptation à \SpecialChar LyX
+ par Jean-Pierre Chrétien <chretien@cert.fr> 
+\end_layout
+
+\begin_layout Plain Layout
+En principe, ce fichier peut être redistribué et/ou modifié conformément
+ aux termes de la GNU Public License, version 2.Cependant, ce fichier est
+ un "exemple-type" qui peut être modifié selon vos propres besoins.
+ Pour cette raison, si vous utilisez ce fichier en tant qu'"exemple-type"
+ et non spécifiquement pour le distribuer en tant que partie d'un package
+ ou programme, je vous donne la permission exceptionnelle de copier librement
+ et de modifier ce fichier et même d'effacer ce message de copyright.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+Correction mineure (style Institute au lieu de style Date) des fichiers
+ originaux le 12 jan 07 par Jean-Pierre Chrétien <chretien@cert.fr> 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Title
+À la recherche de la microbulle perdue
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+(facultatif, à utiliser uniquement si le titre de l'article est trop long)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subtitle
+ou l'analyse des images ultrasonores quadridimensionnelles de contraste
+\end_layout
+
+\begin_layout Author
+Maxandre Jacqueline
+\begin_inset Flex InstituteMark
+status open
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset Newline newline
+\end_inset
+
+sous la supervision de Stéphanie-Pitre Champagnat
+\begin_inset Flex InstituteMark
+status collapsed
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+
+
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Itemize
+composer les noms dans l'ordre dans lequel ils apparaîtrons dans l'article;
+ 
+\end_layout
+
+\begin_layout Itemize
+utiliser l'insert 
+\begin_inset Quotes fld
+\end_inset
+
+MarqueInstitution
+\begin_inset Quotes frd
+\end_inset
+
+ (
+\family typewriter
+Insérer->Inserts personnalisables->MarqueInstitution
+\family default
+) niquement si les auteurs ont des affiliations  différentes.
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Maxandre Jacqueline
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Itemize
+facultatif, à utiliser seulement avec plusieurs auteurs;
+\end_layout
+
+\begin_layout Itemize
+s'il y a vraiment beaucoup d'auteurs, utiliser 
+\begin_inset Quotes eld
+\end_inset
+
+Auteur et al.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Institute
+\begin_inset Flex InstituteMark
+status collapsed
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+
+Étudiant en dernière année à l'école Centrale Paris,
+\begin_inset Newline newline
+\end_inset
+
+option Informatique (ISIA) et filière Recherche (FMR)
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+and
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Flex InstituteMark
+status collapsed
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+
+Chargée de recherche CNRS en Imagerie Médicale,
+\begin_inset Newline newline
+\end_inset
+
+docteur en Physique Nucléaire
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+- utilisez la commande 
+\backslash
+inst uniquement s'il y a plusieurs affiliations.
+\end_layout
+
+\begin_layout Plain Layout
+- faites quelque chose de simple, personne ne s'intéresse à votre adresse
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+École Centrale Paris et CNRS
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+optionnel, mais souvent nécessaire
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Date
+Soutenance de stage de fin d'étude, septembre 2016
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Itemize
+utilisez le nom de la conférence ou son abréviation; 
+\end_layout
+
+\begin_layout Itemize
+n'a pas réellement d'importance pour l'assistance qui sera présente lors
+ de la conférence; mais en a pour les personnes (y compris vous-même) qui
+ liront les transparents en ligne.
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+Soutenance 2016
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+facultatif, devrait être une abréviation du nom de la conférence
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+Si vous avez un fichier nommé "université-logo-nomfichier.xxx", où xxxest
+ un format graphique accepté par \SpecialChar LyX
+ (comme par exemple .png), alors vous pouvez
+ insérer votre logo ainsi :
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%
+\backslash
+logo{
+\backslash
+includegraphics[height=0.5cm]{institution-logo-filename}}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Avec la syntaxe pgf, construction équivalente, mais format graphique compris
+ par latex ou pdflatex:
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+pgfdeclareimage[height=0.5cm]{institution-logo}{institution-logo-filename}
+\end_layout
+
+\begin_layout Plain Layout
+
+%
+\backslash
+logo{
+\backslash
+pgfuseimage{institution-logo}} 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+À supprimer si vous ne voulez pas que la table des matières apparaisse au
+ début de chaque sous-section :
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+AtBeginSubsection[]{%
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+frame<beamer>{ 
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+frametitle{Lignes directrices}   
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+tableofcontents[currentsection,currentsubsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+% Vous pouvez, si vous le souhaitez ajouter l'option [pausesections]
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Si vous souhaitez recouvrir vos transparents un à un, utilisez la commande
+ suivante (pour plus d'info, voir la page 74 du manuel d'utilisation de
+ Beamer (version 3.06) par Till Tantau) :
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Sommaire
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Structurer l'exposé est une tâche difficile et la structure suivante pourrait
+ ne pas convenir.
+ Voici quelques règles à appliquer pour cet exemple ci :
+\end_layout
+
+\begin_layout Itemize
+avoir exactement deux ou trois sections (autre que le sommaire); 
+\end_layout
+
+\begin_layout Itemize
+tout au plus trois sous-sections par section; 
+\end_layout
+
+\begin_layout Itemize
+parler approximativement entre 30 secondes et 2 minutes par transparent.
+ Il  devrait donc y avoir entre 15 et 30 transparents, pour tout dire;
+\end_layout
+
+\begin_layout Itemize
+le public d'une conférence connaîtra probablement peu de chose sur le sujet
+  que vous serez en train de traiter.
+ Donc, *simplifier*
+\begin_inset space ~
+\end_inset
+
+!
+\end_layout
+
+\begin_layout Itemize
+dans un exposé de 20 minutes, garder à l'esprit les idées principales est
+ largement  suffisant pour votre assistance.
+ Laissez tomber certains détails, même s'ils vous  semblent nécessaires;
+ 
+\end_layout
+
+\begin_layout Itemize
+si un détail qui est vital pour une preuve/mise en oeuvre est omis,  le
+ dire simplement une fois.
+ Ce sera suffisant pour l'auditoire.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Motivation
+\end_layout
+
+\begin_layout Subsection
+Améliorer le diagnostic du cancer et l'évaluation de la réponse aux traitements
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+Améliorer l'imagerie du cancer
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Le cancer tue
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout ColumnsTopAligned
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Itemize
+Environ 15 millions de personne meurent du cancer chaque année (Source :
+ OMS).
+\end_layout
+
+\begin_deeper
+\begin_layout Pause
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Le cancer est souvent un indice d'un stade avancé de la maladie du vieillissemen
+t (cf.
+ ma future thèse à Oxford) : 60% des gens atteints de cancer ont 65 ans
+ ou plus.
+ (Source : cancer.net)
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename cancer-patient.jpg
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Patient atteint de cancer
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Le diagnostic du cancer est imparfait 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Le diagnostic est souvent trop tardif
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Ne permet pas d'étudier la vascularisation des néo-vaisseaux
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+L'évaluation des traitements anti-cancéreux est difficile
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Les traitements anti-angiogéniques
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+L'immunothérapie
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Méthode
+\end_layout
+
+\begin_layout Subsection
+Utiliser l'échographie de contraste quadridimensionnelle pour améliorer
+ l'imagerie du cancer...
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+L'échographie de contraste...
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+Échographie de contraste
+\end_layout
+
+\end_inset
+
+L'échographie de contraste détecte le 
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+deuxième harmonique du signal
+\end_layout
+
+\end_inset
+
+ uniquement réémis par l'agent de contraste.
+ Le deuxième harmonique du signal est de fréquence double de la fréquence
+ d'émission de la sonde.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Block
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+Agent de contraste
+\end_layout
+
+\end_inset
+
+L'agent de contraste utilisé en échographie est une solution de 
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+microbulles
+\end_layout
+
+\end_inset
+
+ qui peuvent entrer en résonance avec les ultrasons de l'échographe.
+ La résonance entraine la réémission du deuxième harmonique du signal.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+...peut imager la néo-vascularisation tumorale 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+Néo-vascularisation tumorale
+\end_layout
+
+\end_inset
+
+Quand une tumeur cancéreuse grossit, elle fait croitre de nouveaux vaisseaux,
+ qui forment sa néo-vascularisation, pour l’alimenter en nutriments et en
+ oxygène et évacuer ses déchets.
+\end_layout
+
+\begin_layout Itemize
+Les microbulles ont un diamètre suffisamment petit pour rentrer dans les
+ néo-vaisseaux mais suffisamment grand pour ne pas diffuser en dehors.
+\end_layout
+
+\begin_layout Itemize
+Ainsi, le deuxième harmonique du signal reçu par l'échographe provient uniquemen
+t de l'intérieur des néo-vaisseaux.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+L'échographie de contraste quadridimensionnelle promet moins de variabilité
+ et une information plus riche
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+...en prenant soin d'évaluer ses performances avant de l'utiliser sur des patients...
+\end_layout
+
+\begin_layout Subsection
+...et de pouvoir analyser les images qu'elle produit.
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Démonstration du programme que j'ai développé
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Mon programme s'appelle 
+\begin_inset Quotes fld
+\end_inset
+
+Ultrasound 4D Images Analyser
+\begin_inset Quotes frd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Il est accessible sur le logiciel en ligne de contrôle de version GitHub.
+ Le lien pour y accéder est le suivant : 
+\begin_inset CommandInset href
+LatexCommand href
+target "https://github.com/MaxandreJ/Ultrasound_4D_Images_Analyser"
+
+\end_inset
+
+ .
+\end_layout
+
+\begin_layout Itemize
+Je vais vous en faire une démonstration.
+\end_layout
+
+\end_deeper
+\begin_layout Section*
+Résumé
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Résumé
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Le
+\color none
+ 
+\color inherit
+
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+premier message principal
+\end_layout
+
+\end_inset
+
+
+\color none
+ de l'exposé en une ligne ou    deux.
+\end_layout
+
+\begin_layout Itemize
+Le
+\color none
+ 
+\color inherit
+
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+deuxième message principal
+\end_layout
+
+\end_inset
+
+
+\color none
+ de l'exposé en une ligne ou deux.
+\end_layout
+
+\begin_layout Itemize
+Peut-être un
+\color none
+ 
+\color inherit
+
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+troisième message
+\end_layout
+
+\end_inset
+
+
+\color none
+, mais pas plus.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+  Les perspectives sont toujours facultatives.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Perspectives
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Problème non résolu
+\end_layout
+
+\begin_layout Itemize
+Autre problème non résolu
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Section*
+\start_of_appendix
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+Tout ce qui suit est facultatif et n'est typiquement pas nécessaire.
+\end_layout
+
+\end_inset
+
+Appendix
+\end_layout
+
+\begin_layout Subsection*
+Lectures complémentaires
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Lectures complémentaires
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+beamertemplatebookbibitems
+\end_layout
+
+\end_inset
+
+
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+  Commencer avec des livres (image d'un livre insérée)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Auteur1990"
+
+\end_inset
+
+A.
+ Auteur.
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+newblock
+\end_layout
+
+\end_inset
+
+ 
+\emph on
+Livre sur quelque chose
+\emph default
+.
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+newblock
+\end_layout
+
+\end_inset
+
+ Une Edition, 1990.
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+beamertemplatearticlebibitems
+\end_layout
+
+\end_inset
+
+
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+  Et continuer avec les articles (image d'un article incluse).
+ Faites une liste brève.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "Quelqun2000"
+
+\end_inset
+
+S.
+ Quelqu'un.
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+newblock
+\end_layout
+
+\end_inset
+
+ Et ceci et cela
+\emph on
+.
+
+\emph default
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+newblock
+\end_layout
+
+\end_inset
+
+ 
+\emph on
+Journal de ceci et cela
+\emph default
+.
+ 2(1):50–100, 2000.
+\end_layout
+
+\end_deeper
+\end_body
+\end_document
