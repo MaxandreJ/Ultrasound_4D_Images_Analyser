@@ -15,6 +15,8 @@ The interface, variable names, comments and documentation are written in French.
 these into English if you feel like it (just fork my repository or send me an email so we can collaborate). 
 Or you can also use a dictionary and learn 50 words of French.
 
+The application was developped by Maxandre Jacqueline, student at Ecole Centrale Paris, for his final internship.
+
 ### Français
 
 Application permettant d'analyser des séquences 4D d'images ultrasonores, réalisée pendant mon stage à l'hôpital Gustave Roussy à Villejuif
@@ -26,6 +28,8 @@ Actuellement l'application ne peut ouvrir que des images réalisées avec l'éch
 préablement êtres converties par leur logiciel propriétaire appelé "RawDataExport" (pas disponible sur ce dépôt).
 
 L'ensemble du programme est écrit en français.
+
+L'application a été développé par Maxandre Jacqueline, étudiant à l'Ecole Centrale Paris, pour son stage de fin d'études.
 
 ## How to launch the application - Comment lancer l'application
 
@@ -106,3 +110,14 @@ Ouvrir le répertoire Tests et lancer lancer_tests.m sur Matlab R2014b ou plus r
 
 Si la ligne de commande dit "Tests are done", cela veut dire que tous les tests ont réussis.
 J'ai seulement codé un test par manque de temps.
+
+## Contacting the developper behind the software
+
+### English
+
+If it is necessary you can reach me at the following address (please remove spaces) : 
+maxandre    .    jacqueline    @   me     .    com
+
+### Français
+Si cela est nécessaire vous pouvez me contacter à l'adresse suivante (enlevez les espaces) : 
+maxandre    .    jacqueline    @   me     .    com
