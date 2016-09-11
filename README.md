@@ -15,7 +15,7 @@ The interface, variable names, comments and documentation are written in French.
 these into English if you feel like it (just fork my repository or send me an email so we can collaborate). 
 Or you can also use a dictionary and learn 50 words of French.
 
-### French
+### Français
 
 Application permettant d'analyser des séquences 4D d'images ultrasonores, réalisée pendant mon stage à l'hôpital Gustave Roussy à Villejuif
 près de Paris. Programme écrit sous la supervision du Dr. Stéphanie Pitre-Champagnat, CNRS, UMR 8081 Imagerie par Résonance Magnétique
@@ -37,7 +37,7 @@ The application works on PC, Mac and maybe Linux as well.
 The reason why it wouldn't work on an older version of Matlab than R2014b is because it introduced 
 the dot notation for accessing properties of objects, which I use in my programme.
 
-### French
+### Français
 
 Lancer lancer_programme.m sur Matlab R2014b ou une version plus récente.
 
@@ -62,7 +62,7 @@ Aplio 500 ultrasound machine and exported through their proprietary software Raw
 The explanation on how to export data with RawDataExport and the actual software RawDataExport is not available to the public, but you
 may be able to get it from Toshiba Medical Systems.
 
-### French
+### Français
 
 Les données de test sont dans le dossier Donnes de test.
 
@@ -85,7 +85,7 @@ Open the folder Documentation. All the pdfs that are in the main folder serve as
 
 The most important file, that you should read first, is the one called Rapport de stage (in French).
 
-### French
+### Français
 
 Ouvrir le dossier Documentation. Tous les Pdfs qui sont dans le dossier principal sont la documentation de mon programme.
 
@@ -100,7 +100,7 @@ Open the Tests directory and run lancer_tests.m in Matlab R2014b or newer.
 If the command line says that tests are done, it means that all tests are passed. 
 I only coded one test because I lacked time to code more.
 
-### French
+### Français
 
 Ouvrir le répertoire Tests et lancer lancer_tests.m sur Matlab R2014b ou plus récent.
 
