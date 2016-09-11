@@ -15,7 +15,7 @@ The interface, variable names, comments and documentation are written in French.
 these into English if you feel like it (just fork my repository or send me an email so we can collaborate). 
 Or you can also use a dictionary and learn 50 words of French.
 
-The application was developped by Maxandre Jacqueline, student at Ecole Centrale Paris, for his final internship.
+The application was developped by Maxandre Jacqueline, student at Ecole Centrale Paris, for his final internship. It uses object oriented programming (OOP) and the model-view-controller design pattern.
 
 ### Français
 
@@ -29,7 +29,8 @@ préablement êtres converties par leur logiciel propriétaire appelé "RawDataE
 
 L'ensemble du programme est écrit en français.
 
-L'application a été développé par Maxandre Jacqueline, étudiant à l'Ecole Centrale Paris, pour son stage de fin d'études.
+L'application a été développé par Maxandre Jacqueline, étudiant à l'Ecole Centrale Paris, pour son stage de fin d'études. Elle utilise
+la programmation orientée objet et le patron de conception modèle-vue-contrôleur.
 
 ## How to launch the application - Comment lancer l'application
 
