@@ -1,4 +1,4 @@
-# Ultrasound_4D_Images_Analyser
+# Ultrasound_4D_Images_Analyser also known as U4IA "Euphoria"
 
 ## Summary - Résumé
 
