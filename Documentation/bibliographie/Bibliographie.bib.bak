@@ -177,4 +177,15 @@
   publisher = {Elsevier},
 }
 
+@Article{soret2007partial,
+  author    = {Soret, Marine and Bacharach, Stephen L and Buvat, Irene},
+  title     = {Partial-volume effect in PET tumor imaging},
+  year      = {2007},
+  volume    = {48},
+  number    = {6},
+  pages     = {932--945},
+  journal   = {Journal of Nuclear Medicine},
+  publisher = {Soc Nuclear Med},
+}
+
 @Comment{jabref-meta: databaseType:biblatex;}

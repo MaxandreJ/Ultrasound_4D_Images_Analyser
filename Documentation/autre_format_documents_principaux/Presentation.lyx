@@ -673,22 +673,37 @@ Le cancer tue
 \end_layout
 
 \begin_layout Itemize
-Environ 15 millions de personne meurent du cancer chaque année (Source :
- OMS).
+Dans le monde en 2012 (Source : cancerresearchuk.org) :
 \end_layout
 
 \begin_deeper
+\begin_layout Itemize
+14,1 millions de personnes ont été diagnostiquées avec un cancer ;
+\end_layout
+
 \begin_layout Pause
 
 \end_layout
 
-\end_deeper
 \begin_layout Itemize
-Le cancer est souvent un indice d'un stade avancé de la maladie du vieillissemen
-t (cf.
- ma future thèse à Oxford) : 60% des gens atteints de cancer ont 65 ans
- ou plus.
- (Source : cancer.net)
+8,2 millions de personnes sont mortes du cancer ;
+\end_layout
+
+\end_deeper
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Souvent une conséquence du vieillissement (cf.
+ ma future thèse à Oxford) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "kahana2006cancer"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Pause
@@ -707,7 +722,7 @@ status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename cancer-patient.jpg
+	filename /Users/maxandrejacqueline/Documents/Centrale/Stage Gustave Roussy/Ultrasound_4D_Images_Analyser/Documentation/documents_annexes/cancer-patient.jpg
 	scale 30
 
 \end_inset
@@ -719,7 +734,7 @@ status open
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Patient atteint de cancer
+Patiente atteint de cancer
 \end_layout
 
 \end_inset
@@ -756,7 +771,8 @@ Le diagnostic du cancer est imparfait
 
 \begin_deeper
 \begin_layout Itemize
-Le diagnostic est souvent trop tardif
+Le diagnostic est souvent trop tardif, à cause par exemple du fait que les
+ très petites tumeurs ne sont pas détectées
 \end_layout
 
 \begin_layout Pause
@@ -764,10 +780,42 @@ Le diagnostic est souvent trop tardif
 \end_layout
 
 \begin_layout Itemize
-Ne permet pas d'étudier la vascularisation des néo-vaisseaux
+L'imagerie actuelle ne permet pas d'étudier de manière satisfaisante la
+ 
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+néo-vascularisation
+\end_layout
+
+\end_inset
+
+ (définition à suivre) des tumeurs
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+La tomodensitométrie (
+\begin_inset Quotes fld
+\end_inset
+
+scanner
+\begin_inset Quotes frd
+\end_inset
+
+) est ionisante et provoque des effets nocifs liés à l'irradiation, dont
+ l'apparition de cancers (!).
 \end_layout
 
 \end_deeper
+\begin_layout Frame
+
+\end_layout
+
 \begin_layout Standard
 \begin_inset Separator plain
 \end_inset
@@ -780,7 +828,7 @@ Ne permet pas d'étudier la vascularisation des néo-vaisseaux
 status open
 
 \begin_layout Plain Layout
-L'évaluation des traitements anti-cancéreux est difficile
+L'évaluation de l'effet des traitements anti-cancéreux est difficile
 \end_layout
 
 \end_inset
@@ -790,7 +838,17 @@ L'évaluation des traitements anti-cancéreux est difficile
 
 \begin_deeper
 \begin_layout Itemize
-Les traitements anti-angiogéniques
+Comme les 
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+traitements anti-angiogéniques
+\end_layout
+
+\end_inset
+
+ qui luttent contre le développement des vaisseaux sanguins dans la tumeur
 \end_layout
 
 \begin_layout Pause
@@ -798,7 +856,18 @@ Les traitements anti-angiogéniques
 \end_layout
 
 \begin_layout Itemize
-L'immunothérapie
+Et 
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+l'immunothérapie
+\end_layout
+
+\end_inset
+
+ qui se sert du système immunitaire du patient pour lutter contre les tumeurs
+ cancéreuses
 \end_layout
 
 \end_deeper
@@ -809,6 +878,16 @@ Méthode
 \begin_layout Subsection
 Utiliser l'échographie de contraste quadridimensionnelle pour améliorer
  l'imagerie du cancer...
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+Utiliser l'échographie de contraste quadridimensionnelle...
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Frame
@@ -912,13 +991,30 @@ Néo-vascularisation tumorale
 \end_inset
 
 Quand une tumeur cancéreuse grossit, elle fait croitre de nouveaux vaisseaux,
- qui forment sa néo-vascularisation, pour l’alimenter en nutriments et en
- oxygène et évacuer ses déchets.
+ qui forment sa 
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+néo-vascularisation
+\end_layout
+
+\end_inset
+
+, pour l’alimenter en nutriments et en oxygène et évacuer ses déchets.
+\end_layout
+
+\begin_layout Pause
+
 \end_layout
 
 \begin_layout Itemize
 Les microbulles ont un diamètre suffisamment petit pour rentrer dans les
  néo-vaisseaux mais suffisamment grand pour ne pas diffuser en dehors.
+\end_layout
+
+\begin_layout Pause
+
 \end_layout
 
 \begin_layout Itemize
@@ -948,12 +1044,62 @@ L'échographie de contraste quadridimensionnelle promet moins de variabilité
 
 \end_layout
 
-\begin_layout Subsection
-...en prenant soin d'évaluer ses performances avant de l'utiliser sur des patients...
+\begin_deeper
+\begin_layout Itemize
+L'
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+échographie de contraste quadridimensionnelle
 \end_layout
 
+\end_inset
+
+ (3D dans l'espace auquel on ajoute le temps) est en train de succéder à
+ l'échographie de contraste 
+\begin_inset Quotes fld
+\end_inset
+
+2D+Temps
+\begin_inset Quotes frd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+La prise d'images en trois dimension dans l'espace permet de faciliter la
+ comparaison entre plusieurs examens durant lesquels la sonde était positionnée
+ différemment.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Grâce à la troisième dimension spatiale, on peut étudier une tumeur dans
+ sa profondeur.
+\end_layout
+
+\end_deeper
 \begin_layout Subsection
-...et de pouvoir analyser les images qu'elle produit.
+...en prenant soin d'évaluer ses performances avant de l'utiliser sur des patients...
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+...en prenant soin d'évaluer ses performances...
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Frame
@@ -961,7 +1107,499 @@ L'échographie de contraste quadridimensionnelle promet moins de variabilité
 status open
 
 \begin_layout Plain Layout
-Démonstration du programme que j'ai développé
+La résolution spatiale de la sonde est inconnue...
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+Résolution spatiale
+\end_layout
+
+\end_inset
+
+La 
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+résolution spatiale
+\end_layout
+
+\end_inset
+
+ est la distance minimale, en unité de longueur, à laquelle on arrive à
+ distinguer, sur une image produite par un système d’imagerie, deux objets
+ ponctuels imagés.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /Users/maxandrejacqueline/Documents/Centrale/Stage Gustave Roussy/Ultrasound_4D_Images_Analyser/Documentation/documents_annexes/illustration_resolution_spatiale.png
+	scale 22
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+On considère que ces deux pics d’intensité sont à la 
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+résolution spatiale
+\end_layout
+
+\end_inset
+
+ du système d'imagerie.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+ce qui expose au risque d'artefact du volume partiel
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+Artefact de volume partiel
+\end_layout
+
+\end_inset
+
+L'effet qui fait que des objets qui font une taille inférieure à 3 fois
+ la résolution spatiale vont voir leurs intensités à l'image altérées par
+ rapport à la réalité.
+\begin_inset CommandInset citation
+LatexCommand cite
+key "soret2007partial"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+L'altération de l'intensité des images par rapport à la réalité peut conduire
+ à des 
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+erreurs de diagnostic
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Si l'on connait la résolution spatiale d'un détecteur, on peut corriger
+ cet artefact.
+\begin_inset CommandInset citation
+LatexCommand cite
+key "soret2007partial"
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+L'artefact de volume partiel a deux causes
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename effet_de_volume_partiel-1.png
+	scale 18
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+1ère cause de l'artefact : l'imprécision du système d'imagerie 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "soret2007partial"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename effet-volume-partiel-2.png
+	scale 18
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+2ème cause : l'échantillonnage de l'image en pixels 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "soret2007partial"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+...et de pouvoir analyser les images qu'elle produit avec le logiciel que j'ai
+ développé.
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+...et de pouvoir analyser les images qu'elle produit.
+ 
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Mon programme permet d'afficher les images, sélectionner des régions d'intérêt
+ et créer des courbes d'intensités
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Mon programme permet de :
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+afficher les images acquises au moyen de l'échographe Aplio 500 de Toshiba
+ Medical Systems et sélectionner une zone de l'image qui nous intéresse,
+ qu'on appelle 
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+région d'intérêt
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+afficher des courbes montrant l'évolution de l'intensité du signal suivant
+ différents axes, qu'on appelle 
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+courbes d'intensité
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+détecter les pics
+\end_layout
+
+\end_inset
+
+ (maximums locaux) de ces courbes pour par exemple calculer la résolution
+ spatiale de l'image.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Mon programme permet de caractériser l'hétérogénéité de la vascularisation
+ tumorale
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Les tumeurs cancéreuses sont connues pour le développement anarchique des
+ néo-vaisseaux, caractérisés par des vaisseaux qui fuient, sont dilatés
+ et sont connectés entre eux de manière désorganisée.
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "kumar2012robbins"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+L'équipe à laquelle j'appartiens cherche à trouver le meilleur indicateur
+ quantitatif de cette hétérogénéité pour diagnostiquer le cancer et évaluer
+ la réponse aux traitements.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Mon programme permet de calculer différents indicateurs de l'hétérogénéité
+ de la région d'intérêt sélectionnée.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Mon programme permet de garder la taille des données raisonnable
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+L'inconvénient des données quadridimensionnelles est l'espace qu'elles occupent
+ en mémoire.
+ 45 pas de temps de données 4D compressées font déjà 720 mégaoctets.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+On constate que les images de l'arrivée des microbulles dans la tumeur et
+ du début de leur départ sont très importantes pour déterminer ses caractéristiq
+ues, mais que les images suivantes sont moins importantes.
+\end_layout
+
+\begin_layout Pause
+
+\end_layout
+
+\begin_layout Itemize
+Mon programme permet de sauvegarder toutes les images de la phase importante,
+ et moins d'images de la phase moins importante (par exemple, 1 sur 10).
+ Autrement dit on veut pouvoir 
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+sous-échantillonner
+\end_layout
+
+\end_inset
+
+ les images.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Démonstration du programme que j'ai développé pour répondre à tous les défis
+ présentés
 \end_layout
 
 \end_inset
@@ -982,8 +1620,25 @@ Ultrasound 4D Images Analyser
 
 \end_layout
 
+\begin_layout Pause
+
+\end_layout
+
 \begin_layout Itemize
-Il est accessible sur le logiciel en ligne de contrôle de version GitHub.
+Il est accessible sur le site de 
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+contrôle de version
+\end_layout
+
+\end_inset
+
+ GitHub, qui offre au téléchargement toutes les versions du logiciel.
+\begin_inset Newline newline
+\end_inset
+
  Le lien pour y accéder est le suivant : 
 \begin_inset CommandInset href
 LatexCommand href
@@ -991,7 +1646,11 @@ target "https://github.com/MaxandreJ/Ultrasound_4D_Images_Analyser"
 
 \end_inset
 
- .
+
+\end_layout
+
+\begin_layout Pause
+
 \end_layout
 
 \begin_layout Itemize
@@ -999,7 +1658,301 @@ Je vais vous en faire une démonstration.
 \end_layout
 
 \end_deeper
-\begin_layout Section*
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Un programme utilisable par tous
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Son interface graphique, ses commandes aux clavier et à la souris et ses
+ bulles d'aides facilitent son utilisation par des personnes variées :
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+radiologues ;
+\end_layout
+
+\begin_layout Itemize
+techniciens d'analyse d'images ;
+\end_layout
+
+\begin_layout Itemize
+ingénieurs ;
+\end_layout
+
+\begin_layout Itemize
+chercheurs.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Un programme fait pour durer
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Une 
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+programmation orientée objet
+\end_layout
+
+\end_inset
+
+ qui clarifie le code.
+\end_layout
+
+\begin_layout Itemize
+Une organisation qui suit le patron de conception 
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+modèle-vue-contrôleur 
+\end_layout
+
+\end_inset
+
+qui permet de bien séparer l'affichage des traitements.
+\end_layout
+
+\begin_layout Itemize
+Un code :
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+lisible (noms de variables explicites, commentaires), 
+\end_layout
+
+\begin_layout Itemize
+accessible sur GitHub,
+\end_layout
+
+\begin_layout Itemize
+robuste (gestion des erreurs, exemple de test unitaire)
+\end_layout
+
+\begin_layout Itemize
+bien documenté (bulles d'aide, schémas, fichier 
+\begin_inset Quotes fld
+\end_inset
+
+lisez-moi
+\begin_inset Quotes frd
+\end_inset
+
+, explications dans mon rapport de stage).
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Je vais vous présenter l'organisation de mon code.
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Résultats
+\end_layout
+
+\begin_layout Subsection
+Une première approximation de la résolution spatiale
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+On a calculé une première approximation de la résolution spatiale
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout ColumnsTopAligned
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+5cm
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /Users/maxandrejacqueline/Documents/Centrale/Stage Gustave Roussy/Ultrasound_4D_Images_Analyser/Documentation/resultat_resolution spatiale_dragonskin1/image.png
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Région d’intérêt sélectionnée sur l’image échographique.
+ Le signal de deux tuyaux est en son centre.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Column
+5cm
+\end_layout
+
+\end_deeper
+\begin_layout ColumnsTopAligned
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /Users/maxandrejacqueline/Documents/Centrale/Stage Gustave Roussy/Ultrasound_4D_Images_Analyser/Documentation/resultat_resolution spatiale_dragonskin1/graphique_pics_detectes.png
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Les deux pics de signal correspondant aux deux tuyaux imagés.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+et voici notre résultat
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Nous avons calculé qu'une première approximation de la résolution spatiale
+ de la sonde quadridimensionnelle PLT-1204MV 12MHz en imagerie de contraste
+ est de 
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+\begin_inset Formula $1,57$
+\end_inset
+
+ millimètres selon l'axe 
+\begin_inset Formula $x$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+de la sonde.
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Résumé et perspectives
+\end_layout
+
+\begin_layout Subsection
 Résumé
 \end_layout
 
@@ -1018,7 +1971,7 @@ Résumé
 
 \begin_deeper
 \begin_layout Itemize
-Le
+L'
 \color none
  
 \color inherit
@@ -1027,18 +1980,19 @@ Le
 status open
 
 \begin_layout Plain Layout
-premier message principal
+échographie de contraste quadridimensionnelle
 \end_layout
 
 \end_inset
 
 
 \color none
- de l'exposé en une ligne ou    deux.
+ ouvre de nouvelles possibilités de diagnostic du cancer et d'évaluation
+ des traitements,
 \end_layout
 
 \begin_layout Itemize
-Le
+Mon
 \color none
  
 \color inherit
@@ -1047,34 +2001,15 @@ Le
 status open
 
 \begin_layout Plain Layout
-deuxième message principal
+logiciel
 \end_layout
 
 \end_inset
 
 
 \color none
- de l'exposé en une ligne ou deux.
-\end_layout
-
-\begin_layout Itemize
-Peut-être un
-\color none
- 
-\color inherit
-
-\begin_inset Flex Alert
-status open
-
-\begin_layout Plain Layout
-troisième message
-\end_layout
-
-\end_inset
-
-
-\color none
-, mais pas plus.
+ d'analyse d'images 4D est accessible, utilisable, documenté, structuré,
+ robuste, compréhensible, évolutif et fonctionnel.
 \end_layout
 
 \begin_layout Standard
@@ -1090,24 +2025,90 @@ status collapsed
 
 \end_layout
 
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
 \begin_layout Standard
-\begin_inset VSpace defskip
+\begin_inset Separator plain
 \end_inset
 
 
 \end_layout
 
-\begin_layout Itemize
+\begin_layout Subsection
 Perspectives
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Perspectives
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_deeper
 \begin_layout Itemize
-Problème non résolu
+Se servir de mon logiciel pour :
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+finir de déterminer la résolution spatiale suivant tous les axes en imagerie
+ de contraste 4D ;
 \end_layout
 
 \begin_layout Itemize
-Autre problème non résolu
+valider et utiliser un indicateur de l'hétérogénéité fiable pour déterminer
+ l'état d'avancement du cancer et la réponse au traitement ;
+\end_layout
+
+\begin_layout Itemize
+sous-échantillonner les images pour permettre l'utilisation de l'échographie
+ 4D sur des patients sans être submergé par le volume des données.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset Flex Alert
+status open
+
+\begin_layout Plain Layout
+Poursuive le développement de mon logiciel
+\end_layout
+
+\end_inset
+
+ pour :
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+qu'il puisse charger des images 
+\begin_inset Quotes fld
+\end_inset
+
+2D+Temps
+\begin_inset Quotes frd
+\end_inset
+
+ et des formats issus d'autres échographes ;
+\end_layout
+
+\begin_layout Itemize
+qu'il ait plus de fonctions (par exemple le calcul de l'aire sous la courbe
+ d'intensité) ;
+\end_layout
+
+\begin_layout Itemize
+qu'il soit plus rapide et plus testé.
 \end_layout
 
 \end_deeper
@@ -1123,11 +2124,11 @@ Tout ce qui suit est facultatif et n'est typiquement pas nécessaire.
 
 \end_inset
 
-Appendix
+Annexe
 \end_layout
 
 \begin_layout Subsection*
-Lectures complémentaires
+Références
 \end_layout
 
 \begin_layout Frame
@@ -1145,7 +2146,7 @@ allowframebreaks
 status open
 
 \begin_layout Plain Layout
-Lectures complémentaires
+Références
 \end_layout
 
 \end_inset
@@ -1162,7 +2163,7 @@ status open
 
 
 \backslash
-beamertemplatebookbibitems
+beamertemplatearticlebibitems
 \end_layout
 
 \end_inset
@@ -1180,120 +2181,89 @@ status collapsed
 
 \end_layout
 
-\begin_layout Bibliography
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "Auteur1990"
-
-\end_inset
-
-A.
- Auteur.
- 
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-newblock
-\end_layout
-
-\end_inset
-
- 
-\emph on
-Livre sur quelque chose
-\emph default
-.
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-newblock
-\end_layout
-
-\end_inset
-
- Une Edition, 1990.
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-beamertemplatearticlebibitems
-\end_layout
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "/Users/maxandrejacqueline/Documents/Centrale/Stage Gustave Roussy/Ultrasound_4D_Images_Analyser/Documentation/bibliographie/Bibliographie"
+options "plain"
 
 \end_inset
 
 
-\begin_inset Note Note
-status collapsed
-
-\begin_layout Plain Layout
-  Et continuer avec les articles (image d'un article incluse).
- Faites une liste brève.
- 
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Bibliography
-\begin_inset CommandInset bibitem
-LatexCommand bibitem
-key "Quelqun2000"
-
-\end_inset
-
-S.
- Quelqu'un.
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-newblock
-\end_layout
-
-\end_inset
-
- Et ceci et cela
-\emph on
-.
-
-\emph default
- 
-\begin_inset ERT
-status collapsed
-
-\begin_layout Plain Layout
-
-
-\backslash
-newblock
-\end_layout
-
-\end_inset
-
- 
-\emph on
-Journal de ceci et cela
-\emph default
-.
- 2(1):50–100, 2000.
 \end_layout
 
 \end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Dispositif expérimental
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Dispositif expérimental
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /Users/maxandrejacqueline/Documents/Centrale/Stage Gustave Roussy/Ultrasound_4D_Images_Analyser/Documentation/documents_annexes/dispositif_microfluidique2_poster.JPG
+	lyxscale 10
+	scale 6
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Le dispositif expérimental utilisé pour obtenir nos résultats.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
 \end_body
 \end_document
