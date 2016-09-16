@@ -8,8 +8,9 @@ Gustave Roussy near Paris in France. Written under the supervision of Stéphanie
 team 3 Multimodal Imagery in Oncology headed by Natalie Lassau, MD, PhD. 
 More information on unit UMR 8081 of CNRS can be found here : http://www.ir4m.u-psud.fr/ .
 
-Currently it can only open files extracted from Toshiba Medical System's Aplio 500 ultrasound machine that have first been processed 
+Currently it can open files extracted from Toshiba Medical System's Aplio 500 ultrasound machine that have first been processed 
 by their proprietary software called "RawDataExport" (not available on this repository).
+It can also open images stored in Matlab .mat files.
 
 The interface, variable names, comments and documentation are written in French. Please don't hesitate to translate 
 these into English if you feel like it (just fork my repository or send me an email so we can collaborate). 
@@ -26,8 +27,9 @@ près de Paris. Programme écrit sous la supervision du Dr. Stéphanie Pitre-Cha
 Médicale et Multi-Modalités ("IR4M"), équipe 3 Imagerie multimodale en cancérologie dirigée par le Dr. Natalie Lassau.
 Plus d'informations sont disponibles sur l'unité UMR 8081 du CNRS à cette adresse : http://www.ir4m.u-psud.fr/ .
 
-Actuellement l'application ne peut ouvrir que des images réalisées avec l'échographe Aplio 500 de Toshiba Medical Systems, qui doivent
+Actuellement l'application peut ouvrir des images réalisées avec l'échographe Aplio 500 de Toshiba Medical Systems, qui doivent
 préablement êtres converties par leur logiciel propriétaire appelé "RawDataExport" (pas disponible sur ce dépôt).
+Elle peut également ouvrir des images enregistrées au format .mat de Matlab.
 
 L'ensemble du programme est écrit en français.
 
