@@ -3,7 +3,7 @@
 ## Summary - Résumé
 
 ### English
-Application allowing for analysis of 4D ultrasound images, written as part of an internship at Europe's leading cancer hospital 
+Application enabling analysis of 4D ultrasound images, written as part of an internship at Europe's leading cancer hospital 
 Gustave Roussy near Paris in France. Written under the supervision of Stéphanie Pitre-Champagnat, PhD, CNRS, unit UMR 8081 "IR4M", 
 team 3 Multimodal Imagery in Oncology headed by Natalie Lassau, MD, PhD. 
 More information on unit UMR 8081 of CNRS can be found here : http://www.ir4m.u-psud.fr/ .
